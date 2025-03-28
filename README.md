@@ -10,8 +10,8 @@ First, create a `.env` file as in `.env.example`.
 Then, to start a development server:
 
 ```sh
-bun i
-bun dev
+➜ bun i
+➜ bun dev
 ```
 
 See the SvelteKit documentation for more information on building and previewing
