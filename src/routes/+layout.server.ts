@@ -2,12 +2,16 @@ export function load() {
 	return {
 		routes: [
 			{
-				path: '/',
-				name: 'Home'
+				path: "/",
+				name: "Home"
 			},
 			{
-				path: '/about',
-				name: 'About'
+				path: "/about",
+				name: "About"
+			},
+			{
+				path: "/pets",
+				name: "Pets"
 			}
 		]
 	};

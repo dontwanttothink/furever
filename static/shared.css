@@ -31,14 +31,13 @@ nav {
 		text-decoration: none;
 		border: none;
 		cursor: pointer;
+		color: unset;
 
 		transition: text-decoration 0.3s;
 	}
-
 	a:hover {
 		text-decoration: underline;
 	}
-
 	a:visited {
 		color: unset;
 	}
