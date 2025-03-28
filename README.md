@@ -1,7 +1,7 @@
 # furever
 
-This repository includes the source code for the SvelteKit app responsible for
-both the back-end and the web front-end of the FureverHome project.
+This repository contains the source code for the SvelteKit application that
+powers both the back-end and the web front-end of the FureverHome project.
 
 ## Running
 
