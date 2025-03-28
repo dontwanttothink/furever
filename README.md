@@ -5,7 +5,7 @@ powers both the back-end and the web front-end of the FureverHome project.
 
 ## Running
 
-First, create a `.env` file according to the template in `.env.example`.
+First, create a `.env` file as in `.env.example`.
 
 Then, to start a development server:
 
@@ -21,4 +21,4 @@ the app.
 
 `jiti` is included as a development-only dependency to make the TypeScript-based
 ESLint configuration work on Node environments, such as certain ESLint editor
-extensions.
+extensions. It is otherwise unnecessary.
