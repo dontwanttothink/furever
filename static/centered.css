@@ -1,0 +1,11 @@
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: calc(100vh - 2rem * 2);
+}
+
+main {
+	flex: 1;
+	display: grid;
+	place-items: center;
+}
