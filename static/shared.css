@@ -33,7 +33,7 @@ a {
 nav {
 	display: flex;
 	align-items: center;
-	gap: 1rem;
+	gap: 1.2rem;
 	margin: 1rem 0;
 
 	a {

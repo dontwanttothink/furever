@@ -22,12 +22,12 @@
 </svelte:head>
 
 <div id="wrap">
-	<h1>Welcome back.</h1>
-	<p>Log in to your account.</p>
+	<h1>Te damos la bienvenida de vuelta.</h1>
+	<p>Inicia sesión en tu cuenta.</p>
 	<form method="POST" action="/log-in" use:enhance>
 		<label for="email">Email</label>
 		<input type="email" name="email" id="email" required />
-		<label for="password">Password</label>
+		<label for="password">Contraseña</label>
 		<input type="password" name="password" id="password" required />
 		<div id="submit-area">
 			{#if form?.error}
@@ -35,21 +35,27 @@
 					{form.error}
 				</p>
 			{:else}
-				<p aria-hidden="true" class="error hidden">No errors</p>
+				<p aria-hidden="true" class="error hidden">No hay errores</p>
 			{/if}
-			<button type="submit">Log in</button>
+			<button type="submit">Iniciar sesión</button>
 		</div>
 	</form>
 	<p>
-		Don't have an account? <a href="/sign-up">Sign up</a>
+		¿No tienes una cuenta? <a href="/sign-up">Regístrate</a>
 	</p>
 	<p>
-		<a href="/forgot-password">Forgot password?</a>
+		<a href="/forgot-password">¿Olvidaste tu contraseña?</a>
 	</p>
 </div>
 
 <style>
-	h1,
+	h1 {
+		text-align: center;
+		max-width: 30rem;
+		line-height: 1.1;
+		margin: 0 0 1.5rem;
+	}
+
 	p {
 		text-align: center;
 	}

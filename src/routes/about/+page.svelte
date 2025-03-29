@@ -1,23 +1,22 @@
-<h1>About</h1>
+<h1>Acerca de</h1>
 
 <p>
-	FureverHome is a non-profit organization dedicated to finding loving homes for
-	pets in need.
+	FureverHome es una organización sin ánimo de lucro dedicada a encontrar
+	hogares amorosos para mascotas necesitadas.
 </p>
 <p>
-	We believe that every pet deserves a second chance and a forever home. Our
-	team works tirelessly to rescue, rehabilitate, and find loving homes for
-	animals from shelters and the streets.
+	Creamos que cada mascota merece una segunda oportunidad y un hogar para
+	siempre. Nuestro equipo trabaja incansablemente para rescatar, rehabilitar y
+	encontrar hogares amorosos para animales de refugios y de las calles.
 </p>
 <p>
-	Our mission is to create a world where every pet is loved and cared for. We
-	strive to educate the public about responsible pet ownership and the
-	importance of spaying and neutering.
+	Nuestra misión es crear un mundo donde cada mascota sea amada y cuidada. Nos
+	esforzamos por educar al público sobre la tenencia responsable de mascotas y
+	la importancia de esterilizar y castrar.
 </p>
 <p>
-	Join us in our mission to make a difference in the lives of pets and their
-	humans. Together, we can create a brighter future for all animals.
+	Únete a nuestra misión para marcar la diferencia en las vidas de las mascotas
+	y sus humanos. Juntos, podemos crear un futuro más brillante para todos los
+	animales.
 </p>
-<p>
-	Thank you for your support and for being a part of the FureverHome family!
-</p>
+<p>¡Gracias por tu apoyo y por ser parte de la familia FureverHome!</p>

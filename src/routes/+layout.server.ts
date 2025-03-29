@@ -3,19 +3,19 @@ export function load() {
 		routes: [
 			{
 				path: "/",
-				name: "Home",
+				name: "Inicio",
 			},
 			{
 				path: "/about",
-				name: "About",
+				name: "Acerca de",
 			},
 			{
 				path: "/pets",
-				name: "Pets",
+				name: "Mascotas",
 			},
 			{
 				path: "/log-in",
-				name: "Log In",
+				name: "Iniciar sesión",
 			},
 		],
 	};

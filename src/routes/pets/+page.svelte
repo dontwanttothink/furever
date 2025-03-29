@@ -1,3 +1,3 @@
-<h1>Pets</h1>
+<h1>Mascotas</h1>
 
-<p>Here is a list of all the pets available for adoption.</p>
+<p>Aquí hay una lista de todas las mascotas disponibles para adoptar.</p>

@@ -1,35 +1,36 @@
-<h1>Hello, FureverHome.</h1>
-<p>Someday, the world will be a better place.</p>
+<h1>Hola, FureverHome.</h1>
+<p>Algún día, el mundo será un lugar mejor.</p>
 
-<h2>Purpose</h2>
+<h2>Propósito</h2>
 
 <p>
-	FureverHome is your comprehensive digital companion for pet parenthood. We
-	understand that managing your pet's health and well-being can be overwhelming,
-	which is why we've created an all-in-one solution to help you stay organized
-	and informed.
+	FureverHome es tu compañero digital integral para la crianza de mascotas.
+	Entendemos que gestionar la salud y el bienestar de tu mascota puede ser
+	abrumador, por eso hemos creado una solución todo-en-uno para ayudarte a
+	mantenerte organizado e informado.
 </p>
 
 <p>
-	Our platform simplifies the journey of pet care by providing a centralized hub
-	for all your pet's important information. From vaccination records to
-	medication schedules, and from vet appointments to growth milestones,
-	FureverHome ensures that you never miss a beat in your pet's health journey.
+	Nuestra plataforma simplifica el cuidado de mascotas al proporcionar un centro
+	centralizado para toda la información importante de tu mascota. Desde
+	registros de vacunación hasta horarios de medicación, y desde citas con el
+	veterinario hasta hitos de crecimiento, FureverHome asegura que nunca te
+	pierdas ningún detalle en el cuidado de la salud de tu mascota.
 </p>
 
 <p>
-	Whether you're a new pet parent or have years of experience, FureverHome
-	adapts to your needs. The intuitive interface makes it easy to track multiple
-	pets, share information with veterinarians, and maintain a complete history of
-	your pet's health records. Your peace of mind is our priority, and we're here
-	to support you in providing the best care possible for your furry family
-	members.
+	Ya sea que seas un nuevo padre de mascotas o tengas años de experiencia,
+	FureverHome se adapta a tus necesidades. La interfaz intuitiva facilita el
+	seguimiento de múltiples mascotas, compartir información con veterinarios y
+	mantener un historial completo de los registros de salud de tu mascota. Tu
+	tranquilidad es nuestra prioridad, y estamos aquí para apoyarte en brindar el
+	mejor cuidado posible a tus miembros peludos de la familia.
 </p>
 
-<h2>Features</h2>
+<h2>Características</h2>
 <ul>
-	<li>Track pet health records</li>
-	<li>Manage vaccination schedules</li>
-	<li>Store important documents</li>
-	<li>Set medication reminders</li>
+	<li>Rastrear registros de salud de mascotas</li>
+	<li>Gestionar horarios de vacunación</li>
+	<li>Almacenar documentos importantes</li>
+	<li>Establecer recordatorios de medicación</li>
 </ul>
