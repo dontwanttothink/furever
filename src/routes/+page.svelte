@@ -1,6 +1,3 @@
-<script lang="ts">
-</script>
-
 <h1>Hello, FureverHome.</h1>
 <p>Someday, the world will be a better place.</p>
 

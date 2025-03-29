@@ -12,6 +12,10 @@ export function load() {
 			{
 				path: "/pets",
 				name: "Pets"
+			},
+			{
+				path: "/log-in",
+				name: "Log In"
 			}
 		]
 	};
