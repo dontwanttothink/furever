@@ -3,20 +3,20 @@ export function load() {
 		routes: [
 			{
 				path: "/",
-				name: "Home"
+				name: "Home",
 			},
 			{
 				path: "/about",
-				name: "About"
+				name: "About",
 			},
 			{
 				path: "/pets",
-				name: "Pets"
+				name: "Pets",
 			},
 			{
 				path: "/log-in",
-				name: "Log In"
-			}
-		]
+				name: "Log In",
+			},
+		],
 	};
 }
