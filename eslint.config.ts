@@ -35,7 +35,13 @@ export default ts.config(
 		}
 	},
 	{
-		files: ["../*.ts"]
-		// TODO: Enable strict type checking
+		files: ["../*.ts"],
+		extends: [ts.configs.strictTypeCheckedOnly],
+		languageOptions: {
+			parserOptions: {
+				projectService: true,
+				tsconfigRootDir: import.meta.dirname
+			}
+		}
 	}
 );
