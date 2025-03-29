@@ -9,11 +9,16 @@ This file tracks the project's direct dependencies.
 ## Development
 
 - `eslint`: Linting
+
   - `@eslint/compat`: unknown
   - `@eslint/js`: unknown
   - `eslint-config-prettier`: unknown
   - `eslint-plugin-svelte`: Linting Svelte files
   - `typescript-eslint`: Linting TypeScript files
+  - `jiti`: Needed to make the TypeScript-based ESLint configuration work on
+    Node environments, such as certain ESLint editor extensions. It is otherwise
+    unnecessary.
+
 - `stylelint`: Linting (CSS)
   - `stylelint-config-standard`: unknown
 - `svelte`: unknown
