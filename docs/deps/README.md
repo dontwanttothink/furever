@@ -20,10 +20,11 @@ This file tracks the project's direct dependencies.
     unnecessary.
 
 - `stylelint`: Linting (CSS)
-  - `stylelint-config-standard`: unknown
+  - `stylelint-config-standard`: Standard rule set, extended in
+    `.stylelintrc.json`.
 - `svelte`: unknown
 - `svelte-check`: unknown
-- `tsx`: unknown
+- `tsx`: unknown, but recommended in the Drizzle documentation
 - `typescript`: Code analysis
 - `vite`: Development server, building
 - `globals`: unknown
