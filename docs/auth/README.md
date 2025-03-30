@@ -13,6 +13,9 @@ At least three of the following must also be present:
 - Numbers (0-9)
 - A special character (`!@#$%^&*()`)
 
+The degrees (°) symbol is not allowed because it is used internally for data
+representation.
+
 ## Hashing and Salting
 
 Passwords are hashed using the `argon2id` algorithm with the following
