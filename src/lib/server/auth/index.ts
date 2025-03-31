@@ -41,7 +41,7 @@ export async function logIn(
 		.where(eq(usersTable.email, email));
 
 	if (result.length == 0) {
-		new CharacterizedAuthObject(AuthError.IncorrectCredentials);
+		return new CharacterizedAuthObject(AuthError.IncorrectCredentials);
 	}
 
 	if (result.length > 1) {
