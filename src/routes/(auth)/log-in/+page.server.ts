@@ -1,6 +1,24 @@
 import type { Actions } from "./$types";
-import { logIn } from "$lib/server/auth";
+import {
+	logIn,
+	AuthResult,
+	type CharacterizedAuthResult,
+} from "$lib/server/auth";
 import { fail } from "@sveltejs/kit";
+
+function getMessage(result: CharacterizedAuthResult) {
+	switch (result.type) {
+		case AuthResult.IncorrectCredentials: {
+			return "El usuario o la contraseña no son correctos.";
+		}
+		case AuthResult.TimedOut: {
+			return "Debes esperar antes de volver a intentar.";
+		}
+		default: {
+			return `Algo salió mal. Intenta de nuevo: ${result}`;
+		}
+	}
+}
 
 export const actions = {
 	default: async (event) => {
@@ -12,10 +30,12 @@ export const actions = {
 			return { error: "Email and password are required." };
 		}
 
-		const { error } = await logIn(email, password);
+		const { type: result, isError } = await logIn(email, password);
 
-		if (error) {
-			return fail(400, { error });
+		if (isError) {
+			return fail(400, {
+				error: result,
+			});
 		}
 
 		return { success: true };

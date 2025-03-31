@@ -5,6 +5,7 @@ This file tracks the project's direct dependencies.
 - `@libsql/client`: Used for database access
 - `dotenv`: Used for database access
 - `drizzle-orm`: Used for database access
+- `argon2`: Used to hash passwords
 
 ## Development
 

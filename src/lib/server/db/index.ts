@@ -6,3 +6,4 @@ if (!process.env.DB_FILE_NAME) {
 }
 
 export const db = drizzle(process.env.DB_FILE_NAME);
+export { usersTable } from "./schema";
