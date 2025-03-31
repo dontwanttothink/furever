@@ -6,15 +6,15 @@ export function load() {
 				name: "Inicio",
 			},
 			{
-				path: "/about",
+				path: "/acerca-de",
 				name: "Acerca de",
 			},
 			{
-				path: "/pets",
+				path: "/mascotas",
 				name: "Mascotas",
 			},
 			{
-				path: "/log-in",
+				path: "/iniciar-sesión",
 				name: "Iniciar sesión",
 			},
 		],

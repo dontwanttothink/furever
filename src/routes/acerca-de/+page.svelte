@@ -1,3 +1,11 @@
+<script>
+	import { titlePrefix } from "$lib/misc";
+</script>
+
+<svelte:head>
+	<title>{titlePrefix} Acerca de</title>
+</svelte:head>
+
 <h1>Acerca de</h1>
 
 <p>

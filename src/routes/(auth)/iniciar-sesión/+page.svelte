@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>{titlePrefix}Log In</title>
+	<title>{titlePrefix}Iniciar Sesión</title>
 	<meta
 		name="description"
 		content="This is where the description goes for SEO"
@@ -24,7 +24,7 @@
 <div id="wrap">
 	<h1>Te damos la bienvenida de vuelta.</h1>
 	<p>Inicia sesión en tu cuenta.</p>
-	<form method="POST" action="/log-in" use:enhance>
+	<form method="POST" action="/iniciar-sesión" use:enhance>
 		<label for="email">Email</label>
 		<input type="email" name="email" id="email" required />
 		<label for="password">Contraseña</label>
