@@ -35,7 +35,7 @@
 					{form.error}
 				</p>
 			{:else}
-				<p aria-hidden="true" class="error hidden">No hay errores</p>
+				<p aria-hidden="true" class="error hidden">No hay <br />errores</p>
 			{/if}
 			<button type="submit">Iniciar sesión</button>
 		</div>
@@ -89,7 +89,7 @@
 	button {
 		padding: 0.5rem 3rem;
 		max-width: max-content;
-		margin: 0 auto;
+		margin: 0 auto 0.5rem;
 	}
 
 	form label,
