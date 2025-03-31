@@ -1,3 +1,11 @@
+<script lang="ts">
+	import { titlePrefix } from "$lib/misc";
+</script>
+
+<svelte:head>
+	<title>{titlePrefix}Inicio</title>
+</svelte:head>
+
 <h1>Hola, FureverHome.</h1>
 <p>Algún día, el mundo será un lugar mejor.</p>
 

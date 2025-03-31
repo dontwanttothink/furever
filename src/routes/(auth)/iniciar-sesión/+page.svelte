@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { enhance } from "$app/forms";
 	import { assets } from "$app/paths";
 	import { fly } from "svelte/transition";
@@ -41,10 +41,10 @@
 		</div>
 	</form>
 	<p>
-		¿No tienes una cuenta? <a href="/sign-up">Regístrate</a>
+		¿No tienes una cuenta? <a href="/registrarse">Regístrate</a>
 	</p>
 	<p>
-		<a href="/forgot-password">¿Olvidaste tu contraseña?</a>
+		<a href="/contraseña-olvidada">¿Olvidaste tu contraseña?</a>
 	</p>
 </div>
 

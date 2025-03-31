@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { titlePrefix } from "$lib/misc";
 </script>
 
