@@ -83,16 +83,13 @@
 	}
 
 	#submit-area {
-		margin: 0.5rem auto 1rem;
-
-		p.error {
-			margin-top: 0;
-		}
+		display: contents;
 	}
 
 	button {
 		padding: 0.5rem 3rem;
 		max-width: max-content;
+		margin: 0 auto;
 	}
 
 	form label,

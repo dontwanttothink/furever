@@ -1,22 +1,20 @@
 import type { Actions } from "./$types";
 import {
+	AuthError,
+	isCharacterizedAuthError,
 	logIn,
-	AuthResult,
-	type CharacterizedAuthResult,
+	type CharacterizedAuthError,
 } from "$lib/server/auth";
 import { fail } from "@sveltejs/kit";
 
-function getMessage(result: CharacterizedAuthResult) {
-	switch (result.type) {
-		case AuthResult.IncorrectCredentials: {
-			return "El usuario o la contraseña no son correctos.";
-		}
-		case AuthResult.TimedOut: {
-			return "Debes esperar antes de volver a intentar.";
-		}
-		default: {
-			return `Algo salió mal. Intenta de nuevo: ${result}`;
-		}
+function getMessage(error: CharacterizedAuthError): string {
+	switch (error.type) {
+		case AuthError.IncorrectCredentials:
+			return "El nombre de usuario o la contraseña son incorrectos.";
+		case AuthError.TimedOut:
+			return `Debes esperar hasta ${error.until} para intentar de nuevo.`;
+		default:
+			return `Algo salió mal. Hubo un error desconocido: ${error.type}`;
 	}
 }
 
@@ -30,11 +28,11 @@ export const actions = {
 			return { error: "Email and password are required." };
 		}
 
-		const { type: result, isError } = await logIn(email, password);
+		const characterizedResult = await logIn(email, password);
 
-		if (isError) {
+		if (isCharacterizedAuthError(characterizedResult)) {
 			return fail(400, {
-				error: result,
+				error: getMessage(characterizedResult),
 			});
 		}
 
