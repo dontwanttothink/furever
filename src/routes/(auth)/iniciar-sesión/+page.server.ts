@@ -1,7 +1,6 @@
 import type { Actions } from "./$types";
 import {
 	AuthError,
-	isCharacterizedAuthError,
 	logIn,
 	type CharacterizedAuthError,
 } from "$lib/server/auth";
@@ -13,8 +12,6 @@ function getMessage(error: CharacterizedAuthError): string {
 			return "El nombre de usuario o la contraseña son incorrectos.";
 		case AuthError.TimedOut:
 			return `Debes esperar hasta ${error.until} para intentar de nuevo.`;
-		default:
-			return `Algo salió mal. Hubo un error desconocido: ${error.type}`;
 	}
 }
 
@@ -28,11 +25,11 @@ export const actions = {
 			return { error: "Email and password are required." };
 		}
 
-		const characterizedResult = await logIn(email, password);
+		const loginAttempt = await logIn(email, password);
 
-		if (isCharacterizedAuthError(characterizedResult)) {
+		if (loginAttempt.result.isError) {
 			return fail(400, {
-				error: getMessage(characterizedResult),
+				error: getMessage(loginAttempt.result),
 			});
 		}
 

@@ -9,45 +9,42 @@ export enum AuthError {
 export enum AuthSuccess {
 	LoggedIn = "logged_in",
 }
-export type AuthResult = AuthError | AuthSuccess;
 
+export type CharacterizedIncorrectCredentialsResult = {
+	type: AuthError.IncorrectCredentials;
+	isError: true;
+};
+export type CharacterizedTimedOutResult = {
+	type: AuthError.TimedOut;
+	until: bigint;
+	isError: true;
+};
+export type CharacterizedLoggedInResult = {
+	type: AuthSuccess.LoggedIn;
+	isError: false;
+};
 /**
- * @caveat Instances of this class may be exposed to the internet. Do not
+ * @caveat Objects of this type may be exposed to the internet. Do not include
  * any sensitive information.
  */
-export class CharacterizedAuthResult {
-	until?: Date;
-	type: AuthResult;
-	isError: boolean;
-
-	static isAuthError(type: AuthResult): type is AuthError {
-		return Object.values(AuthError).includes(type as AuthError);
-	}
-
-	constructor(type: Exclude<AuthResult, AuthError.TimedOut>);
-	constructor(type: AuthError.TimedOut, until: Date);
-	constructor(type: AuthResult, until?: Date) {
-		if (type == AuthError.TimedOut) {
-			this.until = until;
-		}
-		this.type = type;
-		this.isError = CharacterizedAuthResult.isAuthError(type);
-	}
-}
+export type CharacterizedAuthResult =
+	| CharacterizedIncorrectCredentialsResult
+	| CharacterizedTimedOutResult
+	| CharacterizedLoggedInResult;
 export type CharacterizedAuthError = CharacterizedAuthResult & {
 	isError: true;
 };
 
-export function isCharacterizedAuthError(
-	characterizedResult: CharacterizedAuthResult,
-): characterizedResult is CharacterizedAuthError {
-	return characterizedResult.isError;
+export type LoginAttempt<T extends CharacterizedAuthResult> = T extends {
+	isError: true;
 }
+	? { result: T }
+	: { result: T; token: string };
 
 export async function logIn(
 	email: string,
 	password: string,
-): Promise<CharacterizedAuthResult> {
+): Promise<LoginAttempt<CharacterizedAuthResult>> {
 	const result = await db
 		.select({
 			passData: usersTable.passwordData,
@@ -56,7 +53,12 @@ export async function logIn(
 		.where(eq(usersTable.email, email));
 
 	if (result.length == 0) {
-		return new CharacterizedAuthResult(AuthError.IncorrectCredentials);
+		return {
+			result: {
+				type: AuthError.IncorrectCredentials,
+				isError: true,
+			},
+		};
 	}
 
 	if (result.length > 1) {
@@ -67,9 +69,20 @@ export async function logIn(
 	const isValid = await verify(passData, password);
 
 	if (isValid) {
-		return new CharacterizedAuthResult(AuthSuccess.LoggedIn);
+		return {
+			result: {
+				type: AuthSuccess.LoggedIn,
+				isError: false,
+			},
+			token: "",
+		};
 	} else {
-		return new CharacterizedAuthResult(AuthError.IncorrectCredentials);
+		return {
+			result: {
+				type: AuthError.IncorrectCredentials,
+				isError: true,
+			},
+		};
 	}
 }
 
