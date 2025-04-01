@@ -12,7 +12,7 @@
 	<title>{titlePrefix}Iniciar Sesión</title>
 	<meta
 		name="description"
-		content="This is where the description goes for SEO"
+		content="Inicia sesión con tu cuenta de FureverHome o crea una."
 	/>
 
 	<!-- We do this because we need to modify the 'body' and 'main' elements. We
