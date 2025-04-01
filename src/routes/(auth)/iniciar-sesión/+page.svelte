@@ -80,6 +80,7 @@
 		border: 1px solid #ccc;
 		border-radius: 4px;
 		margin: 0.5rem 0;
+		font-size: 1.2rem;
 	}
 
 	#submit-area {
