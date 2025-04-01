@@ -21,8 +21,8 @@ function getMessage(error: CharacterizedAuthError): string {
 export const actions = {
 	default: async (event) => {
 		const data = await event.request.formData();
-		const email = data.get("email")?.toString() ?? "";
-		const password = data.get("password")?.toString() ?? "";
+		const email = data.get("email")?.toString();
+		const password = data.get("password")?.toString();
 
 		if (!email || !password) {
 			return { error: "Email and password are required." };
