@@ -25,7 +25,6 @@ This file tracks the project's direct dependencies.
     `.stylelintrc.json`.
 - `svelte`: unknown
 - `svelte-check`: unknown
-- `tsx`: unknown, but recommended in the Drizzle documentation
 - `typescript`: Code analysis
 - `vite`: Development server, building
 - `globals`: unknown
