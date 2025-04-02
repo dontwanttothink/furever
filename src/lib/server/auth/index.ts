@@ -16,7 +16,7 @@ export type CharacterizedIncorrectCredentialsResult = {
 };
 export type CharacterizedTimedOutResult = {
 	type: AuthError.TimedOut;
-	until: bigint;
+	until: number;
 	isError: true;
 };
 export type CharacterizedLoggedInResult = {
