@@ -22,4 +22,4 @@ export function hash(text: string) {
 	});
 }
 
-export const verify = argon2.verify;
+export { verify } from "argon2";
