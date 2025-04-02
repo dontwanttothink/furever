@@ -16,8 +16,8 @@ function getMessage(error: CharacterizedAuthError): string {
 }
 
 export const actions = {
-	default: async (event) => {
-		const data = await event.request.formData();
+	default: async ({ request, cookies }) => {
+		const data = await request.formData();
 		const email = data.get("email")?.toString();
 		const password = data.get("password")?.toString();
 
@@ -33,6 +33,15 @@ export const actions = {
 			});
 		}
 
+		if (!("token" in loginAttempt)) {
+			throw new TypeError("Missing token in successful login response");
+		}
+
+		cookies.set("secret_token", loginAttempt.token, {
+			path: "/",
+			secure: true,
+			expires: new Date(loginAttempt.result.until * 1_000),
+		});
 		return { success: true };
 	},
 } satisfies Actions;

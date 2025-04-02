@@ -1,6 +1,8 @@
 import { eq } from "drizzle-orm";
-import { db, usersTable } from "../db";
+import { db, usersTable, sessionsTable } from "../db";
 import { verify } from "./internal";
+
+const SECONDS_PER_HOUR = 60 * 60;
 
 export enum AuthError {
 	IncorrectCredentials = "incorrect_credentials",
@@ -21,6 +23,7 @@ export type CharacterizedTimedOutResult = {
 };
 export type CharacterizedLoggedInResult = {
 	type: AuthSuccess.LoggedIn;
+	until: number;
 	isError: false;
 };
 /**
@@ -41,6 +44,10 @@ export type LoginAttempt<T extends CharacterizedAuthResult> = T extends {
 	? { result: T }
 	: { result: T; token: string };
 
+function getCurrentTimestampInSeconds() {
+	return Math.floor(Date.now() / 1000);
+}
+
 export async function logIn(
 	email: string,
 	password: string,
@@ -48,6 +55,7 @@ export async function logIn(
 	const result = await db
 		.select({
 			passData: usersTable.passwordData,
+			id: usersTable.id,
 		})
 		.from(usersTable)
 		.where(eq(usersTable.email, email));
@@ -65,16 +73,33 @@ export async function logIn(
 		throw new Error(`More than one user matched a single email: ${email}.`);
 	}
 
-	const { passData } = result[0];
+	const { passData, id: userId } = result[0];
 	const isValid = await verify(passData, password);
 
 	if (isValid) {
+		const token = new Uint8Array(256 / 8);
+		crypto.getRandomValues(token);
+
+		const tokenString = token.reduce(
+			(acc, byte) => acc + byte.toString(16).padStart(2, "0"),
+			"",
+		);
+
+		const expiresAt = getCurrentTimestampInSeconds() + 48 * SECONDS_PER_HOUR;
+
+		db.insert(sessionsTable).values({
+			userId,
+			token: tokenString,
+			expiresAt,
+		});
+
 		return {
 			result: {
 				type: AuthSuccess.LoggedIn,
+				until: expiresAt,
 				isError: false,
 			},
-			token: "",
+			token: tokenString,
 		};
 	} else {
 		return {

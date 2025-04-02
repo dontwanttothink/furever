@@ -5,3 +5,12 @@ export const usersTable = sqliteTable("users_table", {
 	email: text().notNull().unique(),
 	passwordData: text().notNull(),
 });
+
+export const sessionsTable = sqliteTable("sessions_table", {
+	id: int().primaryKey({ autoIncrement: true }),
+	userId: int()
+		.notNull()
+		.references(() => usersTable.id),
+	token: text().notNull().unique(),
+	expiresAt: int().notNull(),
+});
