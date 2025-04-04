@@ -52,6 +52,13 @@ a:visited {
 	color: unset;
 }
 
+input,
+button,
+select,
+textarea {
+	font-family: inherit;
+}
+
 button {
 	background-color: #80f;
 	color: white;
