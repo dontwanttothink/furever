@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { fly } from "svelte/transition";
 
-	const { form, actionName, action } = $props();
+	const { form, action } = $props();
 </script>
 
 <form method="POST" {action} use:enhance>
@@ -11,24 +11,24 @@
 	<label for="password">Contraseña</label>
 	<input type="password" name="password" id="password" required />
 	<div id="submit-area">
-		{#if form?.error}
-			<p class="error" in:fly={{ x: 0, y: -10, duration: 500 }}>
-				{form.error}
-			</p>
-		{:else}
-			<p aria-hidden="true" class="error hidden">No hay <br />errores</p>
-		{/if}
-		<button type="submit">{actionName}</button>
+		<div id="error-area">
+			{#if form?.error}
+				<p class="error" in:fly={{ x: 0, y: -10, duration: 500 }}>
+					{form.error}
+				</p>
+			{/if}
+		</div>
+		<button type="submit">Iniciar sesión</button>
 	</div>
 </form>
 
 <style>
+	#error-area {
+		min-height: 5rem;
+	}
 	.error {
 		color: rgb(163, 57, 57);
-	}
-
-	.hidden {
-		visibility: hidden;
+		margin: 0.7rem 0;
 	}
 
 	form {

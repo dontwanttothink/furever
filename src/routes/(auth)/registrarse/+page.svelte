@@ -13,10 +13,9 @@
 
 <div id="wrap">
 	<h1>Regístrate ahora.</h1>
-	<SignUpForm {form} action="/registrarse" actionName="Registrarse"
-	></SignUpForm>
+	<SignUpForm {form} action="/registrarse"></SignUpForm>
 	<p>
-		¿Ya tienes una cuenta? <a href="/registrarse">Inicia sesión</a>
+		¿Ya tienes una cuenta? <a href="/iniciar-sesión">Inicia sesión</a>
 	</p>
 </div>
 
@@ -25,7 +24,7 @@
 		text-align: center;
 		max-width: 30rem;
 		line-height: 1.1;
-		margin: 0 0 1.5rem;
+		margin: 2rem 0 2.5rem;
 	}
 
 	p {

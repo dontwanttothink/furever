@@ -1,16 +1,16 @@
 import type { Actions } from "./$types";
 import {
-	AuthError,
+	LoginError,
 	logIn,
-	type CharacterizedAuthError,
+	type CharacterizedLoginError,
 } from "$lib/server/auth";
 import { fail } from "@sveltejs/kit";
 
-function getMessage(error: CharacterizedAuthError): string {
+function getMessage(error: CharacterizedLoginError): string {
 	switch (error.type) {
-		case AuthError.IncorrectCredentials:
+		case LoginError.IncorrectCredentials:
 			return "El nombre de usuario o la contraseña son incorrectos.";
-		case AuthError.TimedOut:
+		case LoginError.TimedOut:
 			return `Debes esperar hasta ${error.until} para intentar de nuevo.`;
 	}
 }
@@ -22,7 +22,13 @@ export const actions = {
 		const password = data.get("password")?.toString();
 
 		if (!email || !password) {
-			return { error: "Email and password are required." };
+			return fail(400, { error: "Se necesitan el usuario y la contraseña." });
+		}
+
+		if (password.length > 50) {
+			return fail(400, {
+				error: "La contraseña no puede tener más de 50 caracteres.",
+			});
 		}
 
 		const loginAttempt = await logIn(email, password);

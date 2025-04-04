@@ -23,8 +23,7 @@
 <div id="wrap">
 	<h1>Te damos la bienvenida de vuelta.</h1>
 	<p>Inicia sesión en tu cuenta.</p>
-	<LoginForm {form} action="/iniciar-sesión" actionName="Iniciar Sesión"
-	></LoginForm>
+	<LoginForm {form} action="/iniciar-sesión"></LoginForm>
 	<p>
 		¿No tienes una cuenta? <a href="/registrarse">Regístrate</a>
 	</p>

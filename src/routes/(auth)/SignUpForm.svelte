@@ -2,44 +2,83 @@
 	import { enhance } from "$app/forms";
 	import { fly } from "svelte/transition";
 
-	const { form, actionName, action } = $props();
+	const { form, action } = $props();
+
+	let pass = $state("");
+	let passConfirm = $state("");
+
+	let confirmPasswordInput: HTMLInputElement | null = null;
+	$effect(() => {
+		if (!confirmPasswordInput) {
+			const maybeConfirmPasswordInput =
+				document.getElementById("confirm-password");
+			if (!(maybeConfirmPasswordInput instanceof HTMLInputElement)) {
+				throw new Error("Confirm password input not found");
+			}
+			confirmPasswordInput = maybeConfirmPasswordInput;
+		}
+
+		if (passConfirm != pass) {
+			confirmPasswordInput.setCustomValidity("Las contraseñas no coinciden.");
+		} else {
+			confirmPasswordInput.setCustomValidity("");
+		}
+	});
 </script>
 
 <form method="POST" {action} use:enhance>
+	<label for="name">¿Cómo quieres que te llamen?</label>
+	<input type="text" name="name" id="name" required />
 	<label for="email">Email</label>
 	<input type="email" name="email" id="email" required />
 	<label for="password">Contraseña</label>
-	<input type="password" name="password" id="password" required />
+	<input
+		type="password"
+		name="password"
+		id="password"
+		required
+		bind:value={pass}
+	/>
 	<label for="confirm-password">Confirmar contraseña</label>
 	<input
 		type="password"
 		name="confirm-password"
 		id="confirm-password"
+		bind:value={passConfirm}
 		required
 	/>
 	<div id="submit-area">
-		{#if form?.error}
-			<p class="error" in:fly={{ x: 0, y: -10, duration: 500 }}>
-				{form.error}
-			</p>
-		{:else}
-			<p aria-hidden="true" class="error hidden">No hay <br />errores</p>
-		{/if}
-		<button type="submit">{actionName}</button>
+		<div id="error-area">
+			{#if form?.error}
+				<p class="error" in:fly={{ x: 0, y: -10, duration: 500 }}>
+					{form.error}
+				</p>
+			{/if}
+		</div>
+		<button type="submit">Registrarse</button>
 	</div>
 </form>
 
 <style>
-	#email {
-		margin-bottom: 1.5rem;
+	#error-area {
+		min-height: 5rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin-bottom: 0.5rem;
 	}
 
 	.error {
 		color: rgb(163, 57, 57);
+		margin: 0.7rem 0;
+		text-align: center;
 	}
 
-	.hidden {
-		visibility: hidden;
+	#email {
+		margin-bottom: 1.5rem;
+	}
+	#name {
+		margin-bottom: 1.5rem;
 	}
 
 	form {
