@@ -26,6 +26,7 @@
 <style>
 	header {
 		display: flex;
+		gap: 1em;
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;

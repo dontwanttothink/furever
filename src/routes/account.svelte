@@ -2,17 +2,15 @@
 	const { token } = $props();
 </script>
 
-<div id="container">
-	{#if token}
-		<p>{token.slice(0, 10)}…</p>
-	{:else}
-		<a href="/iniciar-sesión">Iniciar sesión</a>
-	{/if}
-</div>
+{#if token}
+	<p>{token.slice(0, 10)}…</p>
+{:else}
+	<p><a href="/iniciar-sesión">Iniciar sesión</a></p>
+{/if}
 
 <style>
-	#container {
-		margin: 1em;
+	p {
+		text-align: center;
 	}
 	a {
 		font-weight: 500;
