@@ -4,7 +4,7 @@ import {
 	logIn,
 	type CharacterizedLoginError,
 } from "$lib/server/auth";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 
 function getMessage(error: CharacterizedLoginError): string {
 	switch (error.type) {
@@ -48,6 +48,6 @@ export const actions = {
 			secure: true,
 			expires: new Date(loginAttempt.result.until * 1_000),
 		});
-		return { success: true };
+		redirect(303, "/mascotas");
 	},
 } satisfies Actions;

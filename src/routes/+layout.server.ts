@@ -1,4 +1,4 @@
-export function load() {
+export function load({ cookies }) {
 	return {
 		routes: [
 			{
@@ -13,10 +13,7 @@ export function load() {
 				path: "/mascotas",
 				name: "Mascotas",
 			},
-			{
-				path: "/iniciar-sesión",
-				name: "Iniciar sesión",
-			},
 		],
+		sessionToken: cookies.get("secret_token"),
 	};
 }
