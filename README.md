@@ -11,11 +11,18 @@ Then, to start a development server:
 
 ```sh
 ➜ bun i
+
+# set up the local database
+➜ echo "DB_FILE_NAME=file:local.db" > .env # saying where it should be
+➜ bun drizzle-kit push # adding the schema
+
 ➜ bun dev
 ```
 
 See the SvelteKit documentation for more information on building and previewing
 the app.
+
+Only `bun dev` is necessary in subsequent runs.
 
 ## Notes
 
