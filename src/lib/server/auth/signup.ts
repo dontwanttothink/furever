@@ -31,6 +31,8 @@ export async function signUp(
 	email: string,
 	password: string,
 ): Promise<SignupAttempt<CharacterizedSignupResult>> {
+	email = email.toLowerCase();
+
 	try {
 		await db.insert(usersTable).values({
 			name,

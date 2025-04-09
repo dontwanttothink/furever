@@ -52,6 +52,8 @@ export async function logIn(
 	email: string,
 	password: string,
 ): Promise<LoginAttempt<CharacterizedLoginResult>> {
+	email = email.toLowerCase();
+
 	const result = await db
 		.select({
 			passData: usersTable.passwordData,
