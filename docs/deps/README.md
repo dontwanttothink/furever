@@ -6,6 +6,7 @@ This file tracks the project's direct dependencies.
 - `dotenv`: Used for database access
 - `drizzle-orm`: Used for database access
 - `argon2`: Used to hash passwords
+- `@fontsource-variable/inter`: Typeface
 
 ## Development
 
