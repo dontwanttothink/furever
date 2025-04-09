@@ -28,6 +28,7 @@ This file tracks the project's direct dependencies.
 - `svelte-check`: unknown
 - `typescript`: Code analysis
 - `vite`: Development server, building
+- `@sveltejs/adapter-cloudflare`: Building for Cloudflare Workers or Pages
 - `globals`: unknown
 - `prettier`: Formatting
   - `prettier-plugin-svelte`: Formatting Svelte files
