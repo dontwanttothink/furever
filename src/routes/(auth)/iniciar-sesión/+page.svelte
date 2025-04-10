@@ -43,4 +43,8 @@
 	p {
 		text-align: center;
 	}
+
+	#wrap {
+		margin: 2rem 0;
+	}
 </style>

@@ -3,15 +3,19 @@
 	const { token } = $props();
 
 	let showDropdown = $state(false);
+
+	function toggleDropdown() {
+		showDropdown = !showDropdown;
+	}
 </script>
 
 {#if token}
 	<div class="dropdown">
 		<p
 			class="dropdown-toggle"
-			on:click={() => {
-				showDropdown = !showDropdown;
-			}}
+			tabindex="0"
+			on:click={toggleDropdown}
+			on:keydown={toggleDropdown}
 		>
 			{token.slice(0, 10)}…
 		</p>
@@ -19,7 +23,7 @@
 			<ul
 				class="dropdown-items"
 				role="menu"
-				transition:fly={{ x: 0, y: -10, duration: 250 }}
+				transition:fly={{ x: 0, y: -15, duration: 250 }}
 			>
 				<li role="menuitem">
 					<a href="">Cerrar sesión</a>

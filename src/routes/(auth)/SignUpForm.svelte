@@ -9,13 +9,8 @@
 
 	let confirmPasswordInput: HTMLInputElement | null = null;
 	$effect(() => {
-		if (!confirmPasswordInput) {
-			const maybeConfirmPasswordInput =
-				document.getElementById("confirm-password");
-			if (!(maybeConfirmPasswordInput instanceof HTMLInputElement)) {
-				throw new Error("Confirm password input not found");
-			}
-			confirmPasswordInput = maybeConfirmPasswordInput;
+		if (!(confirmPasswordInput instanceof HTMLInputElement)) {
+			throw new Error("Confirm password input not found");
 		}
 
 		if (passConfirm != pass) {
@@ -43,7 +38,7 @@
 	<input
 		type="password"
 		name="confirm-password"
-		id="confirm-password"
+		bind:this={confirmPasswordInput}
 		bind:value={passConfirm}
 		required
 	/>

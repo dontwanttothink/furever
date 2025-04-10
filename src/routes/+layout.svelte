@@ -2,7 +2,7 @@
 	import "@fontsource-variable/inter";
 	import { assets } from "$app/paths";
 
-	import AccountManager from "./account.svelte";
+	import AccountManager from "./AccountManager.svelte";
 	const { data, children } = $props();
 </script>
 
