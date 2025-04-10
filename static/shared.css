@@ -77,3 +77,7 @@ button:focus {
 	background-color: #691fd1;
 	transform: scale(1.05);
 }
+
+.container {
+	display: contents;
+}
