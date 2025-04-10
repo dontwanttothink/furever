@@ -6,10 +6,6 @@ export function load({ cookies }) {
 				name: "Inicio",
 			},
 			{
-				path: "/acerca-de",
-				name: "Acerca de",
-			},
-			{
 				path: "/mascotas",
 				name: "Mascotas",
 			},
