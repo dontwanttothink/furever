@@ -2,3 +2,5 @@ cloudflare
 furever
 idec
 libsql
+nubuwu
+santi
