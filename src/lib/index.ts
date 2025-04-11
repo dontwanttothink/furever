@@ -1,1 +1,8 @@
-// place files you want to import through the `$lib` alias in this folder.
+export function assert(
+	condition: unknown,
+	message?: string,
+): asserts condition {
+	if (!condition) {
+		throw new Error(message || "Assertion failed");
+	}
+}
