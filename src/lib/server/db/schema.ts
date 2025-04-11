@@ -18,7 +18,19 @@ export const sessionsTable = sqliteTable(
 			.notNull()
 			.references(() => usersTable.id),
 		token: text().notNull().unique(),
-		expiresAt: int().notNull(),
+		expiresAt: int().notNull(), // seconds since unix epoch
 	},
 	(table) => [index("expires_at_idx").on(table.expiresAt)],
+);
+
+export const loginAttempts = sqliteTable(
+	"login_attempts",
+	{
+		id: int().primaryKey({ autoIncrement: true }),
+		userId: int()
+			.notNull()
+			.references(() => usersTable.id),
+		timestamp: int().notNull(), // seconds since unix epoch
+	},
+	(table) => [index("userId_timestamp_idx").on(table.userId, table.timestamp)],
 );
