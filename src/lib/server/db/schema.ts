@@ -31,6 +31,7 @@ export const loginAttempts = sqliteTable(
 			.notNull()
 			.references(() => usersTable.id),
 		timestamp: int().notNull(), // seconds since unix epoch
+		source: text().notNull(),
 	},
 	(table) => [index("userId_timestamp_idx").on(table.userId, table.timestamp)],
 );

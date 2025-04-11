@@ -5,6 +5,7 @@ import {
 	maybeSweepSessions,
 	verify,
 } from "./internal";
+import { loginAttempts } from "../db/schema";
 
 const SECONDS_PER_HOUR = 60 * 60;
 
@@ -51,6 +52,7 @@ export type LoginAttempt<T extends CharacterizedLoginResult> = T extends {
 export async function logIn(
 	email: string,
 	password: string,
+	source: string, // TODO: review that
 ): Promise<LoginAttempt<CharacterizedLoginResult>> {
 	email = email.toLowerCase();
 
@@ -76,6 +78,22 @@ export async function logIn(
 	}
 
 	const { passData, id: userId } = result[0];
+
+	async function hashIp(ip: string): Promise<string> {
+		const encoder = new TextEncoder();
+		const data = encoder.encode(ip);
+		const hash = await crypto.subtle.digest("SHA-256", data);
+		return [...new Uint8Array(hash)]
+			.map((byte) => byte.toString(16).padStart(2, "0"))
+			.join("");
+	}
+
+	db.insert(loginAttempts).values({
+		userId,
+		timestamp: getCurrentTimestampInSeconds(),
+		source: await hashIp(source),
+	});
+
 	const isValid = await verify(passData, password);
 
 	if (isValid) {
