@@ -22,13 +22,18 @@ This file tracks the project's direct dependencies.
     unnecessary.
 
 - `stylelint`: Linting (CSS)
+
   - `stylelint-config-standard`: Standard rule set, extended in
     `.stylelintrc.json`.
+
 - `svelte`: unknown
 - `svelte-check`: unknown
-- `typescript`: Code analysis
-- `vite`: Development server, building
 - `@sveltejs/adapter-cloudflare`: Building for Cloudflare Workers or Pages
+- `vite`: Development server, building
+
+- `typescript`: Code analysis
+  - `typescript-svelte-plugin`: Try to add types to server files
 - `globals`: unknown
 - `prettier`: Formatting
   - `prettier-plugin-svelte`: Formatting Svelte files
+- `rimraf`: For the `package.json` `clean` command to work cross-platform
