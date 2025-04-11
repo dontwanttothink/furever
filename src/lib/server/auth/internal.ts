@@ -1,7 +1,5 @@
 import * as argon2 from "argon2";
 
-export const PASSWORD_DATA_SEPARATOR = "°";
-
 /**
  * We create our own salts in order to satisfy the security requirements in
  * `docs/auth`.
