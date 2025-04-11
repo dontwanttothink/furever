@@ -61,7 +61,7 @@ export const actions = {
 		const signupAttempt = await signUp(name, email, password);
 		if (signupAttempt.result.isError) {
 			return fail(400, {
-				error: getMessage(signupAttempt.result), // TODO: Translate this error
+				error: getMessage(signupAttempt.result),
 			});
 		}
 		return { success: true };
