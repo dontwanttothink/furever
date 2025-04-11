@@ -51,3 +51,12 @@ export async function maybeSweepSessions() {
 		lastSweepTime = now;
 	}
 }
+
+const GOLDEN_RATIO = (Math.sqrt(5) + 1) / 2;
+/**
+ * Calculate the backoff time for exponential backoff, as described in
+ * `docs/auth`.
+ */
+export function backoffTime(n: number) {
+	return Math.ceil(GOLDEN_RATIO ** (n - 1) / Math.sqrt(5));
+}
