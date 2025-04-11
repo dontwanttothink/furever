@@ -7,6 +7,8 @@ class InvalidSessionError extends Error {}
 /**
  * Get user data for a given session.
  * @throws UserDoesNotExistError
+ * @caveat This functionality is exposed to the client.
+ * @returns The user name and email.
  */
 export async function getUserDataFor(sessionToken: string) {
 	const matches = await db
@@ -27,7 +29,10 @@ export async function getUserDataFor(sessionToken: string) {
 
 	const userId = matches[0].userId;
 	const userMatches = await db
-		.select()
+		.select({
+			name: usersTable.name,
+			email: usersTable.email,
+		})
 		.from(usersTable)
 		.where(eq(usersTable.id, userId));
 
