@@ -10,6 +10,8 @@ export const actions = {
 		cookies.delete("secret_token", {
 			path: "/",
 		});
+		// TODO: invalidate session
+
 		redirect(303, "/" + encodeURIComponent("iniciar-sesión"));
 	},
 } satisfies Actions;
