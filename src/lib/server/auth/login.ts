@@ -1,6 +1,10 @@
 import { eq } from "drizzle-orm";
 import { db, usersTable, sessionsTable } from "../db";
-import { getCurrentTimestampInSeconds, verify } from "./internal";
+import {
+	getCurrentTimestampInSeconds,
+	maybeSweepSessions,
+	verify,
+} from "./internal";
 
 const SECONDS_PER_HOUR = 60 * 60;
 
@@ -75,6 +79,8 @@ export async function logIn(
 	const isValid = await verify(passData, password);
 
 	if (isValid) {
+		maybeSweepSessions(); // schedule stale sessions to be cleaned up
+
 		const token = new Uint8Array(256 / 8);
 		crypto.getRandomValues(token);
 
