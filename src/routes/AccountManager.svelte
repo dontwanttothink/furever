@@ -11,14 +11,14 @@
 
 {#if token}
 	<div class="dropdown">
-		<p
+		<button
 			class="dropdown-toggle"
 			tabindex="0"
-			on:click={toggleDropdown}
-			on:keydown={toggleDropdown}
+			onclick={toggleDropdown}
+			onkeydown={toggleDropdown}
 		>
 			{token.slice(0, 10)}…
-		</p>
+		</button>
 		{#if showDropdown}
 			<ul
 				class="dropdown-items"
@@ -26,7 +26,9 @@
 				transition:fly={{ x: 0, y: -15, duration: 250 }}
 			>
 				<li role="menuitem">
-					<a href="">Cerrar sesión</a>
+					<form method="POST" action="/cerrar-sesión">
+						<input type="submit" value="Cerrar sesión" />
+					</form>
 				</li>
 				<li role="menuitem"><a href="">Ajustes</a></li>
 			</ul>
@@ -39,9 +41,6 @@
 <style>
 	p {
 		text-align: center;
-	}
-	a {
-		font-weight: 500;
 	}
 	.dropdown {
 		position: relative;
@@ -62,5 +61,32 @@
 		width: max-content;
 		/* Shadow */
 		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.05);
+	}
+
+	/* Style the input type submit so that it looks like the rest of the items */
+	input[type="submit"] {
+		background-color: transparent;
+		border: none;
+		padding: 0;
+		text-align: left;
+		font-size: inherit;
+		cursor: pointer;
+	}
+	input[type="submit"]:hover {
+		text-decoration: underline;
+	}
+
+	button {
+		background-color: unset;
+		transition: unset;
+		color: unset;
+		padding: 0;
+		margin: 0;
+		transform: unset;
+		text-align: center;
+	}
+	a,
+	button {
+		font-weight: 500;
 	}
 </style>
