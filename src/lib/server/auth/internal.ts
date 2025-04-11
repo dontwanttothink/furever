@@ -20,4 +20,34 @@ export function hash(text: string) {
 	});
 }
 
+/**
+ * @returns The current timestamp in seconds.
+ */
+export function getCurrentTimestampInSeconds() {
+	return Math.floor(Date.now() / 1000);
+}
+
 export { verify } from "argon2";
+
+import { db, sessionsTable } from "../db";
+import { lt } from "drizzle-orm";
+
+/**
+ * Delete all sessions that have expired.
+ */
+async function sweepSessions() {
+	await db
+		.delete(sessionsTable)
+		.where(lt(sessionsTable.expiresAt, getCurrentTimestampInSeconds()));
+}
+/**
+ * Clear stale sessions if the last sweep was more than 10 minutes ago.
+ */
+let lastSweepTime = -1;
+export async function maybeSweepSessions() {
+	const now = getCurrentTimestampInSeconds();
+	if (now - lastSweepTime > 10 * 60) {
+		await sweepSessions();
+		lastSweepTime = now;
+	}
+}

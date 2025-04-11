@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db, usersTable, sessionsTable } from "../db";
-import { verify } from "./internal";
+import { getCurrentTimestampInSeconds, verify } from "./internal";
 
 const SECONDS_PER_HOUR = 60 * 60;
 
@@ -43,10 +43,6 @@ export type LoginAttempt<T extends CharacterizedLoginResult> = T extends {
 }
 	? { result: T }
 	: { result: T; token: string };
-
-function getCurrentTimestampInSeconds() {
-	return Math.floor(Date.now() / 1000);
-}
 
 export async function logIn(
 	email: string,
