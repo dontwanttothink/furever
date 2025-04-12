@@ -52,7 +52,7 @@ export type LoginAttempt<T extends CharacterizedLoginResult> = T extends {
 export async function logIn(
 	email: string,
 	password: string,
-	source: string, // TODO: review that
+	source: string,
 ): Promise<LoginAttempt<CharacterizedLoginResult>> {
 	email = email.toLowerCase();
 
