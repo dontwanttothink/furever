@@ -1,4 +1,25 @@
-export function load({ cookies }) {
+import {
+	getUserDataFor,
+	InvalidSessionError,
+} from "$lib/server/auth/userData.js";
+
+export async function load({ cookies }) {
+	const secretToken = cookies.get("secret_token");
+
+	let userData = null;
+	if (secretToken) {
+		try {
+			userData = await getUserDataFor(secretToken);
+		} catch (e) {
+			if (e instanceof InvalidSessionError) {
+				cookies.delete("secret_token", {
+					path: "/",
+				});
+			}
+			throw e;
+		}
+	}
+
 	return {
 		routes: [
 			{
@@ -10,6 +31,6 @@ export function load({ cookies }) {
 				name: "Mascotas",
 			},
 		],
-		sessionToken: cookies.get("secret_token"),
+		userData,
 	};
 }

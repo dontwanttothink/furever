@@ -2,7 +2,7 @@ import { assert } from "$lib";
 import { eq } from "drizzle-orm";
 import { db, sessionsTable, usersTable } from "../db";
 
-class InvalidSessionError extends Error {}
+export class InvalidSessionError extends Error {}
 
 /**
  * Get user data for a given session.

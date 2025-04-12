@@ -1,6 +1,9 @@
 <script lang="ts">
+	import type { getUserDataFor } from "$lib/server/auth/userData";
 	import { fly } from "svelte/transition";
-	const { token } = $props();
+	let {
+		userData,
+	}: { userData: Awaited<ReturnType<typeof getUserDataFor>> | null } = $props();
 
 	let showDropdown = $state(false);
 
@@ -9,7 +12,7 @@
 	}
 </script>
 
-{#if token}
+{#if userData}
 	<div class="dropdown">
 		<button
 			class={["dropdown-toggle", showDropdown ? "expanded" : ""]}
@@ -17,8 +20,7 @@
 			onclick={toggleDropdown}
 			onkeydown={toggleDropdown}
 		>
-			{token.slice(0, 10)}…
-			<!-- ^^^ FIXME -->
+			{userData.name.trim()}
 		</button>
 		{#if showDropdown}
 			<ul

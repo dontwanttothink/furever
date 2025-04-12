@@ -1,9 +1,10 @@
 import {
+	logIn,
 	signUp,
 	SignupError,
 	type CharacterizedSignupError,
 } from "$lib/server/auth";
-import { fail, type Actions } from "@sveltejs/kit";
+import { fail, redirect, type Actions } from "@sveltejs/kit";
 
 function getMessage(error: CharacterizedSignupError): string {
 	switch (error.type) {
@@ -13,7 +14,7 @@ function getMessage(error: CharacterizedSignupError): string {
 }
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, cookies, getClientAddress }) => {
 		const data = await request.formData();
 		const name = data.get("name")?.toString();
 		const email = data.get("email")?.toString();
@@ -64,6 +65,25 @@ export const actions = {
 				error: getMessage(signupAttempt.result),
 			});
 		}
-		return { success: true };
+
+		// Try to log the user in for them
+		const loginAttempt = await logIn(email, password, getClientAddress());
+
+		if (loginAttempt.result.isError) {
+			throw new Error(
+				"A newly created account can seemingly not be logged into: " + email,
+			);
+		}
+
+		if (!("token" in loginAttempt)) {
+			throw new TypeError("Missing token in successful login response");
+		}
+
+		cookies.set("secret_token", loginAttempt.token, {
+			path: "/",
+			secure: true,
+			expires: new Date(loginAttempt.result.until * 1_000),
+		});
+		redirect(303, "/mascotas");
 	},
 } satisfies Actions;

@@ -3,7 +3,8 @@
 	import { assets } from "$app/paths";
 
 	import AccountManager from "./AccountManager.svelte";
-	const { data, children } = $props();
+	let { data, children } = $props();
+	let { userData } = $derived(data);
 </script>
 
 <sveltekit:head>
@@ -16,7 +17,7 @@
 			<a href={route.path} class="nav-link">{route.name}</a>
 		{/each}
 	</nav>
-	<AccountManager token={data.sessionToken}></AccountManager>
+	<AccountManager {userData}></AccountManager>
 </header>
 
 <main>
