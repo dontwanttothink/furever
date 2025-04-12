@@ -59,3 +59,11 @@
 		</li>
 	</ul>
 </section>
+<section>
+	<h2>Cookies</h2>
+	<p>
+		Cuando inicias sesión, almacenamos un token de sesión en forma de cookie
+		para autenticarte e identificarte. Esta cookie se elimina automáticamente al
+		cerrar sesión.
+	</p>
+</section>
