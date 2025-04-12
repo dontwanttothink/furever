@@ -7,38 +7,36 @@
 </svelte:head>
 
 <h1>Hola, FureverHome.</h1>
-<p>Algún día, el mundo será un lugar mejor.</p>
+<p>Encuentra a tu nuevo mejor amigo y dale un hogar para siempre.</p>
 
 <h2>Propósito</h2>
 
 <p>
-	FureverHome es tu compañero digital integral para la crianza de mascotas.
-	Entendemos que gestionar la salud y el bienestar de tu mascota puede ser
-	abrumador, por eso hemos creado una solución todo-en-uno para ayudarte a
-	mantenerte organizado e informado.
+	FureverHome es una plataforma dedicada a conectar refugios de animales y
+	personas con aquellos que buscan adoptar una mascota. Creemos que cada animal
+	merita un hogar lleno de amor, y nuestra misión es facilitar el proceso de
+	adopción para que más mascotas encuentren familias cariñosas.
 </p>
 
 <p>
-	Nuestra plataforma simplifica el cuidado de mascotas al proporcionar un centro
-	centralizado para toda la información importante de tu mascota. Desde
-	registros de vacunación hasta horarios de medicación, y desde citas con el
-	veterinario hasta hitos de crecimiento, FureverHome asegura que nunca te
-	pierdas ningún detalle en el cuidado de la salud de tu mascota.
+	Ya sea que seas un refugio buscando dar visibilidad a tus animales o una
+	persona buscando un nuevo compañero, FureverHome te proporciona las
+	herramientas necesarias para hacer conexiones significativas. Nuestra
+	plataforma permite a los refugios y particulares listar mascotas disponibles
+	para adopción, mientras que los adoptantes pueden buscar fácilmente a su
+	mascota ideal.
 </p>
 
 <p>
-	Ya sea que seas un nuevo padre de mascotas o tengas años de experiencia,
-	FureverHome se adapta a tus necesidades. La interfaz intuitiva facilita el
-	seguimiento de múltiples mascotas, compartir información con veterinarios y
-	mantener un historial completo de los registros de salud de tu mascota. Tu
-	tranquilidad es nuestra prioridad, y estamos aquí para apoyarte en brindar el
-	mejor cuidado posible a tus miembros peludos de la familia.
+	Con FureverHome, estamos comprometidos a reducir la cantidad de animales sin
+	hogar y a promover la adopción responsable. Juntos, podemos hacer una
+	diferencia en la vida de miles de animales y sus futuros dueños.
 </p>
 
 <h2>Características</h2>
 <ul>
-	<li>Rastrear registros de salud de mascotas</li>
-	<li>Gestionar horarios de vacunación</li>
-	<li>Almacenar documentos importantes</li>
-	<li>Establecer recordatorios de medicación</li>
+	<li>Explorar mascotas disponibles para adopción</li>
+	<li>Conectar con refugios y particulares</li>
+	<li>Filtrar búsquedas por tipo de mascota, tamaño, edad y más</li>
+	<li>Acceder a información detallada sobre cada mascota</li>
 </ul>
