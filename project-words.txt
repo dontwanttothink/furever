@@ -1,7 +1,9 @@
 anonimizada
 autenticarte
 cloudflare
+csrf
 furever
+fureverhome
 idec
 libsql
 nubuwu
