@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>{titlePrefix}Iniciar Sesión</title>
+	<title>{titlePrefix}Iniciar sesión</title>
 	<meta
 		name="description"
 		content="Inicia sesión con tu cuenta de FureverHome o crea una."
