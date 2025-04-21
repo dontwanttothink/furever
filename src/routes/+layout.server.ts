@@ -15,8 +15,9 @@ export async function load({ cookies }) {
 				cookies.delete("secret_token", {
 					path: "/",
 				});
+			} else {
+				throw e;
 			}
-			throw e;
 		}
 	}
 
