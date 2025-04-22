@@ -1,3 +1,10 @@
+export enum Sex {
+	Unknown = 0,
+	Male,
+	Female,
+	Indeterminate,
+}
+
 export enum Species {
 	Other = 0,
 	Dog = 1,
