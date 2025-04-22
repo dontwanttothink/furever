@@ -1,0 +1,90 @@
+export enum Sex {
+	Unknown = 0,
+	Male,
+	Female,
+	Indeterminate,
+}
+
+export enum Species {
+	Other = 0,
+	Dog = 1,
+	Cat = 2,
+}
+
+export enum DogBreeds {
+	Other = 0,
+	Unknown = 1,
+	Mixed = 2,
+	BorderCollie,
+	Labrador,
+	GermanShepherd,
+	GoldenRetriever,
+	Bulldog,
+	Beagle,
+	Poodle,
+	Rottweiler,
+	YorkshireTerrier,
+	Boxer,
+	Dachshund,
+}
+
+export enum CatBreeds {
+	Mixed = 0,
+	Unknown = 1,
+}
+
+export enum Temperament {
+	Unknown = 0,
+	Calm,
+	Friendly,
+	Aggressive,
+	Playful,
+	Shy,
+	Loyal,
+	Energetic,
+	Curious,
+	Protective,
+	Independent,
+	Affectionate,
+}
+
+export enum ChronicConditions {
+	Arthritis = 0,
+	Diabetes,
+	HeartDisease,
+	KidneyDisease,
+	LiverDisease,
+	Cancer,
+	Epilepsy,
+	Allergies,
+	Obesity,
+	DentalDisease,
+	Hypothyroidism,
+	Hyperthyroidism,
+	CushingSyndrome,
+	AddisonDisease,
+	RespiratoryIssues,
+	UrinaryTractInfections,
+	SkinConditions,
+	GastrointestinalIssues,
+	Blindness,
+	Deafness,
+	HipDysplasia,
+	LuxatingPatella,
+	Bloat,
+	Anemia,
+	Parvovirus,
+	Distemper,
+	LymeDisease,
+	FelineLeukemia,
+	FelineImmunodeficiencyVirus,
+	Rabies,
+	Heartworm,
+	Ringworm,
+	Mange,
+	Pancreatitis,
+	Glaucoma,
+	Cataracts,
+	Anxiety,
+	Depression,
+}

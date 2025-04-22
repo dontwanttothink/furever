@@ -6,3 +6,11 @@ export function assert(
 		throw new Error(message || "Assertion failed");
 	}
 }
+
+export class ExpectedUnreachableError extends Error {
+	constructor() {
+		super("This code was presumed to be unreachable.");
+	}
+}
+
+export const titlePrefix = "FureverHome — ";

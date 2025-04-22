@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { titlePrefix } from "$lib/misc";
+	import { titlePrefix } from "$lib";
 	import { assets } from "$app/paths";
 	import SignUpForm from "../SignUpForm.svelte";
 

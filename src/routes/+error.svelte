@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { assets } from "$app/paths";
 	import { page } from "$app/state";
-	import { titlePrefix } from "$lib/misc";
+	import { titlePrefix } from "$lib";
 </script>
 
 <svelte:head>

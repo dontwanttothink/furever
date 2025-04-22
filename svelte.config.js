@@ -20,7 +20,7 @@ const config = {
 			// to support correct origin checking in both development and
 			// production modes.
 			checkOrigin: false,
-		}
+		},
 	},
 };
 

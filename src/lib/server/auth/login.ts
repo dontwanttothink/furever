@@ -5,7 +5,7 @@ import {
 	maybeSweepSessions,
 	verify,
 } from "./internal";
-import { loginAttempts } from "../db/schema";
+import { loginAttemptsTable } from "../db/schema";
 
 const SECONDS_PER_HOUR = 60 * 60;
 
@@ -88,7 +88,7 @@ export async function logIn(
 			.join("");
 	}
 
-	db.insert(loginAttempts).values({
+	db.insert(loginAttemptsTable).values({
 		userId,
 		timestamp: getCurrentTimestampInSeconds(),
 		source: await hashIp(source),
