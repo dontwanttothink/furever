@@ -1,6 +1,6 @@
 <script lang="ts">
 	import LinkButton from "$lib/components/LinkButton.svelte";
-	import { titlePrefix } from "$lib/misc";
+	import { titlePrefix } from "$lib";
 	const { data } = $props();
 	const { recentPets } = data;
 </script>
