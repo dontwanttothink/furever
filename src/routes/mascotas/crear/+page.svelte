@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { enhance } from "$app/forms";
 	import { assets } from "$app/paths";
-	import { titlePrefix } from "$lib/misc";
-	import { DogBreeds, Species } from "$lib/pets";
+	import { assert, ExpectedUnreachableError } from "$lib";
+	import { titlePrefix } from "$lib";
+	import { DogBreeds, Sex, Species } from "$lib/pets";
+
+	const sexesList = Object.values(Sex).filter((x) => typeof x === "number");
 
 	const speciesList = Object.values(Species).filter(
 		(x) => typeof x === "number",
@@ -56,6 +60,49 @@
 				return "Dachshund";
 		}
 	}
+
+	function isLeapYear(year: number) {
+		return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+	}
+	function numberOfDaysInMonth(month: number, leapYear: boolean): number {
+		assert(month >= 1 && month <= 12, "Month must be between 1 and 12");
+		switch (month) {
+			case 1:
+			case 3:
+			case 5:
+			case 7:
+			case 8:
+			case 10:
+			case 12:
+				return 31;
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				return 30;
+			case 2:
+				return leapYear ? 29 : 28;
+		}
+
+		throw new ExpectedUnreachableError();
+	}
+
+	function getUserReadableSexName(sex: Sex): string {
+		switch (sex) {
+			case Sex.Unknown:
+				return "Desconocido";
+			case Sex.Male:
+				return "Masculino";
+			case Sex.Female:
+				return "Femenino";
+			case Sex.Indeterminate:
+				return "Indeterminado u ambiguo";
+		}
+	}
+
+	// FIXME: the client-side validation here is highkey horrible. Sigh
+	let birthMonth = $state("1");
+	let birthYear = $state("2020");
 </script>
 
 <svelte:head>
@@ -69,7 +116,7 @@
 
 <h1>Nueva mascota</h1>
 
-<form method="POST" action="/iniciar-sesión">
+<form method="POST" action="/iniciar-sesión" use:enhance>
 	<h2>Datos básicos</h2>
 
 	<div class="question-group">
@@ -97,14 +144,76 @@
 	</div>
 
 	<div class="question-group">
-		<label for="edad">Fecha de nacimiento</label>
-		<input
-			type="date"
-			id="edad"
-			name="edad"
-			disabled={birthDateIsUnknown}
-			required
-		/>
+		<label>
+			Sexo
+			<select name="sexo">
+				{#each sexesList as sex (sex)}
+					<option value={sex}>{getUserReadableSexName(sex)}</option>
+				{/each}
+			</select>
+		</label>
+	</div>
+
+	<div class="question-group">
+		<label
+			>Fecha de nacimiento
+			<div id="date-picker" class={[birthDateIsUnknown ? "dimmed" : ""]}>
+				<label
+					>Día <input
+						name="día-nacimiento"
+						type="number"
+						class="inline"
+						value="1"
+						min="1"
+						max="31"
+						onchange={(e) => {
+							const userValue = parseInt(e.currentTarget.value, 10);
+							const actualMax = numberOfDaysInMonth(
+								parseInt(birthMonth, 10),
+								isLeapYear(parseInt(birthYear, 10)),
+							);
+
+							e.currentTarget.value = Number.isNaN(userValue)
+								? "1"
+								: String(Math.min(actualMax, Math.max(1, userValue)));
+						}}
+						disabled={birthDateIsUnknown}
+					/></label
+				>
+				<label
+					>Mes <input
+						name="mes-nacimiento"
+						type="number"
+						class="inline"
+						disabled={birthDateIsUnknown}
+						min="1"
+						max="12"
+						bind:value={birthMonth}
+						onchange={(e) => {
+							let userValue = parseInt(e.currentTarget.value, 10);
+							e.currentTarget.value = String(
+								Number.isNaN(userValue)
+									? 1
+									: Math.max(1, Math.min(12, userValue)),
+							);
+						}}
+					/></label
+				>
+				<label
+					>Año <input
+						id="año-nacimiento"
+						name="año-nacimiento"
+						type="number"
+						class="inline"
+						bind:value={birthYear}
+						min="1900"
+						disabled={birthDateIsUnknown}
+						max={new Date().getFullYear()}
+					/></label
+				>
+			</div></label
+		>
+
 		<div>
 			<label for="fecha-aproximada" class={[birthDateIsUnknown ? "dimmed" : ""]}
 				><input
@@ -148,7 +257,8 @@
 		<textarea id="descripción" name="descripción" required></textarea>
 	</div>
 
-	<h2>Información opcional de salud</h2>
+	<h2>Información adicional de salud</h2>
+	<p>Estos datos son opcionales.</p>
 
 	<div class="question-group"></div>
 
@@ -156,6 +266,23 @@
 </form>
 
 <style>
+	#date-picker {
+		label {
+			font-weight: normal;
+
+			input {
+				width: 3.5rem;
+			}
+			input#año-nacimiento {
+				width: 5rem;
+			}
+		}
+	}
+
+	h2 {
+		margin-bottom: 0;
+	}
+
 	#date-precision-control {
 		margin: 0.3rem 0 1rem;
 	}
