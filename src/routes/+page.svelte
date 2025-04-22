@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { titlePrefix } from "$lib/misc";
+	import { titlePrefix } from "$lib";
 </script>
 
 <svelte:head>

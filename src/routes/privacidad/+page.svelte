@@ -1,5 +1,5 @@
 <script>
-	import { titlePrefix } from "$lib/misc";
+	import { titlePrefix } from "$lib";
 
 	const title = "Política de privacidad";
 </script>

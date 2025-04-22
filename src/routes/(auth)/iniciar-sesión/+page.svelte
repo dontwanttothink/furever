@@ -2,7 +2,7 @@
 	import LoginForm from "../LoginForm.svelte";
 	import { assets } from "$app/paths";
 
-	import { titlePrefix } from "$lib/misc";
+	import { titlePrefix } from "$lib";
 
 	let { form } = $props();
 </script>
