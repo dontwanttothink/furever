@@ -25,6 +25,13 @@
 </main>
 
 <footer>
+	<noscript>
+		<p>
+			JavaScript está desactivado. Algunas funciones del sitio no funcionarán
+			correctamente.
+		</p>
+	</noscript>
+
 	<p>
 		<span id="copy">Copyright &copy; 2025</span> <br />santi_nubuwu y los
 		colaboradores de FureverHome

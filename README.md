@@ -5,15 +5,14 @@ powers both the back-end and the web front-end of the FureverHome project.
 
 ## Running
 
-First, create a `.env` file as in `.env.example`.
-
-Then, to start a development server:
+To start a development server:
 
 ```sh
 ➜ bun i
 
 # set up the local database
 ➜ echo "DB_FILE_NAME=file:local.db" > .env # saying where it should be
+➜ echo "USER_CONTENT=dev_user_content" >> .env # images and so on
 ➜ bun drizzle-kit push # adding the schema
 
 ➜ bun dev

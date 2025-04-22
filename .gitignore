@@ -2,6 +2,7 @@ node_modules
 
 # Development
 local.db
+dev_user_content
 
 # Output
 .output

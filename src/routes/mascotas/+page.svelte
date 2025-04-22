@@ -1,5 +1,8 @@
 <script lang="ts">
+	import LinkButton from "$lib/components/LinkButton.svelte";
 	import { titlePrefix } from "$lib/misc";
+	const { data } = $props();
+	const { recentPets } = data;
 </script>
 
 <svelte:head>
@@ -8,4 +11,17 @@
 
 <h1>Mascotas</h1>
 
-<p>Aquí hay una lista de todas las mascotas disponibles para adoptar.</p>
+<ul>
+	{#each recentPets as pet (pet.id)}
+		<li>
+			<a href={`/mascotas/${pet.id}`}>
+				{pet.name}
+			</a>
+		</li>
+	{/each}
+</ul>
+
+<LinkButton href="/mascotas/crear">Crear nueva mascota</LinkButton>
+
+<style>
+</style>
