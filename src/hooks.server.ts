@@ -12,7 +12,7 @@ copyright notice and permissions notice follow: */
 */
 
 /**
- * Returns `true` if the request contains a `content-type` header with the given type * @license MIT
+ * Returns `true` if the request contains a `content-type` header with the given type
  * @license MIT
  * @author https://github.com/sveltejs/kit/graphs/contributors
  * @file kit/packages/kit/src/utils/http.js
