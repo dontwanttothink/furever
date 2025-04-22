@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { enhance } from "$app/forms";
+
 	const { href, children } = $props();
 </script>
 
-<form method="GET" action={href}>
+<form method="GET" action={href} use:enhance>
 	<button>{@render children()}</button>
 </form>
 
