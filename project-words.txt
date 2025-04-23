@@ -3,6 +3,8 @@ autenticarte
 bunx
 cloudflare
 csrf
+desparacitada
+desparacitado
 Dewormed
 furever
 fureverhome
