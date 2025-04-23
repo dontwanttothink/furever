@@ -6,8 +6,9 @@ import type { Actions } from "./$types";
 import { DogBreeds, Sex, Species } from "$lib/pets";
 import { assert } from "$lib";
 import { getCurrentTimestampInSeconds } from "$lib/server/auth/internal";
-import { getUserDataFor } from "$lib/server/auth/userData";
+import { getUserDataByToken } from "$lib/server/auth/userData";
 import type { InferInsertModel } from "drizzle-orm";
+import { processAndRegisterPetImages } from "$lib/server/db/userContent";
 
 const validSpecies = Object.values(Species).filter(
 	(n) => typeof n === "number",
@@ -19,12 +20,12 @@ const validSexes = Object.values(Sex).filter((n) => typeof n === "number");
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
-		const userToken = cookies.get("secret-token");
+		const userToken = cookies.get("secret_token");
 		if (!userToken) {
 			return fail(401, { error: "No estás autenticado." });
 		}
 
-		const userData = await getUserDataFor(userToken);
+		const userData = await getUserDataByToken(userToken);
 
 		const badRequestErrors = [];
 
@@ -35,7 +36,7 @@ export const actions: Actions = {
 			badRequestErrors.push("Se necesita un nombre.");
 		}
 
-		const speciesRaw = data.get("species")?.toString();
+		const speciesRaw = data.get("especie")?.toString();
 		if (!speciesRaw || !validSpecies.includes(parseInt(speciesRaw, 10))) {
 			badRequestErrors.push("La especie indicada es inválida.");
 		}
@@ -45,8 +46,9 @@ export const actions: Actions = {
 			badRequestErrors.push("La raza indicada es inválida.");
 		}
 
-		const sexRaw = data.get("sex")?.toString();
+		const sexRaw = data.get("sexo")?.toString();
 		if (!sexRaw || !validSexes.includes(parseInt(sexRaw, 10))) {
+			console.log(sexRaw);
 			badRequestErrors.push("El sexo indicado es inválido.");
 		}
 
@@ -70,10 +72,12 @@ export const actions: Actions = {
 			badRequestErrors.push("Se necesita una descripción.");
 		}
 
-		const weightRaw = data.get("peso")?.toString();
-		if (!weightRaw || Number.isNaN(parseInt(weightRaw, 10))) {
-			badRequestErrors.push("El peso indicado es inválido.");
-		}
+		const maybeWeight = data.get("peso")?.toString();
+
+		// Handle image uploads
+		const imageFiles = data
+			.getAll("imágenes")
+			.filter((f) => f instanceof File) as File[];
 
 		if (badRequestErrors.length > 0) {
 			return fail(400, { error: badRequestErrors });
@@ -86,7 +90,6 @@ export const actions: Actions = {
 				birthDayRaw &&
 				birthMonthRaw &&
 				birthYearRaw &&
-				weightRaw &&
 				name &&
 				description,
 		);
@@ -97,9 +100,11 @@ export const actions: Actions = {
 		const birthDay = parseInt(birthDayRaw, 10);
 		const birthMonth = parseInt(birthMonthRaw, 10);
 		const birthYear = parseInt(birthYearRaw, 10);
-		const weight = parseInt(weightRaw, 10);
+
+		// FIXME: These should be optional. They are currently always set.
 		const wasDewormed = data.get("fue-desparacitado")?.toString() == "on";
 		const wasNeutered = data.get("fue-esterilizado")?.toString() == "on";
+
 		const birthDayIsUnknown =
 			data.get("fecha-de-nacimiento-es-desconocida")?.toString() == "on";
 
@@ -110,7 +115,6 @@ export const actions: Actions = {
 			species: species,
 			breed: breed,
 			sex: sex,
-			weight: weight,
 			isDewormed: Number(wasDewormed),
 			isNeutered: Number(wasNeutered),
 			description: description,
@@ -137,12 +141,22 @@ export const actions: Actions = {
 			// i'm tired)
 		}
 
+		if (maybeWeight && !Number.isNaN(parseInt(maybeWeight, 10))) {
+			newPet.weight = parseInt(maybeWeight, 10);
+		}
+
 		const { insertedId } = (
 			await db
 				.insert(petsTable)
 				.values(newPet)
 				.returning({ insertedId: petsTable.id })
 		)[0];
+
+		// Process and register images if any were uploaded
+		if (imageFiles.length > 0) {
+			await processAndRegisterPetImages(insertedId, imageFiles);
+		}
+
 		redirect(303, "/mascotas/ver/" + insertedId.toString());
 	},
 };
