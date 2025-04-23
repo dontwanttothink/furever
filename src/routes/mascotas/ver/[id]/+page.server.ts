@@ -1,4 +1,5 @@
 import { db } from "$lib/server/db";
+import { getUserDataById } from "$lib/server/auth/userData";
 import { petsTable } from "$lib/server/db/schema";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
@@ -24,5 +25,5 @@ export async function load({ params }) {
 	}
 
 	const [pet] = matchedPets;
-	return { pet };
+	return { pet: { ...pet, author: await getUserDataById(pet.author) } };
 }
