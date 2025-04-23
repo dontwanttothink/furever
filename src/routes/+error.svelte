@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-	<title>{titlePrefix}No Encontrado</title>
+	<title>{titlePrefix}Error {page.status}</title>
 	<meta name="description" content="La página no se pudo encontrar." />
 
 	<!-- We do this because we need to modify the 'body' and 'main' elements. We
