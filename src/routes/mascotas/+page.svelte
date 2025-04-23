@@ -4,6 +4,12 @@
 	import { getUserReadableSpeciesName } from "$lib/pets/index.js";
 	const { data } = $props();
 	const { recentPets } = data;
+
+	function getRandomImageUUID(uuids: string[] | undefined): string | null {
+		if (!uuids || uuids.length === 0) return null;
+		const idx = Math.floor(Math.random() * uuids.length);
+		return uuids[idx];
+	}
 </script>
 
 <svelte:head>
@@ -15,15 +21,18 @@
 <div class="pet-cards">
 	{#each recentPets as pet (pet.id)}
 		<div class="pet-card">
-			<a class="pet-name" href={`/mascotas/ver/${pet.id}`}>
-				{pet.name}
-			</a>
+			{#if pet.attachmentUUIDs && pet.attachmentUUIDs.length > 0}
+				<img
+					class="pet-image"
+					src={`/mascotas/imágenes/${getRandomImageUUID(pet.attachmentUUIDs)}`}
+					alt={`Imagen de ${pet.name}`}
+				/>
+			{/if}
+			<a class="pet-name" href={`/mascotas/ver/${pet.id}`}> {pet.name} </a>
 			<div class="pet-meta">
 				<span class="pet-author">por {pet.authorName}</span>
 			</div>
-			<div class="pet-description">
-				{pet.description}
-			</div>
+			<div class="pet-description">{pet.description}</div>
 			{#if pet.birthDate}
 				<div class="pet-detail">
 					<span class="bold"
@@ -121,5 +130,15 @@
 		margin-top: 0.2rem;
 		margin-bottom: 0.2rem;
 		box-shadow: 0 1px 4px rgba(236, 64, 122, 0.07);
+	}
+	.pet-image {
+		display: block;
+		width: 100%;
+		height: 180px;
+		object-fit: cover;
+		border-radius: 10px;
+		margin-bottom: 0.7rem;
+		background: #fde4ec;
+		box-shadow: 0 1px 6px rgba(236, 64, 122, 0.1);
 	}
 </style>
