@@ -38,7 +38,7 @@
 <p>
 	La información en esta página fue provista por <span class="author-name"
 		>{author.name}</span
-	>, quien está buscando dar a <span class="author-name">{name}</span> de adopción.
+	>, quien está buscando dar a <span class="author-name">{name}</span> en adopción.
 </p>
 
 <h2>Información general</h2>
