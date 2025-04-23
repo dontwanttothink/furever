@@ -56,8 +56,8 @@ export const petsTable = sqliteTable("pets_table", {
 	name: text().notNull(),
 
 	sex: int().notNull(),
-	isNeutered: int().notNull(), // Boolean
-	isDewormed: int().notNull(), // Boolean
+	isNeutered: int(), // Boolean
+	isDewormed: int(), // Boolean
 
 	weight: int(),
 	breed: int().notNull(), // as given in `lib/server/pets`

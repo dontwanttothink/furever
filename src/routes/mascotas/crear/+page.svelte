@@ -273,6 +273,11 @@
 		</label>
 	</div>
 
+	<div class="question-group">
+		<label for="peso">Peso en kilogramos</label>
+		<input id="peso" name="peso" type="number" />
+	</div>
+
 	<button type="submit">Registrar</button>
 </form>
 
