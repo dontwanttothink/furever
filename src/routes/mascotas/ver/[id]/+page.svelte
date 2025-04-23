@@ -46,6 +46,7 @@
 			/>
 		{/each}
 	</div>
+	<div id="spacer" style:height="35rem"></div>
 {/if}
 
 <p>
@@ -90,6 +91,15 @@
 	<p>{description}</p>
 </blockquote>
 
+<svelte:head>
+	<!-- Weird hack to get this to work -->
+	<style>
+		body {
+			position: relative;
+		}
+	</style>
+</svelte:head>
+
 <style>
 	h1 {
 		margin-bottom: 0rem;
@@ -106,13 +116,21 @@
 		display: flex;
 		gap: 1rem;
 		justify-content: center;
-		margin: 1.5rem 0;
+		align-items: center;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		overflow: scroll;
+		flex-direction: row;
+		width: 100vw;
+		height: 35rem;
+		margin: 0;
 	}
 
 	.pet-image {
 		border-radius: 2.5rem;
 		box-shadow: 0 4px 16px rgba(247, 182, 210, 0.15);
-		max-width: 30rem;
+		max-height: 30rem;
 		object-fit: cover;
 		background: #fff0f6;
 		transition:
