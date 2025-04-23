@@ -4,7 +4,7 @@ body {
 	max-width: 50rem;
 	padding: 1rem 2rem;
 
-	
+	/* background-color: #fddada; */
 	color: #333;
 	line-height: 1.6;
 }
@@ -13,8 +13,7 @@ h1 {
 	font-size: 2.5rem;
 	line-height: 1.2;
 	text-align: center;
-	color:#faa3a4;
-	/* color: #fda3a5; */
+	color: #faa3a4;
 }
 
 h1,
@@ -123,21 +122,22 @@ select:focus-visible {
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-  }
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1rem;
+}
 
-  th, td {
-    border: 3px solid #ddd;
-    padding: 0.5rem;
-    text-align: center;
-  }
+th,
+td {
+	border: 3px solid #ddd;
+	padding: 0.5rem;
+	text-align: center;
+}
 
-  th {
-    background-color: #f3f3f3;
-  }
+th {
+	background-color: #f3f3f3;
+}
 
-  td:first-child {
-    text-align: left;
- }
+td:first-child {
+	text-align: left;
+}
