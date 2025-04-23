@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { fly } from "svelte/transition";
+
 	import { enhance } from "$app/forms";
 	import { assets } from "$app/paths";
 	import { assert, ExpectedUnreachableError } from "$lib";
 	import { titlePrefix } from "$lib";
 	import { DogBreeds, Sex, Species } from "$lib/pets";
+
+	const { form } = $props();
 
 	const sexesList = Object.values(Sex).filter((x) => typeof x === "number");
 
@@ -116,7 +120,7 @@
 
 <h1>Nueva mascota</h1>
 
-<form method="POST" action="crear" use:enhance>
+<form method="POST" action="crear" use:enhance enctype="multipart/form-data">
 	<h2>Datos básicos</h2>
 
 	<div class="question-group">
@@ -278,10 +282,56 @@
 		<input id="peso" name="peso" type="number" />
 	</div>
 
+	<div class="question-group">
+		<label for="pet-images">Imágenes de la mascota</label>
+		<input
+			type="file"
+			id="pet-images"
+			name="imágenes"
+			accept="image/*"
+			multiple
+		/>
+		<small
+			>Puedes subir varias imágenes. Solo se aceptan archivos de imagen.</small
+		>
+	</div>
+
 	<button type="submit">Registrar</button>
 </form>
 
+<div id="error-area">
+	{#if form?.error instanceof Array}
+		<ul class="error">
+			{#each form.error as e (e)}
+				<li in:fly={{ x: 0, y: -10, duration: 500 }}>{e}</li>
+			{/each}
+		</ul>
+	{:else if form?.error}
+		<p class="error" in:fly={{ x: 0, y: -10, duration: 500 }}>
+			{form.error}
+		</p>
+	{/if}
+</div>
+
 <style>
+	#error-area {
+		min-height: 5rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin-top: 0.5rem;
+
+		ul li {
+			text-align: left;
+		}
+	}
+
+	.error {
+		color: rgb(163, 57, 57);
+		margin: 0.7rem 0;
+		text-align: center;
+	}
+
 	.normal-weight {
 		font-weight: normal !important;
 	}
