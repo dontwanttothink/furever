@@ -42,6 +42,14 @@
 		bind:value={passConfirm}
 		required
 	/>
+
+	<label for="invitation-code"> Código de invitación </label>
+	<input type="text" name="invitation" id="invitation-code" />
+	<small
+		>Durante la fase de pruebas, es necesario un código de invitación para crear
+		una cuenta.</small
+	>
+
 	<div id="submit-area">
 		<div id="error-area">
 			{#if form?.error}

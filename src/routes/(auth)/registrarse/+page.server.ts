@@ -20,6 +20,8 @@ export const actions = {
 		const email = data.get("email")?.toString();
 		const password = data.get("password")?.toString();
 
+		const invitationCode = data.get("invitation")?.toString();
+
 		if (!name) {
 			return fail(400, {
 				error: "Se necesita un nombre.",
@@ -56,6 +58,12 @@ export const actions = {
 		if (password.at(-1) == " " || password.at(0) == " ") {
 			return fail(400, {
 				error: "La contraseña no puede empezar o terminar con un espacio.",
+			});
+		}
+
+		if (!invitationCode || invitationCode != "3156432755") {
+			return fail(400, {
+				error: "Código de invitación inválido.",
 			});
 		}
 
