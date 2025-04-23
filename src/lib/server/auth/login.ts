@@ -54,6 +54,8 @@ export async function logIn(
 	password: string,
 	source: string,
 ): Promise<LoginAttempt<CharacterizedLoginResult>> {
+	console.log("New login attempt for: " + email);
+
 	email = email.toLowerCase();
 
 	const result = await db
