@@ -2,6 +2,8 @@
 	import { assets } from "$app/paths";
 	import { page } from "$app/state";
 	import { titlePrefix } from "$lib";
+
+	console.error(page.error);
 </script>
 
 <svelte:head>
