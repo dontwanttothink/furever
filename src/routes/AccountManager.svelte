@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { getUserDataFor } from "$lib/server/auth/userData";
+	import type { getUserDataByToken } from "$lib/server/auth/userData";
 	import { fly } from "svelte/transition";
 	let {
 		userData,
-	}: { userData: Awaited<ReturnType<typeof getUserDataFor>> | null } = $props();
+	}: { userData: Awaited<ReturnType<typeof getUserDataByToken>> | null } =
+		$props();
 
 	let showDropdown = $state(false);
 
@@ -80,24 +81,26 @@
 		transition: transform 150ms ease;
 	}
 	.dropdown-toggle.expanded {
-		background-color: rgb(230, 230, 230);
+		background-color: #ffd6e0; /* pink accent background */
 		transform: scale(110%);
 	}
 	.dropdown-toggle:hover {
 		cursor: pointer;
+		background-color: #ffe6ee; /* lighter pink on hover */
 	}
 	.dropdown-items {
 		position: absolute;
 		display: block;
-		background-color: rgb(238, 238, 238);
+		background-color: #fff3f3; /* pink accent background */
 		padding: 0.3em;
 		border-radius: 10px;
 		list-style: none;
 		top: 50%;
 		right: 0;
 		width: max-content;
-		/* Shadow */
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.05);
+		/* Pink shadow */
+		box-shadow: 0 5px 15px 0 rgba(255, 179, 179, 0.18);
+		border: 1px solid #ffb3b3;
 	}
 
 	/* Style the submit input so that it looks like the rest of the items */

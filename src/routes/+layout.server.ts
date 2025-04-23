@@ -1,5 +1,5 @@
 import {
-	getUserDataFor,
+	getUserDataByToken,
 	InvalidSessionError,
 } from "$lib/server/auth/userData.js";
 
@@ -9,7 +9,7 @@ export async function load({ cookies }) {
 	let userData = null;
 	if (secretToken) {
 		try {
-			userData = await getUserDataFor(secretToken);
+			userData = await getUserDataByToken(secretToken);
 		} catch (e) {
 			if (e instanceof InvalidSessionError) {
 				cookies.delete("secret_token", {

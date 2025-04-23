@@ -10,7 +10,7 @@ export class InvalidSessionError extends Error {}
  * @caveat This functionality is exposed to the client.
  * @returns The user name and email.
  */
-export async function getUserDataFor(sessionToken: string) {
+export async function getUserDataByToken(sessionToken: string) {
 	const matches = await db
 		.select({
 			userId: sessionsTable.userId,
@@ -36,6 +36,21 @@ export async function getUserDataFor(sessionToken: string) {
 		})
 		.from(usersTable)
 		.where(eq(usersTable.id, userId));
+
+	assert(userMatches.length == 1);
+
+	return userMatches[0];
+}
+
+export async function getUserDataById(id: number) {
+	const userMatches = await db
+		.select({
+			name: usersTable.name,
+			email: usersTable.email,
+			userId: usersTable.id,
+		})
+		.from(usersTable)
+		.where(eq(usersTable.id, id));
 
 	assert(userMatches.length == 1);
 
