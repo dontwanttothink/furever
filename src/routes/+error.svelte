@@ -3,7 +3,22 @@
 	import { page } from "$app/state";
 	import { titlePrefix } from "$lib";
 
-	console.error(page.error);
+	function beepBoop() {
+		const n = Math.floor(Math.random() * 5 + 3);
+		let out = [];
+		for (let i = 0; i < n; ++i) {
+			if (Math.random() < 0.5) {
+				out.push("beep");
+			} else {
+				out.push("boop");
+			}
+
+			if (Math.random() < 0.2) {
+				out[out.length - 1] += ".";
+			}
+		}
+		return out.join(" ");
+	}
 </script>
 
 <svelte:head>
@@ -20,9 +35,7 @@
 	<h1>{page.status}</h1>
 	<p>Lo sentimos. Hubo un error.</p>
 
-	<p class="raw-error">
-		{page.error?.message ?? "[No se proporcionó un mensaje de error.]"}
-	</p>
+	<p class="raw-error">{beepBoop()}</p>
 </div>
 
 <style>
