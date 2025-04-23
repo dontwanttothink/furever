@@ -6,7 +6,7 @@
 	<title>{titlePrefix}Inicio</title>
 </svelte:head>
 
-<h1>Hola, FureverHome.</h1>
+<h1>FureverHome.</h1>
 <p>Encuentra a tu nuevo mejor amigo y dale un hogar para siempre.</p>
 
 <h2>Propósito</h2>
