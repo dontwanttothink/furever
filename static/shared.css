@@ -3,8 +3,7 @@ body {
 	margin: auto;
 	max-width: 50rem;
 	padding: 1rem 2rem;
-
-	/* background-color: #fddada; */
+	background-color: #fddada;
 	color: #333;
 	line-height: 1.6;
 }
