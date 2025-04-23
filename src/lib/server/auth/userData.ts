@@ -32,6 +32,7 @@ export async function getUserDataFor(sessionToken: string) {
 		.select({
 			name: usersTable.name,
 			email: usersTable.email,
+			userId: usersTable.id,
 		})
 		.from(usersTable)
 		.where(eq(usersTable.id, userId));

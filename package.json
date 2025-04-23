@@ -43,6 +43,7 @@
 		"@libsql/client": "^0.15.1",
 		"argon2": "^0.41.1",
 		"dotenv": "^16.4.7",
-		"drizzle-orm": "^0.41.0"
+		"drizzle-orm": "^0.41.0",
+		"temporal-polyfill": "^0.3.0"
 	}
 }

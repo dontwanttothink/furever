@@ -1,45 +1,148 @@
+import { Temporal } from "temporal-polyfill";
 import { db } from "$lib/server/db";
 import { petsTable } from "$lib/server/db/schema";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
-import { Species } from "$lib/pets";
+import { DogBreeds, Sex, Species } from "$lib/pets";
+import { assert } from "$lib";
+import { getCurrentTimestampInSeconds } from "$lib/server/auth/internal";
+import { getUserDataFor } from "$lib/server/auth/userData";
+import type { InferInsertModel } from "drizzle-orm";
 
 const validSpecies = Object.values(Species).filter(
 	(n) => typeof n === "number",
 );
+const validBreeds = Object.values(DogBreeds).filter(
+	(n) => typeof n === "number",
+);
+const validSexes = Object.values(Sex).filter((n) => typeof n === "number");
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, cookies }) => {
+		const userToken = cookies.get("secret-token");
+		if (!userToken) {
+			return fail(401, { error: "No estás autenticado." });
+		}
+
+		const userData = await getUserDataFor(userToken);
+
+		const badRequestErrors = [];
+
 		const data = await request.formData();
 
 		const name = data.get("nombre")?.toString();
 		if (!name) {
-			return fail(400, { error: "Se necesita un nombre." });
+			badRequestErrors.push("Se necesita un nombre.");
 		}
 
-		let species = data.get("species")?.toString();
-		if (!species || !validSpecies.includes(parseInt(species, 10))) {
-			return fail(400, { error: "La especie indicada es inválida." });
+		const speciesRaw = data.get("species")?.toString();
+		if (!speciesRaw || !validSpecies.includes(parseInt(speciesRaw, 10))) {
+			badRequestErrors.push("La especie indicada es inválida.");
 		}
-		species = parseInt(species, 10);
 
-		let breed = data.get("raza")?.toString();
-		let sexo = data.get("sex")?.toString();
-		let birthDay = data.get("día-nacimiento")?.toString();
-		let birthMonth = data.get("mes-nacimiento")?.toString();
-		let birthYear = data.get("año-nacimiento")?.toString();
-		let description = data.get("descripción")?.toString();
-		let weight = data.get("peso")?.toString();
-		let wasDewormed = data.get("fue-desparacitado")?.toString();
-		let wasNeutered = data.get("fue-esterilizado")?.toString();
-		let birthDayIsUnknown =
+		const breedRaw = data.get("raza")?.toString();
+		if (!breedRaw || !validBreeds.includes(parseInt(breedRaw, 10))) {
+			badRequestErrors.push("La raza indicada es inválida.");
+		}
+
+		const sexRaw = data.get("sex")?.toString();
+		if (!sexRaw || !validSexes.includes(parseInt(sexRaw, 10))) {
+			badRequestErrors.push("El sexo indicado es inválido.");
+		}
+
+		const birthDayRaw = data.get("día-nacimiento")?.toString();
+		if (!birthDayRaw || Number.isNaN(parseInt(birthDayRaw, 10))) {
+			badRequestErrors.push("El día de nacimiento es inválido.");
+		}
+
+		const birthMonthRaw = data.get("mes-nacimiento")?.toString();
+		if (!birthMonthRaw || Number.isNaN(parseInt(birthMonthRaw, 10))) {
+			badRequestErrors.push("El mes de nacimiento es inválido.");
+		}
+
+		const birthYearRaw = data.get("año-nacimiento")?.toString();
+		if (!birthYearRaw || Number.isNaN(parseInt(birthYearRaw, 10))) {
+			badRequestErrors.push("El año de nacimiento es inválido.");
+		}
+
+		const description = data.get("descripción")?.toString();
+		if (!description) {
+			badRequestErrors.push("Se necesita una descripción.");
+		}
+
+		const weightRaw = data.get("peso")?.toString();
+		if (!weightRaw || Number.isNaN(parseInt(weightRaw, 10))) {
+			badRequestErrors.push("El peso indicado es inválido.");
+		}
+
+		if (badRequestErrors.length > 0) {
+			return fail(400, { error: badRequestErrors });
+		}
+
+		assert(
+			speciesRaw &&
+				breedRaw &&
+				sexRaw &&
+				birthDayRaw &&
+				birthMonthRaw &&
+				birthYearRaw &&
+				weightRaw &&
+				name &&
+				description,
+		);
+
+		const species: Species = parseInt(speciesRaw, 10);
+		const breed: DogBreeds = parseInt(breedRaw, 10);
+		const sex: Sex = parseInt(sexRaw, 10);
+		const birthDay = parseInt(birthDayRaw, 10);
+		const birthMonth = parseInt(birthMonthRaw, 10);
+		const birthYear = parseInt(birthYearRaw, 10);
+		const weight = parseInt(weightRaw, 10);
+		const wasDewormed = data.get("fue-desparacitado")?.toString() == "on";
+		const wasNeutered = data.get("fue-esterilizado")?.toString() == "on";
+		const birthDayIsUnknown =
 			data.get("fecha-de-nacimiento-es-desconocida")?.toString() == "on";
 
-		db.insert(petsTable).values({
-			name,
-			species,
-		});
+		const newPet: InferInsertModel<typeof petsTable> = {
+			author: userData.userId,
+			timestamp: getCurrentTimestampInSeconds(),
+			name: name,
+			species: species,
+			breed: breed,
+			sex: sex,
+			weight: weight,
+			isDewormed: Number(wasDewormed),
+			isNeutered: Number(wasNeutered),
+			description: description,
+		};
 
-		console.log([...data.entries()]);
+		if (!birthDayIsUnknown) {
+			let birthInstant;
+			try {
+				birthInstant = Temporal.ZonedDateTime.from({
+					year: birthYear,
+					month: birthMonth,
+					day: birthDay,
+					timeZone: "-05",
+				});
+			} catch (e) {
+				if (e instanceof RangeError) {
+					return fail(400, { error: "Fecha de nacimiento inválida." });
+				}
+				throw e;
+			}
+			newPet.birthDate = birthInstant.epochMilliseconds / 1000;
+
+			// FIXME: take precision into account (i'm speedrunning this and
+			// i'm tired)
+		}
+
+		const { insertedId } = (
+			await db
+				.insert(petsTable)
+				.values(newPet)
+				.returning({ insertedId: petsTable.id })
+		)[0];
+		redirect(303, "/mascotas/ver/" + insertedId.toString());
 	},
 };
