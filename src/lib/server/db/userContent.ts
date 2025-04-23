@@ -34,6 +34,7 @@ export async function processAndRegisterPetImages(
 
 		// Normalize: convert to JPEG, resize to max 1200x1200px, strip metadata
 		const normalized = await image
+			.autoOrient()
 			.resize(1200, 1200, { fit: "inside" })
 			.jpeg({ quality: 85 })
 			.toBuffer();
