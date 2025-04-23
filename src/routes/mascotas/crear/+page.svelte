@@ -240,10 +240,10 @@
 				</div>
 			{/if}
 
-			<div id="date-precision-control">
-				<label for="conocimiento-de-la-fecha">
+			<div>
+				<label>
 					<input
-						id="conocimiento-de-la-fecha"
+						name="fecha-de-nacimiento-es-desconocida"
 						type="checkbox"
 						bind:checked={birthDateIsUnknown}
 					/> No conozco la fecha de nacimiento.
@@ -260,7 +260,18 @@
 	<h2>Información adicional de salud</h2>
 	<p>Estos datos son opcionales.</p>
 
-	<div class="question-group"></div>
+	<div class="question-group">
+		<label>
+			<input name="fue-desparacitado" type="checkbox" /> La mascota fue desparacitada
+			recientemente.
+		</label>
+	</div>
+
+	<div class="question-group">
+		<label>
+			<input name="fue-esterilizado" type="checkbox" /> La mascota fue esterilizada.
+		</label>
+	</div>
 
 	<button type="submit">Registrar</button>
 </form>
