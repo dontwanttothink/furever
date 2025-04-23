@@ -1,7 +1,19 @@
 <script>
+	import { assets } from "$app/paths";
+	import { titlePrefix } from "$lib";
+
 	const { data } = $props();
 	const { userData } = data;
 </script>
+
+<svelte:head>
+	<title>{titlePrefix}Formulario de Adopción</title>
+	<meta
+		name="description"
+		content="Ayuda a una nueva mascota a encontrar su hogar llenando un formulario de adopción."
+	/>
+	<link rel="stylesheet" href="{assets}/centered.css" />
+</svelte:head>
 
 <h1>Formulario de Adopción</h1>
 
@@ -40,8 +52,9 @@
 		<input id="empresa" name="empresa" type="text" /><br />
 		<label for="telefono">Teléfono:</label><br />
 		<input id="telefono" name="telefono" type="tel" required /><br />
-		<label>Tipo de vivienda:</label><br />
-		{#each ["Casa", "Apto", "Condominio", "Finca", "Hacienda", "Otro"] as tipo}
+		<label for="tipo_vivienda">Tipo de vivienda:</label>
+		<br />
+		{#each ["Casa", "Apto", "Condominio", "Finca", "Hacienda", "Otro"] as tipo (tipo)}
 			<label>
 				<input type="radio" name="tipo_vivienda" value={tipo} required />
 				{tipo}
@@ -53,7 +66,7 @@
 			placeholder="¿Otro? ¿Cuál?"
 		/><br />
 
-		<label>La vivienda es:</label><br />
+		<label for="tenencia">La vivienda es:</label><br />
 		{#each ["Propia", "Familiar", "Alquiler"] as tipo}
 			<label>
 				<input type="radio" name="tenencia" value={tipo} required />
