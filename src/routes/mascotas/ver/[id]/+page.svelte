@@ -19,6 +19,7 @@
 		weight,
 		isDewormed,
 		isNeutered,
+		attachmentUUIDs,
 	} = pet;
 </script>
 
@@ -34,6 +35,18 @@
 		}
 	})()} buscando su hogar en FureverHome.
 </p>
+
+{#if attachmentUUIDs.length > 0}
+	<div class="pet-images">
+		{#each attachmentUUIDs as uuid (uuid)}
+			<img
+				src={`/mascotas/imágenes/${uuid}`}
+				alt={`Imagen de ${name}`}
+				class="pet-image"
+			/>
+		{/each}
+	</div>
+{/if}
 
 <p>
 	La información en esta página fue provista por <span class="author-name"
@@ -88,5 +101,27 @@
 	}
 	.author-name {
 		font-style: italic;
+	}
+	.pet-images {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		margin: 1.5rem 0;
+	}
+
+	.pet-image {
+		border-radius: 2.5rem;
+		box-shadow: 0 4px 16px rgba(247, 182, 210, 0.15);
+		max-width: 30rem;
+		object-fit: cover;
+		background: #fff0f6;
+		transition:
+			transform 300ms,
+			box-shadow 300ms;
+	}
+
+	.pet-image:hover {
+		transform: scale(1.01);
+		box-shadow: 0 12px 36px rgba(247, 182, 210, 0.45);
 	}
 </style>

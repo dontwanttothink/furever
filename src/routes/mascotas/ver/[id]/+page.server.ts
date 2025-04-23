@@ -3,6 +3,7 @@ import { getUserDataById } from "$lib/server/auth/userData";
 import { petsTable } from "$lib/server/db/schema";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
+import { getFileAttachmentsFor } from "$lib/server/db/userContent.js";
 
 export async function load({ params }) {
 	const requestedId = parseInt(params.id, 10);
@@ -25,5 +26,11 @@ export async function load({ params }) {
 	}
 
 	const [pet] = matchedPets;
-	return { pet: { ...pet, author: await getUserDataById(pet.author) } };
+	return {
+		pet: {
+			...pet,
+			author: await getUserDataById(pet.author),
+			attachmentUUIDs: await getFileAttachmentsFor(pet.id),
+		},
+	};
 }

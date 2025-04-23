@@ -107,6 +107,17 @@
 	// FIXME: the client-side validation here is highkey horrible. Sigh
 	let birthMonth = $state("1");
 	let birthYear = $state("2020");
+
+	let uploadDialog: HTMLDialogElement | null = $state(null);
+
+	let files: FileList | null | undefined = $state(null);
+	function handleFormSubmit() {
+		assert(uploadDialog);
+
+		if (files && files.length > 0) {
+			uploadDialog.showModal();
+		}
+	}
 </script>
 
 <svelte:head>
@@ -120,7 +131,22 @@
 
 <h1>Nueva mascota</h1>
 
-<form method="POST" action="crear" use:enhance enctype="multipart/form-data">
+<form
+	method="POST"
+	action="crear"
+	use:enhance={() => {
+		assert(uploadDialog);
+
+		uploadDialog.showModal();
+		return async ({ update }) => {
+			await update();
+			assert(uploadDialog);
+			uploadDialog.close();
+		};
+	}}
+	enctype="multipart/form-data"
+	onsubmit={handleFormSubmit}
+>
 	<h2>Datos básicos</h2>
 
 	<div class="question-group">
@@ -288,6 +314,7 @@
 		<label for="pet-images">Muestra al mundo lo tierna que es tu mascota.</label
 		>
 		<input
+			bind:files
 			type="file"
 			id="pet-images"
 			name="imágenes"
@@ -303,6 +330,20 @@
 
 	<button type="submit">Registrar</button>
 </form>
+
+<dialog bind:this={uploadDialog} class="upload-dialog">
+	<div class="dialog-content">
+		<div class="upload-animation">
+			<div class="paw"></div>
+			<div class="paw"></div>
+			<div class="paw"></div>
+		</div>
+		<p>
+			¡Subiendo tus imágenes!<br />Esto puede tardar un momento.<br />Por favor
+			espera…
+		</p>
+	</div>
+</dialog>
 
 <div id="error-area">
 	{#if form?.error instanceof Array}
@@ -477,23 +518,87 @@
 		font-size: 0.95rem;
 	}
 	.upload-dialog {
-		border: none;
-		border-radius: 1.2rem;
+		min-width: 22rem;
+		max-width: 90vw;
+		padding: 2rem 1.5rem 1.5rem 1.5rem;
 		background: #fff6fa;
-		box-shadow: 0 4px 24px 0 #f8b6d1a0;
-		padding: 2rem 2.5rem;
-		text-align: center;
+		border: 2.5px solid #d16a9e;
+		border-radius: 1.2rem;
+		box-shadow:
+			0 8px 32px 0 #d16a9e40,
+			0 1.5px 8px 0 #f8b6d1a0;
+		z-index: 1000;
 	}
-	.upload-dialog .dialog-content p {
-		color: #d16a9e;
-		font-size: 1.1rem;
+	.upload-dialog[open] {
+		animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+		z-index: 1000;
+	}
+	@keyframes popIn {
+		0% {
+			transform: scale(0.7) translateY(40px);
+			opacity: 0;
+		}
+		80% {
+			transform: scale(1.05) translateY(-8px);
+			opacity: 1;
+		}
+		100% {
+			transform: scale(1) translateY(0);
+			opacity: 1;
+		}
+	}
+	.upload-animation {
+		display: flex;
+		justify-content: center;
+		gap: 0.7rem;
 		margin-bottom: 1.2rem;
 	}
-	.upload-dialog progress {
-		width: 100%;
-		height: 1.1rem;
-		accent-color: #f8b6d1;
-		border-radius: 0.7rem;
+	.paw {
+		width: 2.2rem;
+		height: 2.2rem;
+		background: #f8b6d1;
+		border-radius: 60% 60% 70% 70%;
+		position: relative;
+		animation: pawBounce 1.2s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
+		box-shadow: 0 2px 8px #f8b6d180;
+	}
+	.paw:nth-child(2) {
+		animation-delay: 0.2s;
 		background: #ffe4ef;
+	}
+	.paw:nth-child(3) {
+		animation-delay: 0.4s;
+		background: #f8b6d1;
+	}
+	@keyframes pawBounce {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		30% {
+			transform: translateY(-18px) scale(1.08);
+		}
+		60% {
+			transform: translateY(0);
+		}
+	}
+	.paw::before,
+	.paw::after {
+		content: "";
+		position: absolute;
+		background: #fff6fa;
+		border-radius: 50%;
+	}
+	.paw::before {
+		width: 0.7rem;
+		height: 0.7rem;
+		left: 0.2rem;
+		top: -0.4rem;
+	}
+	.paw::after {
+		width: 0.5rem;
+		height: 0.5rem;
+		right: 0.2rem;
+		top: -0.3rem;
 	}
 </style>

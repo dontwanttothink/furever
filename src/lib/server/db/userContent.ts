@@ -4,6 +4,7 @@ import sharp from "sharp";
 import path from "node:path";
 import fs from "node:fs/promises";
 import { randomUUID } from "node:crypto";
+import { eq } from "drizzle-orm";
 
 const USER_CONTENT = process.env.USER_CONTENT;
 
@@ -51,4 +52,19 @@ export async function processAndRegisterPetImages(
 		registeredIds.push(filename);
 	}
 	return registeredIds;
+}
+
+export async function getFileAttachmentsFor(petId: number) {
+	if (!USER_CONTENT) {
+		throw new Error(
+			"The USER_CONTENT environment variable is not set. Please set it to the user content directory.",
+		);
+	}
+
+	const attachments = await db
+		.select()
+		.from(petAttachments)
+		.where(eq(petAttachments.petId, petId));
+
+	return attachments.map((attachment) => attachment.attachmentId);
 }
