@@ -44,6 +44,7 @@
 		"argon2": "^0.41.1",
 		"dotenv": "^16.4.7",
 		"drizzle-orm": "^0.41.0",
+		"sharp": "^0.34.1",
 		"temporal-polyfill": "^0.3.0"
 	}
 }
