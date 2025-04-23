@@ -282,18 +282,23 @@
 		<input id="peso" name="peso" type="number" />
 	</div>
 
-	<div class="question-group">
-		<label for="pet-images">Imágenes de la mascota</label>
+	<h2>Imágenes</h2>
+
+	<div class="question-group pet-images-group">
+		<label for="pet-images">Muestra al mundo lo tierna que es tu mascota.</label
+		>
 		<input
 			type="file"
 			id="pet-images"
 			name="imágenes"
 			accept="image/*"
 			multiple
+			class="pet-images-input"
 		/>
-		<small
-			>Puedes subir varias imágenes. Solo se aceptan archivos de imagen.</small
-		>
+		<small class="pet-images-hint">
+			Puedes subir varias imágenes. Solo se aceptan archivos de imagen por el
+			momento.
+		</small>
 	</div>
 
 	<button type="submit">Registrar</button>
@@ -435,5 +440,60 @@
 	button {
 		margin: 1.5rem auto 0;
 		display: block;
+	}
+
+	.pet-images-group {
+		margin-top: 1.2rem;
+		background: #ffe4ef;
+		border-radius: 1.2rem;
+		padding: 1.2rem 1rem 0.7rem 1rem;
+		box-shadow: 0 2px 8px 0 #f8b6d1a0;
+		border: 1.5px solid #f8b6d1;
+	}
+	.pet-images-group label {
+		color: #d16a9e;
+		font-weight: 600;
+		font-size: 1.1rem;
+	}
+	.pet-images-input {
+		margin: 0.5rem auto 0.4rem;
+		padding: 0.5rem;
+		border-radius: 0.7rem;
+		border: 1.5px solid #f8b6d1;
+		background: #fff6fa;
+		color: #d16a9e;
+		font-size: 1rem;
+		transition: border 0.2s;
+		width: 100%;
+	}
+	.pet-images-input:focus {
+		outline: none;
+		border: 2px solid #d16a9e;
+	}
+	.pet-images-hint {
+		display: block;
+		margin-top: 0.3rem;
+		color: #b97a9c;
+		font-size: 0.95rem;
+	}
+	.upload-dialog {
+		border: none;
+		border-radius: 1.2rem;
+		background: #fff6fa;
+		box-shadow: 0 4px 24px 0 #f8b6d1a0;
+		padding: 2rem 2.5rem;
+		text-align: center;
+	}
+	.upload-dialog .dialog-content p {
+		color: #d16a9e;
+		font-size: 1.1rem;
+		margin-bottom: 1.2rem;
+	}
+	.upload-dialog progress {
+		width: 100%;
+		height: 1.1rem;
+		accent-color: #f8b6d1;
+		border-radius: 0.7rem;
+		background: #ffe4ef;
 	}
 </style>
