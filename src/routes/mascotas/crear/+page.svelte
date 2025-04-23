@@ -116,7 +116,7 @@
 
 <h1>Nueva mascota</h1>
 
-<form method="POST" action="/iniciar-sesión" use:enhance>
+<form method="POST" action="crear" use:enhance>
 	<h2>Datos básicos</h2>
 
 	<div class="question-group">
@@ -126,10 +126,9 @@
 
 	<div class="question-group">
 		<label for="raza">Especie</label>
-		<select id="raza" name="raza" required>
+		<select id="raza" name="especie" required>
 			{#each speciesList as species (species)}
-				<option value="species[1]">{getUserReadableSpeciesName(species)}</option
-				>
+				<option value={species}>{getUserReadableSpeciesName(species)}</option>
 			{/each}
 		</select>
 	</div>
@@ -260,16 +259,17 @@
 	<h2>Información adicional de salud</h2>
 	<p>Estos datos son opcionales.</p>
 
-	<div class="question-group">
-		<label>
-			<input name="fue-desparacitado" type="checkbox" /> La mascota fue desparacitada
-			recientemente.
+	<div class="question-group checkbox-block">
+		<input id="fue-desparacitado" name="fue-desparacitado" type="checkbox" />
+		<label class="normal-weight" for="fue-desparacitado">
+			La mascota fue desparacitada recientemente.
 		</label>
 	</div>
 
-	<div class="question-group">
-		<label>
-			<input name="fue-esterilizado" type="checkbox" /> La mascota fue esterilizada.
+	<div class="question-group checkbox-block">
+		<input id="fue-esterilizado" name="fue-esterilizado" type="checkbox" />
+		<label class="normal-weight" for="fue-esterilizado">
+			La mascota está esterilizada.
 		</label>
 	</div>
 
@@ -282,6 +282,22 @@
 </form>
 
 <style>
+	.normal-weight {
+		font-weight: normal !important;
+	}
+
+	.checkbox-block {
+		display: flex;
+		flex-direction: row;
+		align-items: start;
+		gap: 0.5rem;
+
+		input[type="checkbox"] {
+			display: block;
+			margin-top: 0.32rem;
+		}
+	}
+
 	#date-picker {
 		label {
 			font-weight: normal;
