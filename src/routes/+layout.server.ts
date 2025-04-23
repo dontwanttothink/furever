@@ -31,10 +31,10 @@ export async function load({ cookies }) {
 				path: "/mascotas",
 				name: "Mascotas",
 			},
-			{
-				path: "/adopta",
-				name: "Adopta",
-			},
+			// {
+			// 	path: "/adopta",
+			// 	name: "Adopta",
+			// },
 		],
 		userData,
 	};
