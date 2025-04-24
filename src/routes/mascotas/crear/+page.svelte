@@ -7,7 +7,8 @@
 	import { titlePrefix } from "$lib";
 	import { DogBreeds, Sex, Species } from "$lib/pets";
 
-	const { form } = $props();
+	const { form, data } = $props();
+	const { userData } = data;
 
 	const sexesList = Object.values(Sex).filter((x) => typeof x === "number");
 
@@ -131,233 +132,248 @@
 
 <h1>Nueva mascota</h1>
 
-<form
-	method="POST"
-	action="crear"
-	use:enhance={() => {
-		assert(uploadDialog);
+{#if userData}
+	<div class="container">
+		<form
+			method="POST"
+			action="crear"
+			use:enhance={() => {
+				assert(uploadDialog);
 
-		uploadDialog.showModal();
-		return async ({ update }) => {
-			await update();
-			assert(uploadDialog);
-			uploadDialog.close();
-		};
-	}}
-	enctype="multipart/form-data"
-	onsubmit={handleFormSubmit}
->
-	<h2>Datos básicos</h2>
-
-	<div class="question-group">
-		<label for="nombre">Nombre</label>
-		<input type="text" id="nombre" name="nombre" required />
-	</div>
-
-	<div class="question-group">
-		<label for="raza">Especie</label>
-		<select id="raza" name="especie" required>
-			{#each speciesList as species (species)}
-				<option value={species}>{getUserReadableSpeciesName(species)}</option>
-			{/each}
-		</select>
-	</div>
-
-	<div class="question-group">
-		<label for="raza">Raza</label>
-		<select id="raza" name="raza" value={DogBreeds.Unknown} required>
-			{#each breedsList as breed (breed)}
-				<option value={breed}>{getUserReadableBreedName(breed)}</option>
-			{/each}
-		</select>
-	</div>
-
-	<div class="question-group">
-		<label>
-			Sexo
-			<select name="sexo">
-				{#each sexesList as sex (sex)}
-					<option value={sex}>{getUserReadableSexName(sex)}</option>
-				{/each}
-			</select>
-		</label>
-	</div>
-
-	<div class="question-group">
-		<label
-			>Fecha de nacimiento
-			<div id="date-picker" class={[birthDateIsUnknown ? "dimmed" : ""]}>
-				<label
-					>Día <input
-						name="día-nacimiento"
-						type="number"
-						class="inline"
-						value="1"
-						min="1"
-						max="31"
-						onchange={(e) => {
-							const userValue = parseInt(e.currentTarget.value, 10);
-							const actualMax = numberOfDaysInMonth(
-								parseInt(birthMonth, 10),
-								isLeapYear(parseInt(birthYear, 10)),
-							);
-
-							e.currentTarget.value = Number.isNaN(userValue)
-								? "1"
-								: String(Math.min(actualMax, Math.max(1, userValue)));
-						}}
-						disabled={birthDateIsUnknown}
-					/></label
-				>
-				<label
-					>Mes <input
-						name="mes-nacimiento"
-						type="number"
-						class="inline"
-						disabled={birthDateIsUnknown}
-						min="1"
-						max="12"
-						bind:value={birthMonth}
-						onchange={(e) => {
-							let userValue = parseInt(e.currentTarget.value, 10);
-							e.currentTarget.value = String(
-								Number.isNaN(userValue)
-									? 1
-									: Math.max(1, Math.min(12, userValue)),
-							);
-						}}
-					/></label
-				>
-				<label
-					>Año <input
-						id="año-nacimiento"
-						name="año-nacimiento"
-						type="number"
-						class="inline"
-						bind:value={birthYear}
-						min="1900"
-						disabled={birthDateIsUnknown}
-						max={new Date().getFullYear()}
-					/></label
-				>
-			</div></label
+				uploadDialog.showModal();
+				return async ({ update }) => {
+					await update();
+					assert(uploadDialog);
+					uploadDialog.close();
+				};
+			}}
+			enctype="multipart/form-data"
+			onsubmit={handleFormSubmit}
 		>
+			<h2>Datos básicos</h2>
 
-		<div>
-			<label for="fecha-aproximada" class={[birthDateIsUnknown ? "dimmed" : ""]}
-				><input
-					type="checkbox"
-					id="fecha-aproximada"
-					name="fecha-aproximada"
-					bind:checked={approximateBirth}
-					disabled={birthDateIsUnknown}
-				/> Esta fecha es aproximada.</label
-			>
+			<div class="question-group">
+				<label for="nombre">Nombre</label>
+				<input type="text" id="nombre" name="nombre" required />
+			</div>
 
-			{#if approximateBirth}
-				<div id="date-precision-control">
-					<label
-						for="precisión-fecha"
-						class={[birthDateIsUnknown ? "dimmed" : ""]}
-						>La fecha dada está dentro de un
-						<select class="inline" disabled={birthDateIsUnknown}>
-							<option value={30 * 24 * 60 * 60}>mes</option>
-							<option value={360 * 24 * 60 * 60}>año</option>
-							<option value={2 * 360 * 24 * 60 * 60}>par de años</option>
-						</select> de la fecha correcta.</label
-					>
-				</div>
-			{/if}
+			<div class="question-group">
+				<label for="raza">Especie</label>
+				<select id="raza" name="especie" required>
+					{#each speciesList as species (species)}
+						<option value={species}
+							>{getUserReadableSpeciesName(species)}</option
+						>
+					{/each}
+				</select>
+			</div>
 
-			<div>
+			<div class="question-group">
+				<label for="raza">Raza</label>
+				<select id="raza" name="raza" value={DogBreeds.Unknown} required>
+					{#each breedsList as breed (breed)}
+						<option value={breed}>{getUserReadableBreedName(breed)}</option>
+					{/each}
+				</select>
+			</div>
+
+			<div class="question-group">
 				<label>
-					<input
-						name="fecha-de-nacimiento-es-desconocida"
-						type="checkbox"
-						bind:checked={birthDateIsUnknown}
-					/> No conozco la fecha de nacimiento.
+					Sexo
+					<select name="sexo">
+						{#each sexesList as sex (sex)}
+							<option value={sex}>{getUserReadableSexName(sex)}</option>
+						{/each}
+					</select>
 				</label>
 			</div>
+
+			<div class="question-group">
+				<label
+					>Fecha de nacimiento
+					<div id="date-picker" class={[birthDateIsUnknown ? "dimmed" : ""]}>
+						<label
+							>Día <input
+								name="día-nacimiento"
+								type="number"
+								class="inline"
+								value="1"
+								min="1"
+								max="31"
+								onchange={(e) => {
+									const userValue = parseInt(e.currentTarget.value, 10);
+									const actualMax = numberOfDaysInMonth(
+										parseInt(birthMonth, 10),
+										isLeapYear(parseInt(birthYear, 10)),
+									);
+
+									e.currentTarget.value = Number.isNaN(userValue)
+										? "1"
+										: String(Math.min(actualMax, Math.max(1, userValue)));
+								}}
+								disabled={birthDateIsUnknown}
+							/></label
+						>
+						<label
+							>Mes <input
+								name="mes-nacimiento"
+								type="number"
+								class="inline"
+								disabled={birthDateIsUnknown}
+								min="1"
+								max="12"
+								bind:value={birthMonth}
+								onchange={(e) => {
+									let userValue = parseInt(e.currentTarget.value, 10);
+									e.currentTarget.value = String(
+										Number.isNaN(userValue)
+											? 1
+											: Math.max(1, Math.min(12, userValue)),
+									);
+								}}
+							/></label
+						>
+						<label
+							>Año <input
+								id="año-nacimiento"
+								name="año-nacimiento"
+								type="number"
+								class="inline"
+								bind:value={birthYear}
+								min="1900"
+								disabled={birthDateIsUnknown}
+								max={new Date().getFullYear()}
+							/></label
+						>
+					</div></label
+				>
+
+				<div>
+					<label
+						for="fecha-aproximada"
+						class={[birthDateIsUnknown ? "dimmed" : ""]}
+						><input
+							type="checkbox"
+							id="fecha-aproximada"
+							name="fecha-aproximada"
+							bind:checked={approximateBirth}
+							disabled={birthDateIsUnknown}
+						/> Esta fecha es aproximada.</label
+					>
+
+					{#if approximateBirth}
+						<div id="date-precision-control">
+							<label
+								for="precisión-fecha"
+								class={[birthDateIsUnknown ? "dimmed" : ""]}
+								>La fecha dada está dentro de un
+								<select class="inline" disabled={birthDateIsUnknown}>
+									<option value={30 * 24 * 60 * 60}>mes</option>
+									<option value={360 * 24 * 60 * 60}>año</option>
+									<option value={2 * 360 * 24 * 60 * 60}>par de años</option>
+								</select> de la fecha correcta.</label
+							>
+						</div>
+					{/if}
+
+					<div>
+						<label>
+							<input
+								name="fecha-de-nacimiento-es-desconocida"
+								type="checkbox"
+								bind:checked={birthDateIsUnknown}
+							/> No conozco la fecha de nacimiento.
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="question-group">
+				<label for="descripción">Descripción</label>
+				<textarea id="descripción" name="descripción" required></textarea>
+			</div>
+
+			<h2>Información adicional de salud</h2>
+			<p>Estos datos son opcionales.</p>
+
+			<div class="question-group checkbox-block">
+				<input
+					id="fue-desparacitado"
+					name="fue-desparacitado"
+					type="checkbox"
+				/>
+				<label class="normal-weight" for="fue-desparacitado">
+					La mascota fue desparacitada recientemente.
+				</label>
+			</div>
+
+			<div class="question-group checkbox-block">
+				<input id="fue-esterilizado" name="fue-esterilizado" type="checkbox" />
+				<label class="normal-weight" for="fue-esterilizado">
+					La mascota está esterilizada.
+				</label>
+			</div>
+
+			<div class="question-group">
+				<label for="peso">Peso en kilogramos</label>
+				<input id="peso" name="peso" type="number" />
+			</div>
+
+			<h2>Imágenes</h2>
+
+			<div class="question-group pet-images-group">
+				<label for="pet-images"
+					>Muestra al mundo lo tierna que es tu mascota.</label
+				>
+				<input
+					bind:files
+					type="file"
+					id="pet-images"
+					name="imágenes"
+					accept="image/*"
+					multiple
+					class="pet-images-input"
+				/>
+				<small class="pet-images-hint">
+					Puedes subir varias imágenes. Solo se aceptan archivos de imagen por
+					el momento.
+				</small>
+			</div>
+
+			<button type="submit">Registrar</button>
+		</form>
+
+		<dialog bind:this={uploadDialog} class="upload-dialog">
+			<div class="dialog-content">
+				<div class="upload-animation">
+					<div class="paw"></div>
+					<div class="paw"></div>
+					<div class="paw"></div>
+				</div>
+				<h1>¡Subiendo tus imágenes!</h1>
+				<p>Esto puede tardar un momento. Por favor espera.</p>
+			</div>
+		</dialog>
+
+		<div id="error-area">
+			{#if form?.error instanceof Array}
+				<ul class="error">
+					{#each form.error as e (e)}
+						<li in:fly={{ x: 0, y: -10, duration: 500 }}>{e}</li>
+					{/each}
+				</ul>
+			{:else if form?.error}
+				<p class="error" in:fly={{ x: 0, y: -10, duration: 500 }}>
+					{form.error}
+				</p>
+			{/if}
 		</div>
 	</div>
-
-	<div class="question-group">
-		<label for="descripción">Descripción</label>
-		<textarea id="descripción" name="descripción" required></textarea>
-	</div>
-
-	<h2>Información adicional de salud</h2>
-	<p>Estos datos son opcionales.</p>
-
-	<div class="question-group checkbox-block">
-		<input id="fue-desparacitado" name="fue-desparacitado" type="checkbox" />
-		<label class="normal-weight" for="fue-desparacitado">
-			La mascota fue desparacitada recientemente.
-		</label>
-	</div>
-
-	<div class="question-group checkbox-block">
-		<input id="fue-esterilizado" name="fue-esterilizado" type="checkbox" />
-		<label class="normal-weight" for="fue-esterilizado">
-			La mascota está esterilizada.
-		</label>
-	</div>
-
-	<div class="question-group">
-		<label for="peso">Peso en kilogramos</label>
-		<input id="peso" name="peso" type="number" />
-	</div>
-
-	<h2>Imágenes</h2>
-
-	<div class="question-group pet-images-group">
-		<label for="pet-images">Muestra al mundo lo tierna que es tu mascota.</label
-		>
-		<input
-			bind:files
-			type="file"
-			id="pet-images"
-			name="imágenes"
-			accept="image/*"
-			multiple
-			class="pet-images-input"
-		/>
-		<small class="pet-images-hint">
-			Puedes subir varias imágenes. Solo se aceptan archivos de imagen por el
-			momento.
-		</small>
-	</div>
-
-	<button type="submit">Registrar</button>
-</form>
-
-<dialog bind:this={uploadDialog} class="upload-dialog">
-	<div class="dialog-content">
-		<div class="upload-animation">
-			<div class="paw"></div>
-			<div class="paw"></div>
-			<div class="paw"></div>
-		</div>
-		<p>
-			¡Subiendo tus imágenes!<br />Esto puede tardar un momento.<br />Por favor
-			espera…
-		</p>
-	</div>
-</dialog>
-
-<div id="error-area">
-	{#if form?.error instanceof Array}
-		<ul class="error">
-			{#each form.error as e (e)}
-				<li in:fly={{ x: 0, y: -10, duration: 500 }}>{e}</li>
-			{/each}
-		</ul>
-	{:else if form?.error}
-		<p class="error" in:fly={{ x: 0, y: -10, duration: 500 }}>
-			{form.error}
-		</p>
-	{/if}
-</div>
+{:else}
+	<p>
+		Debes <a href="iniciar-sesión">iniciar sesión</a> para registrar una mascota.
+	</p>
+{/if}
 
 <style>
 	#error-area {
