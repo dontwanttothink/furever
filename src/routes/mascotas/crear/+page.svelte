@@ -130,9 +130,9 @@
 	<link rel="stylesheet" href="{assets}/centered.css" />
 </svelte:head>
 
-<h1>Nueva mascota</h1>
-
 {#if userData}
+	<h1>Nueva mascota</h1>
+
 	<div class="container">
 		<form
 			method="POST"
@@ -371,7 +371,7 @@
 	</div>
 {:else}
 	<p>
-		Debes <a href="iniciar-sesión">iniciar sesión</a> para registrar una mascota.
+		Debes <a href="/iniciar-sesión">iniciar sesión</a> para registrar una mascota.
 	</p>
 {/if}
 

@@ -3,7 +3,7 @@
 	import { titlePrefix } from "$lib";
 	import { getUserReadableSpeciesName } from "$lib/pets/index.js";
 	const { data } = $props();
-	const { recentPets } = data;
+	const { recentPets, userData } = data;
 
 	function getRandomImageUUID(uuids: string[] | undefined): string | null {
 		if (!uuids || uuids.length === 0) return null;
@@ -49,7 +49,13 @@
 	{/each}
 </div>
 
-<LinkButton href="/mascotas/crear">Crear nueva mascota</LinkButton>
+{#if userData}
+	<LinkButton href="/mascotas/crear">Crear nueva mascota</LinkButton>
+{:else}
+	<LinkButton href="/iniciar-sesión"
+		>Iniciar sesión para registrar una mascota</LinkButton
+	>
+{/if}
 
 <p id="recency-disclaimer">Se muestran las diez mascotas más recientes.</p>
 
