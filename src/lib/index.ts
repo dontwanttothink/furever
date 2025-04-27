@@ -14,3 +14,4 @@ export class ExpectedUnreachableError extends Error {
 }
 
 export const titlePrefix = "FureverHome — ";
+export const contactEmail = "furever@uq4.net";
