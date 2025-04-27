@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db, sessionsTable } from "../db";
-
-export class InvalidSessionError extends Error {}
+import { InvalidSessionError } from "./errors";
 
 /**
  * Invalidate a session.

@@ -1,12 +1,11 @@
 import { assert } from "$lib";
 import { eq } from "drizzle-orm";
 import { db, sessionsTable, usersTable } from "../db";
-
-export class InvalidSessionError extends Error {}
+import { InvalidSessionError } from "./errors";
 
 /**
  * Get user data for a given session.
- * @throws UserDoesNotExistError
+ * @throws InvalidSessionError
  * @caveat This functionality is exposed to the client.
  * @returns The user name and email.
  */
