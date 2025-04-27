@@ -85,6 +85,7 @@
 		flex-wrap: wrap;
 		gap: 1.5rem;
 		margin: 3rem 0 5rem;
+		justify-content: center;
 	}
 	.pet-card {
 		background: var(--card-bg);
