@@ -11,12 +11,27 @@
 	function toggleDropdown() {
 		showDropdown = !showDropdown;
 	}
+
+	let dropdownToggle = $state();
 </script>
+
+<svelte:document
+	onclick={(e) => {
+		if (
+			dropdownToggle instanceof HTMLButtonElement &&
+			e.target instanceof Node &&
+			!dropdownToggle.contains(e.target)
+		) {
+			showDropdown = false;
+		}
+	}}
+/>
 
 {#if userData}
 	<div class="dropdown">
 		<button
 			class={["dropdown-toggle", showDropdown ? "expanded" : ""]}
+			bind:this={dropdownToggle}
 			tabindex="0"
 			onclick={toggleDropdown}
 			onkeydown={toggleDropdown}
