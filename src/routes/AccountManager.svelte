@@ -96,8 +96,9 @@
 		transition: transform 150ms ease;
 	}
 	.dropdown-toggle.expanded {
-		background-color: #ffd6e0; /* pink accent background */
+		background-color: #ffd6e0;
 		transform: scale(110%);
+		transition: background-color 200ms ease;
 	}
 	.dropdown-toggle:hover {
 		cursor: pointer;
