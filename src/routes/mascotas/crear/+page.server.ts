@@ -52,18 +52,30 @@ export const actions: Actions = {
 			badRequestErrors.push("El sexo indicado es inválido.");
 		}
 
+		const birthDayIsUnknown =
+			data.get("fecha-de-nacimiento-es-desconocida")?.toString() == "on";
+
 		const birthDayRaw = data.get("día-nacimiento")?.toString();
-		if (!birthDayRaw || Number.isNaN(parseInt(birthDayRaw, 10))) {
+		if (
+			!birthDayIsUnknown &&
+			(!birthDayRaw || Number.isNaN(parseInt(birthDayRaw, 10)))
+		) {
 			badRequestErrors.push("El día de nacimiento es inválido.");
 		}
 
 		const birthMonthRaw = data.get("mes-nacimiento")?.toString();
-		if (!birthMonthRaw || Number.isNaN(parseInt(birthMonthRaw, 10))) {
+		if (
+			!birthDayIsUnknown &&
+			(!birthMonthRaw || Number.isNaN(parseInt(birthMonthRaw, 10)))
+		) {
 			badRequestErrors.push("El mes de nacimiento es inválido.");
 		}
 
 		const birthYearRaw = data.get("año-nacimiento")?.toString();
-		if (!birthYearRaw || Number.isNaN(parseInt(birthYearRaw, 10))) {
+		if (
+			!birthDayIsUnknown &&
+			(!birthYearRaw || Number.isNaN(parseInt(birthYearRaw, 10)))
+		) {
 			badRequestErrors.push("El año de nacimiento es inválido.");
 		}
 
@@ -74,7 +86,6 @@ export const actions: Actions = {
 
 		const maybeWeight = data.get("peso")?.toString();
 
-		// Handle image uploads
 		const imageFiles = data
 			.getAll("imágenes")
 			.filter((f) => f instanceof File) as File[];
@@ -83,30 +94,15 @@ export const actions: Actions = {
 			return fail(400, { error: badRequestErrors });
 		}
 
-		assert(
-			speciesRaw &&
-				breedRaw &&
-				sexRaw &&
-				birthDayRaw &&
-				birthMonthRaw &&
-				birthYearRaw &&
-				name &&
-				description,
-		);
+		assert(speciesRaw && breedRaw && sexRaw && name && description);
 
 		const species: Species = parseInt(speciesRaw, 10);
 		const breed: DogBreeds = parseInt(breedRaw, 10);
 		const sex: Sex = parseInt(sexRaw, 10);
-		const birthDay = parseInt(birthDayRaw, 10);
-		const birthMonth = parseInt(birthMonthRaw, 10);
-		const birthYear = parseInt(birthYearRaw, 10);
 
 		// FIXME: These should be optional. They are currently always set.
 		const wasDewormed = data.get("fue-desparacitado")?.toString() == "on";
 		const wasNeutered = data.get("fue-esterilizado")?.toString() == "on";
-
-		const birthDayIsUnknown =
-			data.get("fecha-de-nacimiento-es-desconocida")?.toString() == "on";
 
 		const newPet: InferInsertModel<typeof petsTable> = {
 			author: userData.userId,
@@ -121,6 +117,11 @@ export const actions: Actions = {
 		};
 
 		if (!birthDayIsUnknown) {
+			assert(birthDayRaw && birthMonthRaw && birthYearRaw);
+			const birthDay = parseInt(birthDayRaw, 10);
+			const birthMonth = parseInt(birthMonthRaw, 10);
+			const birthYear = parseInt(birthYearRaw, 10);
+
 			let birthInstant;
 			try {
 				birthInstant = Temporal.ZonedDateTime.from({
