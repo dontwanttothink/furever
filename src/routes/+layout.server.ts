@@ -1,7 +1,4 @@
-import {
-	getUserDataByToken,
-	InvalidSessionError,
-} from "$lib/server/auth/userData.js";
+import { getUserDataByToken, InvalidSessionError } from "$lib/server/auth";
 
 export async function load({ cookies }) {
 	const secretToken = cookies.get("secret_token");
