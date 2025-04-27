@@ -98,11 +98,13 @@
 	.dropdown-toggle.expanded {
 		background-color: #ffd6e0;
 		transform: scale(110%);
-		transition: background-color 200ms ease;
 	}
 	.dropdown-toggle:hover {
 		cursor: pointer;
-		background-color: #ffe6ee; /* lighter pink on hover */
+
+		&:not(.expanded) {
+			background-color: #ffe6ee;
+		}
 	}
 	.dropdown-items {
 		position: absolute;
