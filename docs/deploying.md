@@ -14,8 +14,10 @@ bun run build
 Then load it in the server:
 
 ```sh
-rsync -avz build/ doggy@server.example:/furever
+rsync -avz build/ doggy@server.example:/furever/
 ```
+
+<!-- /home/santi/fur/furever/ -->
 
 You can set up a `systemd` service to keep the server software online:
 
