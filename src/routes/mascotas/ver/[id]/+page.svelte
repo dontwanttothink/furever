@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { assert } from "$lib";
 	import {
 		Species,
 		getUserReadableSpeciesName,
 		getUserReadableSexName,
 		getUserReadableBreedName,
 	} from "$lib/pets/index";
+	import { onMount } from "svelte";
 
 	const { data } = $props();
 	const { pet } = data;
@@ -21,6 +23,13 @@
 		isNeutered,
 		attachmentUUIDs,
 	} = pet;
+
+	let petImagesSpace = $state();
+	onMount(() => {
+		assert(petImagesSpace && petImagesSpace instanceof HTMLElement);
+		petImagesSpace.scrollLeft =
+			(petImagesSpace.scrollWidth - petImagesSpace.clientWidth) / 2;
+	});
 </script>
 
 <h1>{name}</h1>
@@ -37,14 +46,16 @@
 </p>
 
 {#if attachmentUUIDs.length > 0}
-	<div class="pet-images">
-		{#each attachmentUUIDs as uuid (uuid)}
-			<img
-				src={`/mascotas/imágenes/${uuid}`}
-				alt={`Imagen de ${name}`}
-				class="pet-image"
-			/>
-		{/each}
+	<div class="pet-images-space" bind:this={petImagesSpace}>
+		<div class="pet-images">
+			{#each attachmentUUIDs as uuid (uuid)}
+				<img
+					src={`/mascotas/imágenes/${uuid}`}
+					alt={`Imagen de ${name}`}
+					class="pet-image"
+				/>
+			{/each}
+		</div>
 	</div>
 	<div id="spacer" style:height="35rem"></div>
 {/if}
@@ -112,19 +123,27 @@
 	.author-name {
 		font-style: italic;
 	}
+	.pet-images-space {
+		margin: 0;
+		position: absolute;
+		overflow: scroll;
+		width: 100vw;
+		height: 35rem;
+		left: 50%;
+		transform: translateX(-50%);
+		scrollbar-width: thin;
+		scrollbar-color: #f7b6d2 #fff0f6;
+	}
 	.pet-images {
 		display: flex;
 		gap: 1rem;
 		justify-content: center;
 		align-items: center;
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
-		overflow: scroll;
 		flex-direction: row;
-		width: 100vw;
-		height: 35rem;
-		margin: 0;
+		height: 100%;
+		width: max-content;
+		margin: 0 auto;
+		padding: 0 2em;
 	}
 
 	.pet-image {
