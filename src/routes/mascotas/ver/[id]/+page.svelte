@@ -45,6 +45,7 @@
 	})()} buscando su hogar en FureverHome.
 </p>
 
+<!-- TODO: Extract the carousel to a separate component -->
 {#if attachmentUUIDs.length > 0}
 	<div class="pet-images-space" bind:this={petImagesSpace}>
 		<div class="pet-images">
