@@ -3,7 +3,7 @@ import { getUserDataById } from "$lib/server/auth/userData";
 import { petsTable } from "$lib/server/db/schema";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
-import { getFileAttachmentsFor } from "$lib/server/db/userContent.js";
+import { getFileAttachmentsFor } from "$lib/server/content/index.js";
 
 export async function load({ params }) {
 	const requestedId = parseInt(params.id, 10);

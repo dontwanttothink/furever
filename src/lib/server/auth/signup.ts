@@ -1,6 +1,9 @@
 import { LibsqlError } from "@libsql/client";
-import { db, usersTable } from "../db";
+import { db, sessionsTable, usersTable } from "../db";
 import { hash } from "./internal";
+import { eq } from "drizzle-orm";
+import { petsTable } from "../db/schema";
+import { deletePet } from "../content";
 
 export enum SignupSuccess {
 	SignedUp = "signed_up",
@@ -60,4 +63,24 @@ export async function signUp(
 			isError: false,
 		},
 	};
+}
+
+export async function deleteUser(userId: number) {
+	// delete sessions
+	await db.delete(sessionsTable).where(eq(sessionsTable.userId, userId));
+
+	// delete pets
+	const pets = await db
+		.select({
+			petId: petsTable.id,
+		})
+		.from(petsTable)
+		.where(eq(petsTable.author, userId));
+	for (const { petId } of pets) {
+		// attachment deletion is handled in the function
+		await deletePet(petId);
+	}
+
+	// delete user
+	await db.delete(usersTable).where(eq(usersTable.id, userId));
 }

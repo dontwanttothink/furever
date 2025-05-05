@@ -155,3 +155,35 @@ blockquote {
 blockquote p {
 	margin: 0;
 }
+
+dialog {
+	min-width: 22rem;
+	max-width: 90vw;
+	padding: 1.5rem;
+	background: #fff6fa;
+	border: 2.5px solid #d16a9e;
+	border-radius: 1.2rem;
+	box-shadow:
+		0 8px 32px 0 #d16a9e40,
+		0 1.5px 8px 0 #f8b6d1a0;
+}
+
+@keyframes pop-in {
+	0% {
+		transform: scale(0.9) translateY(20px);
+		opacity: 0;
+	}
+
+	50% {
+		transform: scale(1.03) translateY(-3px);
+		opacity: 1;
+	}
+
+	100% {
+		transform: scale(1) translateY(0);
+	}
+}
+
+dialog[open] {
+	animation: pop-in 400ms ease-in-out;
+}

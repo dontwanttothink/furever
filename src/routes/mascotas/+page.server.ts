@@ -2,7 +2,7 @@ import { db } from "$lib/server/db";
 import { desc, type InferSelectModel } from "drizzle-orm";
 import { petsTable } from "$lib/server/db/schema";
 import { getUserDataById } from "$lib/server/auth/userData";
-import { getFileAttachmentsFor } from "$lib/server/db/userContent";
+import { getFileAttachmentsFor } from "$lib/server/content";
 
 export async function load() {
 	// Fetch recent pets from database

@@ -1,12 +1,52 @@
-import { db } from "./index";
-import { petAttachments } from "./schema";
+import { db } from "../db/index";
+import { petAttachments, petsTable } from "../db/schema";
 import sharp from "sharp";
 import path from "node:path";
 import fs from "node:fs/promises";
 import { randomUUID } from "node:crypto";
-import { eq } from "drizzle-orm";
+import { eq, type InferInsertModel } from "drizzle-orm";
 
 const USER_CONTENT = process.env.USER_CONTENT;
+
+const USER_CONTENT_ERROR = new Error(
+	"The USER_CONTENT environment variable is not set. Please set it to the user content directory.",
+);
+
+export async function createPet(
+	newPet: InferInsertModel<typeof petsTable>,
+	imageFiles: File[] | Blob[],
+): Promise<number> {
+	const { insertedId } = (
+		await db
+			.insert(petsTable)
+			.values(newPet)
+			.returning({ insertedId: petsTable.id })
+	)[0];
+
+	await processAndRegisterPetImages(insertedId, imageFiles);
+	return insertedId;
+}
+
+export async function deletePet(petId: number): Promise<void> {
+	if (!USER_CONTENT) {
+		throw USER_CONTENT_ERROR;
+	}
+
+	const attachments = await db
+		.delete(petAttachments)
+		.where(eq(petAttachments.petId, petId))
+		.returning();
+	for (const attachment of attachments) {
+		const filePath = path.join(USER_CONTENT, attachment.attachmentId);
+		try {
+			await fs.unlink(filePath);
+		} catch (error) {
+			console.error(`Error deleting file ${filePath}:`, error);
+		}
+	}
+
+	await db.delete(petsTable).where(eq(petsTable.id, petId));
+}
 
 /**
  * Normalize and register image attachments for a pet.
@@ -20,9 +60,7 @@ export async function processAndRegisterPetImages(
 	files: File[] | Blob[],
 ): Promise<string[]> {
 	if (!USER_CONTENT) {
-		throw new Error(
-			"The USER_CONTENT environment variable is not set. Please set it to the user content directory.",
-		);
+		throw USER_CONTENT_ERROR;
 	}
 
 	await fs.mkdir(USER_CONTENT, { recursive: true });
@@ -55,12 +93,6 @@ export async function processAndRegisterPetImages(
 }
 
 export async function getFileAttachmentsFor(petId: number) {
-	if (!USER_CONTENT) {
-		throw new Error(
-			"The USER_CONTENT environment variable is not set. Please set it to the user content directory.",
-		);
-	}
-
 	const attachments = await db
 		.select()
 		.from(petAttachments)

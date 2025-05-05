@@ -543,25 +543,9 @@
 		box-shadow:
 			0 8px 32px 0 #d16a9e40,
 			0 1.5px 8px 0 #f8b6d1a0;
-		z-index: 1000;
 	}
 	.upload-dialog[open] {
-		animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-		z-index: 1000;
-	}
-	@keyframes popIn {
-		0% {
-			transform: scale(0.7) translateY(40px);
-			opacity: 0;
-		}
-		80% {
-			transform: scale(1.05) translateY(-8px);
-			opacity: 1;
-		}
-		100% {
-			transform: scale(1) translateY(0);
-			opacity: 1;
-		}
+		animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 	}
 	.upload-animation {
 		display: flex;

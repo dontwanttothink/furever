@@ -8,7 +8,7 @@ import { assert } from "$lib";
 import { getCurrentTimestampInSeconds } from "$lib/server/auth/internal";
 import { getUserDataByToken } from "$lib/server/auth/userData";
 import type { InferInsertModel } from "drizzle-orm";
-import { processAndRegisterPetImages } from "$lib/server/db/userContent";
+import { createPet } from "$lib/server/content";
 
 const validSpecies = Object.values(Species).filter(
 	(n) => typeof n === "number",
@@ -146,17 +146,7 @@ export const actions: Actions = {
 			newPet.weight = parseInt(maybeWeight, 10);
 		}
 
-		const { insertedId } = (
-			await db
-				.insert(petsTable)
-				.values(newPet)
-				.returning({ insertedId: petsTable.id })
-		)[0];
-
-		// Process and register images if any were uploaded
-		if (imageFiles.length > 0) {
-			await processAndRegisterPetImages(insertedId, imageFiles);
-		}
+		const insertedId = await createPet(newPet, imageFiles);
 
 		redirect(303, "/mascotas/ver/" + insertedId.toString());
 	},
