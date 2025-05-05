@@ -61,6 +61,7 @@ export const actions = {
 			});
 		}
 
+		// TODO: move this to an env var
 		if (!invitationCode || invitationCode != "3156432755") {
 			return fail(400, {
 				error: "Código de invitación inválido.",

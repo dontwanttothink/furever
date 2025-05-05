@@ -14,4 +14,4 @@ export class ExpectedUnreachableError extends Error {
 }
 
 export const titlePrefix = "FureverHome — ";
-export const contactEmail = "furever@uq4.net";
+export const contactEmail = "furever@uq4.net"; // TODO: use an env var (sveltekit static)
