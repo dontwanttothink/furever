@@ -90,8 +90,10 @@
 	#text-et-button {
 		display: flex;
 		flex-direction: row;
-		gap: 1em;
+		flex-wrap: wrap;
+		justify-content: center;
 		align-items: center;
+		gap: 1em;
 	}
 
 	dialog {
