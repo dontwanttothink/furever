@@ -47,19 +47,32 @@
 			</div>
 		</div>
 	{/each}
+
+	{#if recentPets.length === 0}
+		<p id="no-pets">No hay mascotas registradas.</p>
+	{/if}
 </div>
 
 {#if userData}
 	<LinkButton href="/mascotas/crear">Crear nueva mascota</LinkButton>
 {:else}
 	<LinkButton href="/iniciar-sesión"
-		>Iniciar sesión para registrar una mascota</LinkButton
+		>Inicia sesión para registrar una mascota.</LinkButton
 	>
 {/if}
 
 <p id="recency-disclaimer">Se muestran las diez mascotas más recientes.</p>
 
 <style>
+	#no-pets {
+		margin-bottom: -1rem;
+		text-align: center;
+		font-size: 3.5rem;
+		padding: 0 2rem;
+		font-weight: normal;
+		opacity: 0.5;
+	}
+
 	#recency-disclaimer {
 		margin-top: 1rem;
 		margin-bottom: 0;
