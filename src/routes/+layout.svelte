@@ -51,6 +51,7 @@
 
 	footer {
 		border-top: 1px solid rgb(0 0 0 / 7%);
+		padding-top: 0.8em;
 		margin-top: 3rem;
 		font-size: 0.9rem;
 		text-align: center;
