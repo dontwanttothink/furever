@@ -9,7 +9,7 @@
 	import { onMount } from "svelte";
 
 	const { data } = $props();
-	const { pet } = data;
+	const { pet, userData } = data;
 	const {
 		name,
 		description,
@@ -102,6 +102,25 @@
 <blockquote>
 	<p>{description}</p>
 </blockquote>
+
+{#if pet.author.userId === userData?.userId}
+	<details>
+		<summary>Opciones</summary>
+		<form action="?/delete" method="POST">
+			<button
+				type="submit"
+				onclick={(e) => {
+					// TODO: don't use confirm()
+					if (!confirm("¿Estás seguro de que quieres eliminar esta mascota?")) {
+						e.preventDefault();
+					}
+				}}
+			>
+				Eliminar esta mascota
+			</button>
+		</form>
+	</details>
+{/if}
 
 <svelte:head>
 	<!-- Weird hack to get this to work -->
