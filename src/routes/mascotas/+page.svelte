@@ -49,7 +49,7 @@
 	{/each}
 
 	{#if recentPets.length === 0}
-		<p id="no-pets">No hay mascotas registradas.</p>
+		<p id="no-pets">(No hay mascotas registradas todavía.)</p>
 	{/if}
 </div>
 
@@ -61,13 +61,15 @@
 	>
 {/if}
 
-<p id="recency-disclaimer">Se muestran las diez mascotas más recientes.</p>
+{#if recentPets.length > 0}
+	<p id="recency-disclaimer">Se muestran las diez mascotas más recientes.</p>
+{/if}
 
 <style>
 	#no-pets {
 		margin-bottom: -1rem;
 		text-align: center;
-		font-size: 3.5rem;
+		font-size: 1rem;
 		padding: 0 2rem;
 		font-weight: normal;
 		opacity: 0.5;
