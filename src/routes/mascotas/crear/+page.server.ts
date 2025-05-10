@@ -1,5 +1,4 @@
 import { Temporal } from "temporal-polyfill";
-import { db } from "$lib/server/db";
 import { petsTable } from "$lib/server/db/schema";
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
