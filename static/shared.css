@@ -196,3 +196,9 @@ dialog {
 dialog[open] {
 	animation: pop-in 400ms ease-in-out;
 }
+
+div.horizontal-center {
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+}
