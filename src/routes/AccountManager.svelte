@@ -34,7 +34,6 @@
 			bind:this={dropdownToggle}
 			tabindex="0"
 			onclick={toggleDropdown}
-			onkeydown={toggleDropdown}
 		>
 			{userData.name.trim()}
 		</button>
