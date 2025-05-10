@@ -348,6 +348,8 @@
 					<div class="paw"></div>
 					<div class="paw"></div>
 				</div>
+				<!-- FIXME: The contents of this dialog aren't centered. For
+				 some reason the dialog is larger than the content -->
 				<h1>¡Subiendo tus imágenes!</h1>
 				<p>Esto puede tardar un momento. Por favor espera.</p>
 			</div>
