@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { assert } from "$lib";
+	import { assert, unshell } from "$lib";
+	import ConfirmButton from "$lib/components/ConfirmButton.svelte";
 	import {
 		Species,
 		getUserReadableSpeciesName,
@@ -26,10 +27,14 @@
 
 	let petImagesSpace = $state();
 	onMount(() => {
-		assert(petImagesSpace && petImagesSpace instanceof HTMLElement);
-		petImagesSpace.scrollLeft =
-			(petImagesSpace.scrollWidth - petImagesSpace.clientWidth) / 2;
+		if (petImagesSpace) {
+			assert(petImagesSpace instanceof HTMLElement);
+			petImagesSpace.scrollLeft =
+				(petImagesSpace.scrollWidth - petImagesSpace.clientWidth) / 2;
+		}
 	});
+
+	let confirmButton: ConfirmButton | null = $state(null);
 </script>
 
 <h1>{name}</h1>
@@ -106,19 +111,26 @@
 {#if pet.author.userId === userData?.userId}
 	<details>
 		<summary>Opciones</summary>
-		<form action="?/delete" method="POST">
-			<button
-				type="submit"
-				onclick={(e) => {
-					// TODO: don't use confirm()
-					if (!confirm("¿Estás seguro de que quieres eliminar esta mascota?")) {
-						e.preventDefault();
-					}
-				}}
-			>
-				Eliminar esta mascota
-			</button>
-		</form>
+		<ConfirmButton bind:this={confirmButton} message="Eliminar esta mascota">
+			<form style:max-width="400px" action="?/delete" method="POST">
+				<h2 style:margin-top="0">
+					¿Confirmas que quieres eliminar esta mascota?
+				</h2>
+
+				<p>
+					Esta acción no se puede deshacer. Puedes crear una nueva mascota
+					después de eliminarla, pero no podrás recuperar la información de esta
+					mascota.
+				</p>
+
+				<div class="horizontal-center">
+					<button onclick={(e) => unshell(confirmButton).cancel(e)}
+						>Conservar mascota</button
+					>
+					<button class="is-danger" type="submit">Eliminar</button>
+				</div>
+			</form>
+		</ConfirmButton>
 	</details>
 {/if}
 
@@ -132,6 +144,10 @@
 </svelte:head>
 
 <style>
+	details:open summary {
+		margin-bottom: 1em;
+	}
+
 	h1 {
 		margin-bottom: 0rem;
 	}
