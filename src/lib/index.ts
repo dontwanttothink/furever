@@ -1,10 +1,36 @@
+class AssertionError extends Error {}
+
+/**
+ * @throws AssertionError
+ */
 export function assert(
 	condition: unknown,
 	message?: string,
 ): asserts condition {
 	if (!condition) {
-		throw new Error(message || "Assertion failed");
+		throw new AssertionError(message || "Assertion failed");
 	}
+}
+
+/**
+ * Unwraps a nullable value.
+ *
+ * @example ```typescript
+ * function foo(): string | null
+ *
+ * // throws if foo() returns null
+ * unshell(foo()).toUpperCase();
+ * ```
+ * @throws AssertionError
+ */
+export function unshell<T>(
+	condition: T,
+	message?: string,
+): T extends null | undefined ? never : NonNullable<T> {
+	if (!condition) {
+		throw new AssertionError(message || "Assertion failed");
+	}
+	return condition as T extends null | undefined ? never : NonNullable<T>;
 }
 
 export class ExpectedUnreachableError extends Error {
