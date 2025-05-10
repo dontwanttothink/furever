@@ -4,9 +4,10 @@
 	const { children, message } = $props();
 	let modal: HTMLDialogElement | null = $state(null);
 
-	export function cancel() {
+	export function cancel(e: Event) {
 		assert(modal instanceof HTMLDialogElement);
 		modal.close();
+		e.preventDefault();
 	}
 </script>
 
