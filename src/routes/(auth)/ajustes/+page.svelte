@@ -45,6 +45,21 @@
 	</section>
 
 	<section>
+		<form action="?/passkeyTransition" method="POST">
+			<h2>Claves de acceso</h2>
+			<p>
+				La clave de acceso es una forma segura de iniciar sesión sin usar una
+				contraseña. Puedes usarla en lugar de tu contraseña para iniciar sesión
+				en cualquier dispositivo.
+			</p>
+			<p>
+				Podrás empezar a usar una clave de acceso para iniciar sesión en el
+				futuro.
+			</p>
+		</form>
+	</section>
+
+	<section>
 		<form action="?/deleteAccount" method="POST">
 			<h2>Eliminar cuenta</h2>
 			<p>
@@ -77,7 +92,7 @@
 						onclick={() => deleteAccountConfirmationDialog?.close()}
 						>Conservar cuenta</button
 					>
-					<button type="submit" id="confirm-button"
+					<button type="submit" class="is-danger" id="confirm-button"
 						>Eliminar cuenta permanentemente</button
 					>
 				</div>
