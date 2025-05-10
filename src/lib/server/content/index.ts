@@ -67,6 +67,10 @@ export async function processAndRegisterPetImages(
 	const registeredIds: string[] = [];
 
 	for (const file of files) {
+		if (file.size == 0) {
+			continue; // Skip empty files lol
+		}
+
 		const arrayBuffer = await file.arrayBuffer();
 		const buffer = Buffer.from(arrayBuffer);
 		const image = sharp(buffer);
