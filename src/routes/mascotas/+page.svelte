@@ -72,7 +72,7 @@
 		font-size: 1rem;
 		padding: 0 2rem;
 		font-weight: normal;
-		opacity: 0.5;
+		opacity: 0.7;
 	}
 
 	#recency-disclaimer {
