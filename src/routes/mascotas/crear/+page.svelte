@@ -138,9 +138,7 @@
 			method="POST"
 			action="crear"
 			use:enhance={() => {
-				assert(uploadDialog);
-
-				uploadDialog.showModal();
+				handleFormSubmit();
 				return async ({ update }) => {
 					await update();
 					assert(uploadDialog);
