@@ -81,6 +81,15 @@ button:focus-visible {
 	transform: scale(1.05);
 }
 
+button.is-danger {
+	background-color: #f44336;
+
+	&:hover,
+	&:focus-visible {
+		background-color: #d32f2f;
+	}
+}
+
 .container {
 	display: contents;
 }
