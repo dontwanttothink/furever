@@ -15,4 +15,5 @@ Luxating
 nubuwu
 Parvovirus
 santi
+unshell
 uuids
