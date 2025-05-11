@@ -74,9 +74,7 @@
 				}}>Eliminar…</button
 			>
 			<dialog bind:this={deleteAccountConfirmationDialog}>
-				<h2 style:margin-top="0">
-					¿Estás seguro de que deseas eliminar tu cuenta?
-				</h2>
+				<h2 style:margin-top="0">¿Confirmas que deseas eliminar tu cuenta?</h2>
 				<p>
 					Se eliminarán inmediatamente todos los datos asociados a tu cuenta,
 					incluidos tus mensajes, mascotas y fotos.
