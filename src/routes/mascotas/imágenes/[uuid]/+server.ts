@@ -29,7 +29,8 @@ export const GET: RequestHandler = async ({ params: { uuid } }) => {
 			throw e;
 		}
 
-		return new Response(data, {
+		// I don't know why the type assertion is needed
+		return new Response(data as BodyInit, {
 			status: 200,
 			headers: {
 				"Content-Type": "image/jpg",
