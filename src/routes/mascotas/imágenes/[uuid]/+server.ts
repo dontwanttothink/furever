@@ -29,7 +29,7 @@ export const GET: RequestHandler = async ({ params: { uuid } }) => {
 			throw e;
 		}
 
-		// I don't know why the type assertion is needed
+		// FIXME: I don't know why the type assertion is needed
 		return new Response(data as BodyInit, {
 			status: 200,
 			headers: {
