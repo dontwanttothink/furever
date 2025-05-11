@@ -18,5 +18,6 @@
 	onclick={() => {
 		assert(modal instanceof HTMLDialogElement);
 		modal.showModal();
-	}}>{message}…</button
->
+	}}
+	>{message}…
+</button>
