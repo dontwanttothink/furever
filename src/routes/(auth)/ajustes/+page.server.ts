@@ -1,17 +1,12 @@
-import { error, fail, json, redirect, type Actions } from "@sveltejs/kit";
+import { error, fail, redirect, type Actions } from "@sveltejs/kit";
 import { deleteUser, updateName } from "$lib/server/auth";
 import { getUserDataByToken } from "$lib/server/auth";
-import {
-	InvalidSessionError,
-	InvalidUserError,
-} from "$lib/server/auth/errors.js";
+import { InvalidSessionError, InvalidUserError } from "$lib/server/auth/errors";
 import { tidyName } from "$lib/hygiene";
 import { Temporal } from "temporal-polyfill";
-
-const signingPair = await crypto.subtle.generateKey("Ed25519", false, [
-	"sign",
-	"verify",
-]);
+import { assert } from "$lib";
+import { signingPair } from "$lib/server/auth/passkeys/constants"; // FIXME
+import { verifyRegistrationResponse } from "@simplewebauthn/server";
 
 export async function load({ parent }) {
 	const parentData = await parent();
@@ -82,7 +77,14 @@ export const actions = {
 	},
 
 	async registerPasskey({ request, cookies }) {
-		const body = await request.json();
+		const body: unknown = await request.json();
+		if (!(body instanceof Object)) {
+			return fail(400, { error: "El cuerpo de la petición no es un objeto." });
+		}
+		if (!("stage" in body)) {
+			return fail(400, { error: "Se debe indicar la etapa." });
+		}
+
 		const { stage } = body;
 		if (!stage || typeof stage !== "string") {
 			return fail(400, { error: "Se debe indicar la etapa." });
@@ -101,36 +103,7 @@ export const actions = {
 			}
 			throw e;
 		}
-
-		if (stage == "challenge please") {
-			const challengeData = crypto.getRandomValues(new Uint8Array(32));
-			const challenge = {
-				// @ts-expect-error This will be fixed by TypeScript sometime.
-				// It doesn't know about `.toBase64`.
-				data: challengeData.toBase64() as string,
-				created: Temporal.Now.instant().epochMilliseconds,
-				login: userId,
-			};
-
-			const encoder = new TextEncoder();
-			const signature = await crypto.subtle.sign(
-				"Ed25519",
-				signingPair.privateKey,
-				encoder.encode(JSON.stringify(challenge)),
-			);
-
-			// @ts-expect-error Again, this will be fixed by TypeScript
-			// sometime.
-			const signatureBase64 = new Uint8Array(signature).toBase64();
-
-			return json({
-				challenge,
-				authenticity: signatureBase64,
-			});
-		}
-
-		if (stage == "check me") {
-			const { given } = body;
-		}
+		console.log(userId);
+		return fail(400, { error: "La etapa no es válida." });
 	},
 } satisfies Actions;
