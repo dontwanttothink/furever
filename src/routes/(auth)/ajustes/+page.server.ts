@@ -3,10 +3,6 @@ import { deleteUser, updateName } from "$lib/server/auth";
 import { getUserDataByToken } from "$lib/server/auth";
 import { InvalidSessionError, InvalidUserError } from "$lib/server/auth/errors";
 import { tidyName } from "$lib/hygiene";
-import { Temporal } from "temporal-polyfill";
-import { assert } from "$lib";
-import { signingPair } from "$lib/server/auth/passkeys/constants"; // FIXME
-import { verifyRegistrationResponse } from "@simplewebauthn/server";
 
 export async function load({ parent }) {
 	const parentData = await parent();
