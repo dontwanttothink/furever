@@ -100,3 +100,16 @@ export const petChronicConditions = sqliteTable(
 	},
 	(table) => [index("conditions_petId_idx").on(table.petId)],
 );
+
+export const passkeysTable = sqliteTable("passkeys", {
+	id: text().notNull().unique().primaryKey(),
+	userId: int()
+		.notNull()
+		.references(() => usersTable.id),
+	webAuthnUserId: text().notNull(),
+	publicKeyB64: text().notNull(),
+	counter: int().notNull(),
+	transports: text().notNull(), // transports provided, joined by a ":" symbol
+	deviceType: text().notNull(),
+	backedUp: int().notNull(), // 0 means not backed up
+});
