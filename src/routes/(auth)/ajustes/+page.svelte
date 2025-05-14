@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { titlePrefix } from "$lib";
+	import { assert, contactEmail, titlePrefix } from "$lib";
+	import { generatePasskey } from "$lib/client/generatePasskey.js";
 
 	const { data } = $props();
 	const { userData } = data;
@@ -45,17 +46,40 @@
 	</section>
 
 	<section>
-		<form action="?/passkeyTransition" method="POST">
+		<form>
 			<h2>Claves de acceso</h2>
 			<p>
 				La clave de acceso es una forma segura de iniciar sesión sin usar una
 				contraseña. Puedes usarla en lugar de tu contraseña para iniciar sesión
 				en cualquier dispositivo.
 			</p>
-			<p>
-				Podrás empezar a usar una clave de acceso para iniciar sesión en el
-				futuro.
-			</p>
+			<button
+				onclick={async () => {
+					const { challenge, authenticity } = await (
+						await fetch("?/registerPasskey", {
+							method: "POST",
+							body: JSON.stringify({
+								stage: "challenge please",
+							}),
+						})
+					).json();
+
+					assert(typeof challenge.data === "string");
+
+					const credential = await generatePasskey(
+						// @ts-expect-error Fucking TypeScript again doesn't know
+						// about this method (fromBase64)
+						Uint8Array.fromBase64(challenge.data),
+						userData.email,
+						userData.name,
+						userData.userId,
+					);
+					assert(credential);
+
+					const response = credential.response;
+					console.log(response);
+				}}>Crear clave de acceso</button
+			>
 		</form>
 	</section>
 
