@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { assert, contactEmail, titlePrefix } from "$lib";
-	import { generatePasskey } from "$lib/client/generatePasskey.js";
+	import { startRegistration } from "@simplewebauthn/browser";
 
 	const { data } = $props();
 	const { userData } = data;
@@ -54,30 +53,21 @@
 				en cualquier dispositivo.
 			</p>
 			<button
-				onclick={async () => {
-					const { challenge, authenticity } = await (
-						await fetch("?/registerPasskey", {
-							method: "POST",
-							body: JSON.stringify({
-								stage: "challenge please",
-							}),
-						})
+				onclick={async (e) => {
+					e.preventDefault();
+
+					const { optionsJSON, signature } = await (
+						await fetch("/passkeys/registration-options")
 					).json();
 
-					assert(typeof challenge.data === "string");
-
-					const credential = await generatePasskey(
-						// @ts-expect-error Fucking TypeScript again doesn't know
-						// about this method (fromBase64)
-						Uint8Array.fromBase64(challenge.data),
-						userData.email,
-						userData.name,
-						userData.userId,
+					const registrationOptions = JSON.parse(optionsJSON);
+					const attestationResponse = await startRegistration(
+						registrationOptions.webauthn,
 					);
-					assert(credential);
 
-					const response = credential.response;
-					console.log(response);
+					console.log(signature, attestationResponse);
+
+					// TODO: continue accessing api thing
 				}}>Crear clave de acceso</button
 			>
 		</form>
