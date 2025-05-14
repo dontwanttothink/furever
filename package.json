@@ -4,6 +4,8 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"predev": ". ./shell/bun_verify.sh",
+		"prepreview": ". ./shell/bun_verify.sh",
 		"dev": "vite dev",
 		"build": "vite build && cp package.json build/package.json && cp bun.lock build/bun.lock",
 		"preview": "vite preview",
@@ -42,6 +44,8 @@
 	"dependencies": {
 		"@fontsource-variable/inter": "^5.2.5",
 		"@libsql/client": "^0.15.6",
+		"@simplewebauthn/browser": "^13.1.0",
+		"@simplewebauthn/server": "^13.1.1",
 		"argon2": "^0.41.1",
 		"dotenv": "^16.5.0",
 		"drizzle-orm": "^0.41.0",

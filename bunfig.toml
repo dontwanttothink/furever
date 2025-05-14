@@ -1,0 +1,4 @@
+[run]
+bun = true # equivalent to `bun --bun` for all `bun run` commands
+
+# doesn't work right now: see https://github.com/oven-sh/bun/pull/16664

@@ -15,7 +15,7 @@ To start a development server:
 ➜ echo "USER_CONTENT=dev_user_content" >> .env # images and so on
 ➜ bun drizzle-kit push # adding the schema
 
-➜ bun dev
+➜ bun -b dev
 ```
 
 See the SvelteKit documentation for more information on building and previewing
