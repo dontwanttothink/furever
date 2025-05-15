@@ -9,9 +9,10 @@ To start a development server:
 
 ```sh
 ➜ bun i
+➜ cp .env,example .env
 
 # set up the local database
-➜ echo "DB_FILE_NAME=file:local.db" > .env # saying where it should be
+➜ echo "DB_FILE_NAME=file:local.db" >> .env # saying where it should be
 ➜ echo "USER_CONTENT=dev_user_content" >> .env # images and so on
 ➜ bun drizzle-kit push # adding the schema
 
