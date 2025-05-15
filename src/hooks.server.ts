@@ -1,3 +1,4 @@
+import { env } from "$env/dynamic/private";
 import { text, json } from "@sveltejs/kit";
 
 /* Some code in this file was licensed MIT by the SvelteKit contributors. The
@@ -40,7 +41,7 @@ export function is_form_content_type(request: Request) {
 }
 
 export async function handle({ event, resolve }) {
-	const assertedOrigin = process.env.ORIGIN;
+	const assertedOrigin = env.ORIGIN;
 
 	// This section of the code is based on work licensed MIT by the SvelteKit
 	// contributors.

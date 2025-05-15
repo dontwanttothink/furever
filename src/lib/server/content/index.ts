@@ -4,9 +4,10 @@ import sharp from "sharp";
 import path from "node:path";
 import fs from "node:fs/promises";
 import { randomUUID } from "node:crypto";
+import { env } from "$env/dynamic/private";
 import { eq, type InferInsertModel } from "drizzle-orm";
 
-const USER_CONTENT = process.env.USER_CONTENT;
+const USER_CONTENT = env.USER_CONTENT;
 
 const USER_CONTENT_ERROR = new Error(
 	"The USER_CONTENT environment variable is not set. Please set it to the user content directory.",
