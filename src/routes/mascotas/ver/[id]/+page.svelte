@@ -6,7 +6,7 @@
 		getUserReadableSpeciesName,
 		getUserReadableSexName,
 		getUserReadableBreedName,
-	} from "$lib/pets/index";
+	} from "$lib/pets";
 	import { onMount } from "svelte";
 
 	const { data } = $props();
@@ -40,9 +40,9 @@
 <h1>{name}</h1>
 <p class="subtitle">
 	{(() => {
-		if (species == Species.Dog) {
+		if (species === Species.Dog) {
 			return "Un perro";
-		} else if (species == Species.Cat) {
+		} else if (species === Species.Cat) {
 			return "Un gato";
 		} else {
 			return "Una mascota";
@@ -144,12 +144,12 @@
 </svelte:head>
 
 <style>
-	details:open summary {
+	details[open] summary {
 		margin-bottom: 1em;
 	}
 
 	h1 {
-		margin-bottom: 0rem;
+		margin-bottom: 0;
 	}
 	.subtitle {
 		text-align: center;
