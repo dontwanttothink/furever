@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { titlePrefix } from "$lib";
 	import { startRegistration } from "@simplewebauthn/browser";
 
 	const { data } = $props();
