@@ -62,9 +62,9 @@
 					).json();
 
 					const registrationOptions = JSON.parse(optionsJSON);
-					const attestationResponse = await startRegistration(
-						registrationOptions.webauthn,
-					);
+					const attestationResponse = await startRegistration({
+						optionsJSON: registrationOptions.webauthn,
+					});
 
 					console.log(signature, attestationResponse);
 
