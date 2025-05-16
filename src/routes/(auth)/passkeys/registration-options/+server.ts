@@ -38,10 +38,12 @@ export async function GET({ cookies }) {
 		signingPair.privateKey,
 		encoder.encode(optionsJSON),
 	);
+	// @ts-expect-error Outdated types by TypeScript
+	const signatureB64: string = new Uint8Array(signature).toBase64();
 
 	const data = {
 		optionsJSON,
-		signature,
+		signatureB64,
 	};
 	return Response.json(data, {
 		status: 200,

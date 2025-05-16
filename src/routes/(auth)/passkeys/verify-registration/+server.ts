@@ -1,3 +1,4 @@
+import { env } from "$env/dynamic/private";
 import { assert } from "$lib";
 import { InvalidSessionError } from "$lib/server/auth/errors.js";
 import { rpID, signingPair } from "$lib/server/auth/passkeys";
@@ -27,7 +28,7 @@ export async function POST({ request, cookies }) {
 		throw e;
 	}
 
-	const origin = new URL(request.url).toString();
+	const expectedOrigin = env.ORIGIN;
 	const body = await request.json();
 	const {
 		optionsJSON,
@@ -40,7 +41,7 @@ export async function POST({ request, cookies }) {
 	} = body;
 
 	// @ts-expect-error: Fucking TypeScript pmo
-	const signature = new Uint8Array.fromHex64(signatureB64);
+	const signature = Uint8Array.fromBase64(signatureB64);
 
 	const encoder = new TextEncoder();
 	if (
@@ -55,7 +56,7 @@ export async function POST({ request, cookies }) {
 	}
 
 	const options: {
-		webAuthn: PublicKeyCredentialCreationOptionsJSON;
+		webauthn: PublicKeyCredentialCreationOptionsJSON;
 		timestamp: number;
 		userId: number;
 	} = JSON.parse(optionsJSON);
@@ -76,8 +77,8 @@ export async function POST({ request, cookies }) {
 	try {
 		verification = await verifyRegistrationResponse({
 			response: attestationResponse,
-			expectedChallenge: options.webAuthn.challenge,
-			expectedOrigin: origin,
+			expectedChallenge: options.webauthn.challenge,
+			expectedOrigin,
 			expectedRPID: rpID,
 		});
 	} catch (e) {
@@ -100,7 +101,7 @@ export async function POST({ request, cookies }) {
 	await db.insert(passkeysTable).values({
 		id: credential.id,
 		userId: user.userId,
-		webAuthnUserId: options.webAuthn.user.id,
+		webAuthnUserId: options.webauthn.user.id,
 		// @ts-expect-error TypeScript is annoying
 		publicKeyB64: credential.publicKey.toBase64(),
 		counter: credential.counter,

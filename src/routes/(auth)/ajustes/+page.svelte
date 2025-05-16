@@ -57,18 +57,40 @@
 				onclick={async (e) => {
 					e.preventDefault();
 
-					const { optionsJSON, signature } = await (
-						await fetch("/passkeys/registration-options")
-					).json();
+					const {
+						optionsJSON,
+						signatureB64,
+					}: {
+						optionsJSON: string;
+						signatureB64: string;
+					} = await (await fetch("/passkeys/registration-options")).json();
 
 					const registrationOptions = JSON.parse(optionsJSON);
 					const attestationResponse = await startRegistration({
 						optionsJSON: registrationOptions.webauthn,
 					});
 
-					console.log(signature, attestationResponse);
+					const {
+						verified,
+					}: {
+						verified: boolean;
+					} = await (
+						await fetch("/passkeys/verify-registration", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({
+								optionsJSON,
+								attestationResponse,
+								signatureB64,
+							}),
+						})
+					).json();
 
-					// TODO: continue accessing api thing
+					if (!verified) {
+						alert("Verification failed.");
+					}
 				}}>Crear clave de acceso</button
 			>
 		</form>
