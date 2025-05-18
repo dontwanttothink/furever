@@ -1,6 +1,7 @@
 import { env } from "$env/dynamic/private";
 import { assert } from "$lib";
 import { InvalidSessionError } from "$lib/server/auth/errors.js";
+import { getCurrentTimestampInSeconds } from "$lib/server/auth/internal";
 import { rpID, signingPair } from "$lib/server/auth/passkeys";
 import { getUserDataByToken } from "$lib/server/auth/userData.js";
 import { db } from "$lib/server/db/index.js";
@@ -108,6 +109,7 @@ export async function POST({ request, cookies }) {
 		transports: (credential.transports ?? []).join(":"),
 		deviceType: credentialDeviceType,
 		backedUp: credentialBackedUp ? 1 : 0,
+		createdAt: getCurrentTimestampInSeconds(),
 	});
 
 	return Response.json({ verified });

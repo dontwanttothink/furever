@@ -1,6 +1,12 @@
-/* :root {
-	color-scheme: light dark;
-} */
+:root {
+	/* color-scheme: light dark; */
+	--accent-pink: #f8bbd0;
+	--accent-pink-light: #fde4ec;
+	--accent-pink-dark: #ec407a;
+	--card-bg: #fff0f6;
+	--card-border: #f8bbd0;
+	--body-text-color: #000;
+}
 
 body {
 	font-family: "Inter Variable", system-ui, sans-serif;
@@ -135,19 +141,25 @@ select:focus-visible {
 
 table {
 	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 1rem;
-}
+	margin: 1em 0;
+	border: 2px solid var(--accent-pink-dark);
+	border-radius: 1em;
 
-th,
-td {
-	border: 3px solid #ddd;
-	padding: 0.5rem;
-	text-align: center;
-}
+	th,
+	td {
+		padding: 0.5rem;
+		text-align: center;
+	}
 
-th {
-	background-color: #f3f3f3;
+	th {
+		background-color: var(--card-bg);
+		border-radius: calc(1em - 3px) 1rem 0 0;
+		outline: 1px solid var(--card-border);
+	}
+
+	td {
+		border: none;
+	}
 }
 
 td:first-child {

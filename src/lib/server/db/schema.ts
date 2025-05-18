@@ -20,7 +20,7 @@ export const sessionsTable = sqliteTable(
 			.notNull()
 			.references(() => usersTable.id),
 		token: text().notNull().unique(),
-		expiresAt: int().notNull(),
+		expiresAt: int().notNull(), // seconds since UNIX epoch
 	},
 	(table) => [index("expires_at_idx").on(table.expiresAt)],
 );
@@ -32,7 +32,7 @@ export const loginAttemptsTable = sqliteTable(
 		userId: int()
 			.notNull()
 			.references(() => usersTable.id),
-		timestamp: int().notNull(),
+		timestamp: int().notNull(), // seconds since UNIX epoch
 		source: text().notNull(),
 	},
 	(table) => [index("userId_timestamp_idx").on(table.userId, table.timestamp)],
@@ -112,4 +112,5 @@ export const passkeysTable = sqliteTable("passkeys", {
 	transports: text().notNull(), // transports provided, joined by a ":" symbol
 	deviceType: text().notNull(),
 	backedUp: int().notNull(), // 0 means not backed up
+	createdAt: int().notNull(), // seconds since UNIX epoch
 });

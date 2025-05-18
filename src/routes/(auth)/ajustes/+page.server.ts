@@ -3,14 +3,28 @@ import { deleteUser, updateName } from "$lib/server/auth";
 import { getUserDataByToken } from "$lib/server/auth";
 import { InvalidSessionError, InvalidUserError } from "$lib/server/auth/errors";
 import { tidyName } from "$lib/hygiene";
+import { db } from "$lib/server/db";
+import { passkeysTable } from "$lib/server/db/schema";
+import { eq } from "drizzle-orm";
 
-export async function load({ parent }) {
+export async function load({ parent, depends }) {
+	depends("fh:user-passkeys");
+
 	const parentData = await parent();
 	if (!parentData.userData) {
 		error(401, "No estás autenticado.");
 	}
+
+	const passkeys = await db
+		.select({
+			id: passkeysTable.id,
+			deviceType: passkeysTable.deviceType,
+		})
+		.from(passkeysTable)
+		.where(eq(passkeysTable.userId, parentData.userData.userId));
+
 	return {
-		userData: parentData.userData, // just for typescript to understand
+		userData: { ...parentData.userData, passkeys },
 	};
 }
 

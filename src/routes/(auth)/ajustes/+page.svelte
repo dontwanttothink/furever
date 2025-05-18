@@ -1,11 +1,52 @@
 <script lang="ts">
+	import { invalidate } from "$app/navigation";
 	import { titlePrefix } from "$lib";
 	import { startRegistration } from "@simplewebauthn/browser";
 
 	const { data } = $props();
-	const { userData } = data;
+	const { userData } = $derived(data);
 
 	let deleteAccountConfirmationDialog: HTMLDialogElement | null = $state(null);
+
+	async function createPasskey(e: SubmitEvent) {
+		e.preventDefault();
+
+		const {
+			optionsJSON,
+			signatureB64,
+		}: {
+			optionsJSON: string;
+			signatureB64: string;
+		} = await (await fetch("/passkeys/registration-options")).json();
+
+		const registrationOptions = JSON.parse(optionsJSON);
+		const attestationResponse = await startRegistration({
+			optionsJSON: registrationOptions.webauthn,
+		});
+
+		const {
+			verified,
+		}: {
+			verified: boolean;
+		} = await (
+			await fetch("/passkeys/verify-registration", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					optionsJSON,
+					attestationResponse,
+					signatureB64,
+				}),
+			})
+		).json();
+
+		if (!verified) {
+			return alert("Verification failed.");
+		}
+		invalidate("fh:user-passkeys");
+	}
 </script>
 
 <svelte:head>
@@ -46,53 +87,42 @@
 	</section>
 
 	<section>
-		<form>
+		<form onsubmit={createPasskey}>
 			<h2>Claves de acceso</h2>
 			<p>
 				La clave de acceso es una forma segura de iniciar sesión sin usar una
 				contraseña. Puedes usarla en lugar de tu contraseña para iniciar sesión
 				en cualquier dispositivo.
 			</p>
-			<button
-				onclick={async (e) => {
-					e.preventDefault();
 
-					const {
-						optionsJSON,
-						signatureB64,
-					}: {
-						optionsJSON: string;
-						signatureB64: string;
-					} = await (await fetch("/passkeys/registration-options")).json();
-
-					const registrationOptions = JSON.parse(optionsJSON);
-					const attestationResponse = await startRegistration({
-						optionsJSON: registrationOptions.webauthn,
-					});
-
-					const {
-						verified,
-					}: {
-						verified: boolean;
-					} = await (
-						await fetch("/passkeys/verify-registration", {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify({
-								optionsJSON,
-								attestationResponse,
-								signatureB64,
-							}),
-						})
-					).json();
-
-					if (!verified) {
-						alert("Verification failed.");
-					}
-				}}>Crear clave de acceso</button
-			>
+			{#if userData.passkeys.length == 0}
+				<button>Crear clave de acceso</button>
+			{:else}
+				<div id="passkey-manager">
+					<table>
+						<thead>
+							<tr>
+								<th>Clave de acceso</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<thead>
+							{#each userData.passkeys as passkey (passkey.id)}
+								<tr>
+									<td>{passkey.deviceType}</td>
+									<td>{passkey.id}</td>
+								</tr>
+							{/each}
+						</thead>
+						<tfoot>
+							<tr>
+								<td colspan="2"
+									><button>Crear una nueva clave de acceso</button></td
+								>
+							</tr>
+						</tfoot>
+					</table>
+				</div>{/if}
 		</form>
 	</section>
 
@@ -165,6 +195,18 @@
 			h2 {
 				margin-bottom: 0.5rem;
 			}
+		}
+	}
+
+	#passkey-manager {
+		table tfoot td {
+			text-align: center;
+		}
+
+		table button {
+			display: inline;
+			background: none;
+			color: var(--body-text-color);
 		}
 	}
 </style>

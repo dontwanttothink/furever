@@ -87,11 +87,6 @@
 	}
 
 	:root {
-		--accent-pink: #f8bbd0;
-		--accent-pink-light: #fde4ec;
-		--accent-pink-dark: #ec407a;
-		--card-bg: #fff0f6;
-		--card-border: #f8bbd0;
 		--card-shadow: 0 2px 8px rgba(236, 64, 122, 0.08);
 	}
 
