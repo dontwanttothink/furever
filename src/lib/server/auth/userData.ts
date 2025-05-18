@@ -6,7 +6,6 @@ import { InvalidSessionError } from "./errors";
 /**
  * Get user data for a given session.
  * @throws InvalidSessionError
- * @caveat This functionality is exposed to the client.
  * @returns The user name and email.
  */
 export async function getUserDataByToken(sessionToken: string) {
