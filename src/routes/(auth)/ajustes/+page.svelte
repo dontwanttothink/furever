@@ -2,6 +2,7 @@
 	import { invalidate } from "$app/navigation";
 	import { titlePrefix } from "$lib";
 	import { startRegistration } from "@simplewebauthn/browser";
+	import { fly } from "svelte/transition";
 
 	const { data } = $props();
 	const { userData } = $derived(data);
@@ -108,7 +109,7 @@
 						</thead>
 						<thead>
 							{#each userData.passkeys as passkey (passkey.id)}
-								<tr>
+								<tr in:fly={{ y: -10 }}>
 									<td>{passkey.deviceType}</td>
 									<td>{passkey.id}</td>
 								</tr>
@@ -117,7 +118,9 @@
 						<tfoot>
 							<tr>
 								<td colspan="2"
-									><button>Crear una nueva clave de acceso</button></td
+									><button class="inert linklike"
+										>Crear una nueva clave de acceso</button
+									></td
 								>
 							</tr>
 						</tfoot>
@@ -198,9 +201,14 @@
 		}
 	}
 
+	/* I think this wrapper is a vestige */
 	#passkey-manager {
-		table tfoot td {
-			text-align: center;
+		width: 100%;
+		table {
+			width: 100%;
+			tfoot td {
+				text-align: center;
+			}
 		}
 
 		table button {
