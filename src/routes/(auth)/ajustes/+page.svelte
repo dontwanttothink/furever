@@ -89,43 +89,49 @@
 
 	<section>
 		<form onsubmit={createPasskey}>
-			<h2>Claves de acceso</h2>
+			<h2>Llaves de acceso</h2>
 			<p>
-				La clave de acceso es una forma segura de iniciar sesión sin usar una
+				La llave de acceso es una forma segura de iniciar sesión sin usar una
 				contraseña. Puedes usarla en lugar de tu contraseña para iniciar sesión
 				en cualquier dispositivo.
 			</p>
 
-			{#if userData.passkeys.length == 0}
-				<button>Crear clave de acceso</button>
-			{:else}
-				<div id="passkey-manager">
-					<table>
-						<thead>
-							<tr>
-								<th>Clave de acceso</th>
-								<th>Acciones</th>
-							</tr>
-						</thead>
-						<thead>
-							{#each userData.passkeys as passkey (passkey.id)}
-								<tr in:fly={{ y: -10 }}>
-									<td>{passkey.deviceType}</td>
-									<td>{passkey.id}</td>
+			{#if false}
+				{#if userData.passkeys.length == 0}
+					<button>Crear llave de acceso</button>
+				{:else}
+					<div id="passkey-manager">
+						<table>
+							<thead>
+								<tr>
+									<th>Llave de acceso</th>
+									<th>Acciones</th>
 								</tr>
-							{/each}
-						</thead>
-						<tfoot>
-							<tr>
-								<td colspan="2"
-									><button class="inert linklike"
-										>Crear una nueva clave de acceso</button
-									></td
-								>
-							</tr>
-						</tfoot>
-					</table>
-				</div>{/if}
+							</thead>
+							<thead>
+								{#each userData.passkeys as passkey (passkey.id)}
+									<tr in:fly={{ y: -10 }}>
+										<td>{passkey.deviceType}</td>
+										<td>{passkey.id}</td>
+									</tr>
+								{/each}
+							</thead>
+							<tfoot>
+								<tr>
+									<td colspan="2"
+										><button class="inert linklike"
+											>Crear una nueva llave de acceso</button
+										></td
+									>
+								</tr>
+							</tfoot>
+						</table>
+					</div>{/if}
+			{:else}
+				<p style:width="100%">
+					Las llaves de acceso estarán disponibles pronto.
+				</p>
+			{/if}
 		</form>
 	</section>
 
