@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { db, usersTable } from "../db";
+import { getDB, usersTable } from "../db";
 import { InvalidUserError } from "./errors";
 
 /**
@@ -7,8 +7,12 @@ import { InvalidUserError } from "./errors";
  * @param to The new name
  * @throws InvalidUserError
  */
-export async function updateName(of: number, to: string) {
-	const result = await db
+export async function updateName(
+	of: number,
+	to: string,
+	platform: NonNullable<App.Platform["env"]>,
+) {
+	const result = await getDB(platform.db)
 		.update(usersTable)
 		.set({
 			name: to,

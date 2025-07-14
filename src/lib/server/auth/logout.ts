@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { db, sessionsTable } from "../db";
+import { getDB, sessionsTable } from "../db";
 import { InvalidSessionError } from "./errors";
 
 /**
@@ -7,8 +7,11 @@ import { InvalidSessionError } from "./errors";
  * @param session The session token to invalidate.
  * @throws InvalidSessionError
  */
-export async function logOut(session: string) {
-	const result = await db
+export async function logOut(
+	session: string,
+	platform: NonNullable<App.Platform["env"]>,
+) {
+	const result = await getDB(platform.db)
 		.delete(sessionsTable)
 		.where(eq(sessionsTable.token, session))
 		.returning();

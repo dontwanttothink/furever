@@ -3,8 +3,11 @@ import { generateRegistrationOptions } from "@simplewebauthn/server";
 import { error } from "@sveltejs/kit";
 import { signingPair, rpID } from "$lib/server/auth/passkeys";
 import { Temporal } from "temporal-polyfill";
+import { assert } from "$lib";
 
-export async function GET({ cookies }) {
+export async function GET({ cookies, platform }) {
+	assert(platform?.env);
+
 	const token = cookies.get("secret_token");
 	if (!token) {
 		error(401);
@@ -12,7 +15,7 @@ export async function GET({ cookies }) {
 
 	let user;
 	try {
-		user = await getUserDataByToken(token);
+		user = await getUserDataByToken(token, platform.env);
 	} catch (e) {
 		if (e instanceof InvalidSessionError) {
 			error(401);

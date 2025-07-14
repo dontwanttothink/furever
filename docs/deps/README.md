@@ -11,7 +11,6 @@ This file tracks the project's direct dependencies.
 ## Development
 
 - `eslint`: Linting
-
   - `@eslint/compat`: unknown
   - `@eslint/js`: unknown
   - `eslint-config-prettier`: unknown
@@ -22,7 +21,6 @@ This file tracks the project's direct dependencies.
     unnecessary.
 
 - `stylelint`: Linting (CSS)
-
   - `stylelint-config-standard`: Standard rule set, extended in
     `.stylelintrc.json`.
 

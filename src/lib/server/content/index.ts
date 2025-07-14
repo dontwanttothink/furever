@@ -1,52 +1,36 @@
-import { db } from "../db/index";
+import { getDB } from "../db/index";
 import { petAttachments, petsTable } from "../db/schema";
-import sharp from "sharp";
-import path from "node:path";
-import fs from "node:fs/promises";
-import { randomUUID } from "node:crypto";
-import { env } from "$env/dynamic/private";
 import { eq, type InferInsertModel } from "drizzle-orm";
-
-const USER_CONTENT = env.USER_CONTENT;
-
-const USER_CONTENT_ERROR = new Error(
-	"The USER_CONTENT environment variable is not set. Please set it to the user content directory.",
-);
 
 export async function createPet(
 	newPet: InferInsertModel<typeof petsTable>,
 	imageFiles: File[] | Blob[],
+	platform: NonNullable<App.Platform["env"]>,
 ): Promise<number> {
 	const { insertedId } = (
-		await db
+		await getDB(platform.db)
 			.insert(petsTable)
 			.values(newPet)
 			.returning({ insertedId: petsTable.id })
 	)[0];
 
-	await processAndRegisterPetImages(insertedId, imageFiles);
+	await processAndRegisterPetImages(insertedId, imageFiles, platform);
 	return insertedId;
 }
 
-export async function deletePet(petId: number): Promise<void> {
-	if (!USER_CONTENT) {
-		throw USER_CONTENT_ERROR;
-	}
-
-	const attachments = await db
+export async function deletePet(
+	petId: number,
+	platform: NonNullable<App.Platform["env"]>,
+): Promise<void> {
+	const attachments = await getDB(platform.db)
 		.delete(petAttachments)
 		.where(eq(petAttachments.petId, petId))
 		.returning();
 	for (const attachment of attachments) {
-		const filePath = path.join(USER_CONTENT, attachment.attachmentId);
-		try {
-			await fs.unlink(filePath);
-		} catch (error) {
-			console.error(`Error deleting file ${filePath}:`, error);
-		}
+		await platform.user_photography.delete(attachment.storageId);
 	}
 
-	await db.delete(petsTable).where(eq(petsTable.id, petId));
+	await getDB(platform.db).delete(petsTable).where(eq(petsTable.id, petId));
 }
 
 /**
@@ -59,49 +43,46 @@ export async function deletePet(petId: number): Promise<void> {
 export async function processAndRegisterPetImages(
 	petId: number,
 	files: File[] | Blob[],
+	platform: NonNullable<App.Platform["env"]>,
 ): Promise<string[]> {
-	if (!USER_CONTENT) {
-		throw USER_CONTENT_ERROR;
-	}
-
-	await fs.mkdir(USER_CONTENT, { recursive: true });
 	const registeredIds: string[] = [];
 
 	for (const file of files) {
 		if (file.size == 0) {
 			continue; // Skip empty files lol
 		}
+		if (file.size > 1000 ** 2 * 500) {
+			continue; // Skip files that are too big silently (oops)
+		}
 
 		const arrayBuffer = await file.arrayBuffer();
-		const buffer = Buffer.from(arrayBuffer);
-		const image = sharp(buffer);
 
-		// Normalize: convert to JPEG, resize to max 1200x1200px, strip metadata
-		const normalized = await image
-			.autoOrient()
-			.resize(1200, 1200, { fit: "inside" })
-			.jpeg({ quality: 85 })
-			.toBuffer();
+		const storageId = crypto.randomUUID();
 
-		const attachmentId = randomUUID();
-		const filename = `${attachmentId}.jpg`;
-		const outPath = path.join(USER_CONTENT, filename);
-		await fs.writeFile(outPath, normalized);
+		// TODO: normalize this
 
-		await db.insert(petAttachments).values({
-			petId,
-			attachmentId: filename,
+		platform.user_photography.put(storageId, arrayBuffer, {
+			httpMetadata: {
+				contentType: file.type,
+			},
 		});
-		registeredIds.push(filename);
+		await getDB(platform.db).insert(petAttachments).values({
+			petId,
+			storageId,
+		});
+		registeredIds.push(storageId);
 	}
 	return registeredIds;
 }
 
-export async function getFileAttachmentsFor(petId: number) {
-	const attachments = await db
+export async function getFileAttachmentsFor(
+	petId: number,
+	platform: NonNullable<App.Platform["env"]>,
+) {
+	const attachments = await getDB(platform.db)
 		.select()
 		.from(petAttachments)
 		.where(eq(petAttachments.petId, petId));
 
-	return attachments.map((attachment) => attachment.attachmentId);
+	return attachments.map((attachment) => attachment.storageId);
 }

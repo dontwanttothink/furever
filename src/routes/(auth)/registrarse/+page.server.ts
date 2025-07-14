@@ -14,7 +14,11 @@ function getMessage(error: CharacterizedSignupError): string {
 }
 
 export const actions = {
-	default: async ({ request, cookies, getClientAddress }) => {
+	default: async ({ request, cookies, getClientAddress, platform }) => {
+		if (!platform?.env) {
+			throw new TypeError();
+		}
+
 		const data = await request.formData();
 		const name = data.get("name")?.toString();
 		const email = data.get("email")?.toString();
@@ -68,7 +72,7 @@ export const actions = {
 			});
 		}
 
-		const signupAttempt = await signUp(name, email, password);
+		const signupAttempt = await signUp(name, email, password, platform.env);
 		if (signupAttempt.result.isError) {
 			return fail(400, {
 				error: getMessage(signupAttempt.result),
@@ -76,7 +80,12 @@ export const actions = {
 		}
 
 		// Try to log the user in for them
-		const loginAttempt = await logIn(email, password, getClientAddress());
+		const loginAttempt = await logIn(
+			email,
+			password,
+			getClientAddress(),
+			platform.env,
+		);
 
 		if (loginAttempt.result.isError) {
 			throw new Error(

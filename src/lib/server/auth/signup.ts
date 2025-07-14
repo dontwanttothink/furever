@@ -1,5 +1,5 @@
 import { LibsqlError } from "@libsql/client";
-import { db, sessionsTable, usersTable } from "../db";
+import { getDB, sessionsTable, usersTable } from "../db";
 import { hash } from "./internal";
 import { eq } from "drizzle-orm";
 import { petsTable } from "../db/schema";
@@ -33,15 +33,18 @@ export async function signUp(
 	name: string,
 	email: string,
 	password: string,
+	platform: NonNullable<App.Platform["env"]>,
 ): Promise<SignupAttempt<CharacterizedSignupResult>> {
 	email = email.toLowerCase();
 
 	try {
-		await db.insert(usersTable).values({
-			name,
-			email,
-			passwordData: await hash(password),
-		});
+		await getDB(platform.db)
+			.insert(usersTable)
+			.values({
+				name,
+				email,
+				passwordData: await hash(password),
+			});
 	} catch (error) {
 		if (
 			error instanceof LibsqlError &&
@@ -65,7 +68,12 @@ export async function signUp(
 	};
 }
 
-export async function deleteUser(userId: number) {
+export async function deleteUser(
+	userId: number,
+	platform: NonNullable<App.Platform["env"]>,
+) {
+	const db = await getDB(platform.db);
+
 	// delete sessions
 	await db.delete(sessionsTable).where(eq(sessionsTable.userId, userId));
 
@@ -78,7 +86,7 @@ export async function deleteUser(userId: number) {
 		.where(eq(petsTable.author, userId));
 	for (const { petId } of pets) {
 		// attachment deletion is handled in the function
-		await deletePet(petId);
+		await deletePet(petId, platform);
 	}
 
 	// delete user

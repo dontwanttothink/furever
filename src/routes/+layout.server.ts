@@ -1,12 +1,17 @@
 import { getUserDataByToken, InvalidSessionError } from "$lib/server/auth";
+import type { LayoutServerLoad } from "./$types";
 
-export async function load({ cookies }) {
+export const load: LayoutServerLoad = async ({ cookies, platform }) => {
 	const secretToken = cookies.get("secret_token");
+
+	if (!platform?.env) {
+		throw new TypeError();
+	}
 
 	let userData = null;
 	if (secretToken) {
 		try {
-			userData = await getUserDataByToken(secretToken);
+			userData = await getUserDataByToken(secretToken, platform.env);
 		} catch (e) {
 			if (e instanceof InvalidSessionError) {
 				cookies.delete("secret_token", {
@@ -35,4 +40,4 @@ export async function load({ cookies }) {
 		],
 		userData,
 	};
-}
+};

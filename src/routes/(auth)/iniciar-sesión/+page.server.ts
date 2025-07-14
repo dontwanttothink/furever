@@ -16,7 +16,11 @@ function getMessage(error: CharacterizedLoginError): string {
 }
 
 export const actions = {
-	default: async ({ request, cookies, getClientAddress }) => {
+	default: async ({ request, cookies, getClientAddress, platform }) => {
+		if (!platform?.env) {
+			throw new TypeError();
+		}
+
 		const data = await request.formData();
 		const email = data.get("email")?.toString();
 		const password = data.get("password")?.toString();
@@ -31,7 +35,12 @@ export const actions = {
 			});
 		}
 
-		const loginAttempt = await logIn(email, password, getClientAddress());
+		const loginAttempt = await logIn(
+			email,
+			password,
+			getClientAddress(),
+			platform.env,
+		);
 
 		if (loginAttempt.result.isError) {
 			return fail(400, {

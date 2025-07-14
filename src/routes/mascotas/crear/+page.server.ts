@@ -18,13 +18,15 @@ const validBreeds = Object.values(DogBreeds).filter(
 const validSexes = Object.values(Sex).filter((n) => typeof n === "number");
 
 export const actions: Actions = {
-	default: async ({ request, cookies }) => {
+	default: async ({ request, cookies, platform }) => {
+		assert(platform?.env);
+
 		const userToken = cookies.get("secret_token");
 		if (!userToken) {
 			return fail(401, { error: "No estás autenticado." });
 		}
 
-		const userData = await getUserDataByToken(userToken);
+		const userData = await getUserDataByToken(userToken, platform.env);
 
 		const badRequestErrors = [];
 
@@ -145,7 +147,7 @@ export const actions: Actions = {
 			newPet.weight = parseInt(maybeWeight, 10);
 		}
 
-		const insertedId = await createPet(newPet, imageFiles);
+		const insertedId = await createPet(newPet, imageFiles, platform.env);
 
 		redirect(303, "/mascotas/ver/" + insertedId.toString());
 	},

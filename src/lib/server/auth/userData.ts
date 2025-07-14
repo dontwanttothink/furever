@@ -1,6 +1,6 @@
 import { assert } from "$lib";
 import { eq } from "drizzle-orm";
-import { db, sessionsTable, usersTable } from "../db";
+import { getDB, sessionsTable, usersTable } from "../db";
 import { InvalidSessionError } from "./errors";
 
 /**
@@ -8,8 +8,11 @@ import { InvalidSessionError } from "./errors";
  * @throws InvalidSessionError
  * @returns The user name and email.
  */
-export async function getUserDataByToken(sessionToken: string) {
-	const matches = await db
+export async function getUserDataByToken(
+	sessionToken: string,
+	platform: NonNullable<App.Platform["env"]>,
+) {
+	const matches = await getDB(platform.db)
 		.select({
 			userId: sessionsTable.userId,
 		})
@@ -26,7 +29,7 @@ export async function getUserDataByToken(sessionToken: string) {
 	}
 
 	const userId = matches[0].userId;
-	const userMatches = await db
+	const userMatches = await getDB(platform.db)
 		.select({
 			name: usersTable.name,
 			email: usersTable.email,
@@ -40,8 +43,11 @@ export async function getUserDataByToken(sessionToken: string) {
 	return userMatches[0];
 }
 
-export async function getUserDataById(id: number) {
-	const userMatches = await db
+export async function getUserDataById(
+	id: number,
+	platform: NonNullable<App.Platform["env"]>,
+) {
+	const userMatches = await getDB(platform.db)
 		.select({
 			name: usersTable.name,
 			email: usersTable.email,

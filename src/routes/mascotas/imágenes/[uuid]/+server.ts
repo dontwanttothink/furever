@@ -1,40 +1,25 @@
+// The casts in this file are needed because of subtle type differences
+// between DOM-like types in Cloudflare Workers and the actual DOM, which
+// SvelteKit's type definitions want.
+
 import { error, type RequestHandler } from "@sveltejs/kit";
-import { assert } from "$lib";
-import { cwd, env } from "node:process";
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import type * as Worker from "@cloudflare/workers-types";
 
-const USER_CONTENT = env.USER_CONTENT;
-assert(USER_CONTENT);
-
-const USER_CONTENT_PATH = resolve(cwd(), USER_CONTENT);
-
-export const GET: RequestHandler = async ({ params: { uuid } }) => {
-	if (!USER_CONTENT || !uuid) {
+export const GET: RequestHandler = async ({ params: { uuid }, platform }) => {
+	if (!uuid || !platform?.env) {
 		throw new TypeError();
 	}
 
-	const requestedPath = resolve(USER_CONTENT, uuid);
-
-	if (!requestedPath.startsWith(USER_CONTENT_PATH)) {
-		error(403);
-	} else {
-		let data;
-		try {
-			data = await readFile(requestedPath);
-		} catch (e) {
-			if (e instanceof Object && "code" in e && e.code == "ENOENT") {
-				error(404);
-			}
-			throw e;
-		}
-
-		// FIXME: I don't know why the type assertion is needed
-		return new Response(data as BodyInit, {
-			status: 200,
-			headers: {
-				"Content-Type": "image/jpg",
-			},
-		});
+	const image = await platform.env.user_photography.get(uuid);
+	if (image == null) {
+		error(404);
 	}
+
+	const headers = new Headers();
+	image.writeHttpMetadata(headers as unknown as Worker.Headers);
+	headers.set("etag", image.httpEtag);
+
+	return new Response(image.body as unknown as ReadableStream, {
+		headers,
+	});
 };

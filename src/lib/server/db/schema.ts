@@ -71,7 +71,7 @@ export const petAttachments = sqliteTable(
 		petId: int()
 			.notNull()
 			.references(() => petsTable.id),
-		attachmentId: text().notNull(),
+		storageId: text().notNull(),
 	},
 	(table) => [index("attachments_petId_idx").on(table.petId)],
 );

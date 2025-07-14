@@ -29,14 +29,14 @@ export function getCurrentTimestampInSeconds() {
 
 export { verify } from "argon2";
 
-import { db, sessionsTable } from "../db";
+import { getDB, sessionsTable } from "../db";
 import { lt } from "drizzle-orm";
 
 /**
  * Delete all sessions that have expired.
  */
-async function sweepSessions() {
-	await db
+async function sweepSessions(platform: NonNullable<App.Platform["env"]>) {
+	await getDB(platform.db)
 		.delete(sessionsTable)
 		.where(lt(sessionsTable.expiresAt, getCurrentTimestampInSeconds()));
 }
@@ -44,10 +44,12 @@ async function sweepSessions() {
  * Clear stale sessions if the last sweep was more than 10 minutes ago.
  */
 let lastSweepTime = -1;
-export async function maybeSweepSessions() {
+export async function maybeSweepSessions(
+	platform: NonNullable<App.Platform["env"]>,
+) {
 	const now = getCurrentTimestampInSeconds();
 	if (now - lastSweepTime > 10 * 60) {
-		await sweepSessions();
+		await sweepSessions(platform);
 		lastSweepTime = now;
 	}
 }

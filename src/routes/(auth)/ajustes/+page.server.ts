@@ -3,11 +3,15 @@ import { deleteUser, updateName } from "$lib/server/auth";
 import { getUserDataByToken } from "$lib/server/auth";
 import { InvalidSessionError, InvalidUserError } from "$lib/server/auth/errors";
 import { tidyName } from "$lib/hygiene";
-import { db } from "$lib/server/db";
+import { getDB } from "$lib/server/db";
 import { passkeysTable } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function load({ parent, depends }) {
+export async function load({ parent, depends, platform }) {
+	if (!platform?.env) {
+		throw new TypeError();
+	}
+
 	depends("fh:user-passkeys");
 
 	const parentData = await parent();
@@ -15,7 +19,7 @@ export async function load({ parent, depends }) {
 		error(401, "No estás autenticado.");
 	}
 
-	const passkeys = await db
+	const passkeys = await getDB(platform.env.db)
 		.select({
 			id: passkeysTable.id,
 			deviceType: passkeysTable.deviceType,
@@ -29,7 +33,11 @@ export async function load({ parent, depends }) {
 }
 
 export const actions = {
-	async name({ request, cookies }) {
+	async name({ request, cookies, platform }) {
+		if (!platform?.env) {
+			throw new TypeError();
+		}
+
 		const token = cookies.get("secret_token");
 		if (!token) {
 			return fail(401, { error: "Se necesita un token." });
@@ -44,7 +52,7 @@ export const actions = {
 
 		let userId;
 		try {
-			userId = (await getUserDataByToken(token)).userId;
+			userId = (await getUserDataByToken(token, platform.env)).userId;
 		} catch (e) {
 			if (e instanceof InvalidSessionError) {
 				return fail(400, { error: "La sesión es inválida." });
@@ -53,7 +61,7 @@ export const actions = {
 		}
 
 		try {
-			await updateName(userId, tidyName(newName));
+			await updateName(userId, tidyName(newName), platform.env);
 		} catch (e) {
 			if (e instanceof InvalidUserError) {
 				return fail(400, { error: "Parece que el usuario ya no existe." });
@@ -62,7 +70,11 @@ export const actions = {
 		}
 	},
 
-	async deleteAccount({ cookies }) {
+	async deleteAccount({ cookies, platform }) {
+		if (!platform?.env) {
+			throw new TypeError();
+		}
+
 		const token = cookies.get("secret_token");
 		if (!token) {
 			return fail(401, { error: "Se necesita un token." });
@@ -70,14 +82,14 @@ export const actions = {
 
 		let userId;
 		try {
-			userId = (await getUserDataByToken(token)).userId;
+			userId = (await getUserDataByToken(token, platform.env)).userId;
 		} catch (e) {
 			if (e instanceof InvalidSessionError) {
 				return fail(400, { error: "La sesión es inválida." });
 			}
 			throw e;
 		}
-		await deleteUser(userId);
+		await deleteUser(userId, platform.env);
 
 		cookies.delete("secret_token", {
 			path: "/",
@@ -86,7 +98,11 @@ export const actions = {
 		redirect(303, "/");
 	},
 
-	async registerPasskey({ request, cookies }) {
+	async registerPasskey({ request, cookies, platform }) {
+		if (!platform?.env) {
+			throw new TypeError();
+		}
+
 		const body: unknown = await request.json();
 		if (!(body instanceof Object)) {
 			return fail(400, { error: "El cuerpo de la petición no es un objeto." });
@@ -106,7 +122,7 @@ export const actions = {
 		}
 		let userId;
 		try {
-			userId = (await getUserDataByToken(token)).userId;
+			userId = (await getUserDataByToken(token, platform.env)).userId;
 		} catch (e) {
 			if (e instanceof InvalidSessionError) {
 				return fail(400, { error: "La sesión es inválida." });

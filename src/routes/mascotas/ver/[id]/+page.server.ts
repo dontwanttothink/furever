@@ -1,4 +1,4 @@
-import { db } from "$lib/server/db";
+import { getDB } from "$lib/server/db";
 import { getUserDataById, getUserDataByToken } from "$lib/server/auth/userData";
 import { petsTable } from "$lib/server/db/schema";
 import { error, fail, redirect, type Actions } from "@sveltejs/kit";
@@ -7,8 +7,11 @@ import { deletePet, getFileAttachmentsFor } from "$lib/server/content";
 import { assert } from "$lib";
 import { InvalidSessionError } from "$lib/server/auth";
 
-async function getPetForId(requestedId: number) {
-	const matchedPets = await db
+async function getPetForId(
+	requestedId: number,
+	platform: NonNullable<App.Platform["env"]>,
+) {
+	const matchedPets = await getDB(platform.db)
 		.select()
 		.from(petsTable)
 		.where(eq(petsTable.id, requestedId));
@@ -26,25 +29,30 @@ async function getPetForId(requestedId: number) {
 	return pet;
 }
 
-export async function load({ params }) {
+export async function load({ params, platform }) {
+	if (!platform?.env) {
+		throw new TypeError();
+	}
+
 	const requestedId = parseInt(params.id, 10);
 	if (Number.isNaN(requestedId)) {
 		error(404);
 	}
 
-	const pet = await getPetForId(requestedId);
+	const pet = await getPetForId(requestedId, platform.env);
 	return {
 		pet: {
 			...pet,
-			author: await getUserDataById(pet.author),
-			attachmentUUIDs: await getFileAttachmentsFor(pet.id),
+			author: await getUserDataById(pet.author, platform.env),
+			attachmentUUIDs: await getFileAttachmentsFor(pet.id, platform.env),
 		},
 	};
 }
 
 export const actions = {
-	delete: async ({ params, cookies }) => {
+	delete: async ({ params, cookies, platform }) => {
 		assert(params.id);
+		assert(platform?.env);
 
 		const requestedId = parseInt(params.id, 10);
 		if (Number.isNaN(requestedId)) {
@@ -58,7 +66,7 @@ export const actions = {
 
 		let userData;
 		try {
-			userData = await getUserDataByToken(token);
+			userData = await getUserDataByToken(token, platform.env);
 		} catch (e) {
 			if (e instanceof InvalidSessionError) {
 				return fail(401, { error: "El token no es válido." });
@@ -66,14 +74,14 @@ export const actions = {
 			throw e;
 		}
 
-		const pet = await getPetForId(requestedId);
+		const pet = await getPetForId(requestedId, platform.env);
 		if (pet.author !== userData.userId) {
 			return fail(403, {
 				error: "No tienes permiso para eliminar esta mascota.",
 			});
 		}
 
-		await deletePet(requestedId);
+		await deletePet(requestedId, platform.env);
 
 		redirect(303, "/mascotas");
 	},

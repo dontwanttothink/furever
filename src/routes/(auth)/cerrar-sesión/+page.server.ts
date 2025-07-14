@@ -7,7 +7,11 @@ export function load() {
 }
 
 export const actions = {
-	default: async ({ cookies }) => {
+	default: async ({ cookies, platform }) => {
+		if (!platform?.env) {
+			throw new TypeError();
+		}
+
 		const currentSession = cookies.get("secret_token");
 
 		if (!currentSession) {
@@ -17,7 +21,7 @@ export const actions = {
 		cookies.delete("secret_token", {
 			path: "/",
 		});
-		await logOut(currentSession);
+		await logOut(currentSession, platform.env);
 
 		redirect(303, "/" + encodeURIComponent("iniciar-sesión"));
 	},

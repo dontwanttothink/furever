@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { db, usersTable, sessionsTable } from "../db";
+import { getDB, usersTable, sessionsTable } from "../db";
 import {
 	getCurrentTimestampInSeconds,
 	maybeSweepSessions,
@@ -53,12 +53,13 @@ export async function logIn(
 	email: string,
 	password: string,
 	source: string,
+	platform: NonNullable<App.Platform["env"]>,
 ): Promise<LoginAttempt<CharacterizedLoginResult>> {
 	console.log("New login attempt for: " + email);
 
 	email = email.toLowerCase();
 
-	const result = await db
+	const result = await getDB(platform.db)
 		.select({
 			passData: usersTable.passwordData,
 			id: usersTable.id,
@@ -90,16 +91,18 @@ export async function logIn(
 			.join("");
 	}
 
-	db.insert(loginAttemptsTable).values({
-		userId,
-		timestamp: getCurrentTimestampInSeconds(),
-		source: await hashIp(source),
-	});
+	getDB(platform.db)
+		.insert(loginAttemptsTable)
+		.values({
+			userId,
+			timestamp: getCurrentTimestampInSeconds(),
+			source: await hashIp(source),
+		});
 
 	const isValid = await verify(passData, password);
 
 	if (isValid) {
-		maybeSweepSessions(); // schedule stale sessions to be cleaned up
+		maybeSweepSessions(platform); // schedule stale sessions to be cleaned up
 
 		const token = new Uint8Array(256 / 8);
 		crypto.getRandomValues(token);
@@ -111,7 +114,7 @@ export async function logIn(
 
 		const expiresAt = getCurrentTimestampInSeconds() + 48 * SECONDS_PER_HOUR;
 
-		await db.insert(sessionsTable).values({
+		await getDB(platform.db).insert(sessionsTable).values({
 			userId,
 			token: tokenString,
 			expiresAt,

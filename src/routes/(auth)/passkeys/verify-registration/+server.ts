@@ -4,7 +4,7 @@ import { InvalidSessionError } from "$lib/server/auth/errors.js";
 import { getCurrentTimestampInSeconds } from "$lib/server/auth/internal";
 import { rpID, signingPair } from "$lib/server/auth/passkeys";
 import { getUserDataByToken } from "$lib/server/auth/userData.js";
-import { db } from "$lib/server/db/index.js";
+import { getDB } from "$lib/server/db/index.js";
 import { passkeysTable } from "$lib/server/db/schema.js";
 import {
 	verifyRegistrationResponse,
@@ -13,7 +13,9 @@ import {
 import { error } from "@sveltejs/kit";
 import { Temporal } from "temporal-polyfill";
 
-export async function POST({ request, cookies }) {
+export async function POST({ request, cookies, platform }) {
+	assert(platform?.env);
+
 	const token = cookies.get("secret_token");
 	if (!token) {
 		error(401);
@@ -21,7 +23,7 @@ export async function POST({ request, cookies }) {
 
 	let user;
 	try {
-		user = await getUserDataByToken(token);
+		user = await getUserDataByToken(token, platform.env);
 	} catch (e) {
 		if (e instanceof InvalidSessionError) {
 			error(401);
@@ -99,7 +101,7 @@ export async function POST({ request, cookies }) {
 	const { credential, credentialDeviceType, credentialBackedUp } =
 		registrationInfo;
 
-	await db.insert(passkeysTable).values({
+	await getDB(platform.env.db).insert(passkeysTable).values({
 		id: credential.id,
 		userId: user.userId,
 		webAuthnUserId: options.webauthn.user.id,
