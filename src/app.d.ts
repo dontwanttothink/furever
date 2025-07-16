@@ -10,8 +10,8 @@ declare global {
 		// interface PageState {}
 		interface Platform {
 			env?: {
-				user_photography: R2Bucket;
-				db: D1Database;
+				user_photography?: R2Bucket;
+				db?: D1Database;
 			};
 		}
 	}

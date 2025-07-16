@@ -5,11 +5,12 @@ import { getUserDataById } from "$lib/server/auth/userData";
 import { getFileAttachmentsFor } from "$lib/server/content";
 
 export async function load({ platform }) {
-	if (!platform?.env) {
-		throw new TypeError();
+	console.log(platform?.env);
+	if (!platform?.env?.db) {
+		throw new TypeError("Missing database binding");
 	}
 
-	const env = platform.env;
+	const db = getDB(platform.env.db);
 
 	// Fetch recent pets from database
 	const recentPets: (InferSelectModel<typeof petsTable> & {
@@ -24,11 +25,11 @@ export async function load({ platform }) {
 				.limit(10)
 		).map(async (pet) => {
 			const authorId = pet.author;
-			const { name } = await getUserDataById(authorId, env);
+			const { name } = await getUserDataById(authorId, db);
 			return {
 				...pet,
 				authorName: name,
-				attachmentUUIDs: await getFileAttachmentsFor(pet.id, env),
+				attachmentUUIDs: await getFileAttachmentsFor(pet.id, db),
 			};
 		}),
 	);

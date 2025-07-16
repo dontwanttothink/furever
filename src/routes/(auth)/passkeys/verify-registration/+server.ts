@@ -31,6 +31,7 @@ export async function POST({ request, cookies, platform }) {
 		throw e;
 	}
 
+	assert(env.ORIGIN, "The ORIGIN environment variable is not set.");
 	const expectedOrigin = env.ORIGIN;
 	const body = await request.json();
 	const {
@@ -101,18 +102,20 @@ export async function POST({ request, cookies, platform }) {
 	const { credential, credentialDeviceType, credentialBackedUp } =
 		registrationInfo;
 
-	await getDB(platform.env.db).insert(passkeysTable).values({
-		id: credential.id,
-		userId: user.userId,
-		webAuthnUserId: options.webauthn.user.id,
-		// @ts-expect-error TypeScript is annoying
-		publicKeyB64: credential.publicKey.toBase64(),
-		counter: credential.counter,
-		transports: (credential.transports ?? []).join(":"),
-		deviceType: credentialDeviceType,
-		backedUp: credentialBackedUp ? 1 : 0,
-		createdAt: getCurrentTimestampInSeconds(),
-	});
+	await getDB(platform.env.db)
+		.insert(passkeysTable)
+		.values({
+			id: credential.id,
+			userId: user.userId,
+			webAuthnUserId: options.webauthn.user.id,
+			// @ts-expect-error TypeScript is annoying
+			publicKeyB64: credential.publicKey.toBase64(),
+			counter: credential.counter,
+			transports: (credential.transports ?? []).join(":"),
+			deviceType: credentialDeviceType,
+			backedUp: credentialBackedUp ? 1 : 0,
+			createdAt: getCurrentTimestampInSeconds(),
+		});
 
 	return Response.json({ verified });
 }

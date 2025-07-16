@@ -1,6 +1,6 @@
 import prettier from "eslint-config-prettier";
-import js from "@eslint/js";
 import { includeIgnoreFile } from "@eslint/compat";
+import js from "@eslint/js";
 import svelte from "eslint-plugin-svelte";
 import globals from "globals";
 import { fileURLToPath } from "node:url";
@@ -12,7 +12,7 @@ const gitignorePath = fileURLToPath(new URL("./.gitignore", import.meta.url));
 export default ts.config(
 	includeIgnoreFile(gitignorePath),
 	js.configs.recommended,
-	...ts.configs.strict,
+	...ts.configs.recommended,
 	...svelte.configs.recommended,
 	prettier,
 	...svelte.configs.prettier,
@@ -20,27 +20,20 @@ export default ts.config(
 		languageOptions: {
 			globals: { ...globals.browser, ...globals.node },
 		},
-		rules: { "no-undef": "off" },
+		rules: {
+			// typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
+			// see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
+			"no-undef": "off",
+		},
 	},
 	{
 		files: ["**/*.svelte", "**/*.svelte.ts", "**/*.svelte.js"],
-		ignores: ["eslint.config.js", "svelte.config.js"],
 		languageOptions: {
 			parserOptions: {
 				projectService: true,
 				extraFileExtensions: [".svelte"],
 				parser: ts.parser,
 				svelteConfig,
-			},
-		},
-	},
-	{
-		files: ["../*.ts"],
-		extends: [ts.configs.strictTypeCheckedOnly],
-		languageOptions: {
-			parserOptions: {
-				projectService: true,
-				tsconfigRootDir: import.meta.dirname,
 			},
 		},
 	},

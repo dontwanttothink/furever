@@ -1,3 +1,4 @@
+import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { getDB } from "../db/index";
 import { petAttachments, petsTable } from "../db/schema";
 import { eq, type InferInsertModel } from "drizzle-orm";
@@ -77,9 +78,9 @@ export async function processAndRegisterPetImages(
 
 export async function getFileAttachmentsFor(
 	petId: number,
-	platform: NonNullable<App.Platform["env"]>,
+	db: DrizzleD1Database,
 ) {
-	const attachments = await getDB(platform.db)
+	const attachments = await db
 		.select()
 		.from(petAttachments)
 		.where(eq(petAttachments.petId, petId));

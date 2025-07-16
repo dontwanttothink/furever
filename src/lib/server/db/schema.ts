@@ -1,5 +1,3 @@
-// See `docs/schema.md` for more information about how data is represented.
-
 import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 export const usersTable = sqliteTable(
 	"users_table",

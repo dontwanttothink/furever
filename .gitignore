@@ -1,9 +1,5 @@
 node_modules
 
-# Development
-local.db
-dev_user_content
-
 # Output
 .output
 .vercel
@@ -25,3 +21,6 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# SQLite
+*.db

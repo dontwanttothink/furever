@@ -2,6 +2,7 @@ import { assert } from "$lib";
 import { eq } from "drizzle-orm";
 import { getDB, sessionsTable, usersTable } from "../db";
 import { InvalidSessionError } from "./errors";
+import type { DrizzleD1Database } from "drizzle-orm/d1";
 
 /**
  * Get user data for a given session.
@@ -43,11 +44,8 @@ export async function getUserDataByToken(
 	return userMatches[0];
 }
 
-export async function getUserDataById(
-	id: number,
-	platform: NonNullable<App.Platform["env"]>,
-) {
-	const userMatches = await getDB(platform.db)
+export async function getUserDataById(id: number, db: DrizzleD1Database) {
+	const userMatches = await db
 		.select({
 			name: usersTable.name,
 			email: usersTable.email,
