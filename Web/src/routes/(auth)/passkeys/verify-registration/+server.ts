@@ -1,11 +1,11 @@
 import { env } from "$env/dynamic/private";
 import { assert } from "$lib";
-import { InvalidSessionError } from "$lib/server/auth/errors.js";
+import { InvalidSessionError } from "$lib/server/auth/errors";
 import { getCurrentTimestampInSeconds } from "$lib/server/auth/internal";
 import { rpID, signingPair } from "$lib/server/auth/passkeys";
-import { getUserDataByToken } from "$lib/server/auth/userData.js";
-import { getDB } from "$lib/server/db/index.js";
-import { passkeysTable } from "$lib/server/db/schema.js";
+import { getUserDataByToken } from "$lib/server/auth/userData";
+import { getDB } from "$lib/server/db/index";
+import { passkeysTable } from "$lib/server/db/schema";
 import {
 	verifyRegistrationResponse,
 	type RegistrationResponseJSON,
