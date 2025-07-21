@@ -4,9 +4,9 @@ import { resolve } from "node:path";
 import { PROJECT_DIRECTORY } from "./private/constants.mts";
 import { log } from "@clack/prompts";
 
-log.step("prettier --check");
+log.step("prettier . --check");
 const { exitCode: prettierExitCode } = spawnSync(
-	["bunx", "-b", "prettier", "--check"],
+	["bunx", "-b", "prettier", ".", "--check"],
 	{
 		cwd: resolve(PROJECT_DIRECTORY, "Web"),
 
