@@ -26,4 +26,16 @@ const { exitCode: eslintExitCode } = spawnSync(["bunx", "-b", "eslint", "."], {
 	stdout: "inherit",
 	stderr: "inherit",
 });
+
+if (prettierExitCode && !eslintExitCode) {
+	log.error("There were Prettier issues. No ESLint issues were detected.");
+	log.message("Try `bun format`.");
+} else if (eslintExitCode && !prettierExitCode) {
+	log.error("There were ESLint issues. No Prettier issues were detected.");
+} else if (eslintExitCode && prettierExitCode) {
+	log.error("There were ESLint and Prettier issues.");
+} else {
+	log.success("No issues were detected.");
+}
+
 process.exit(prettierExitCode || eslintExitCode);
