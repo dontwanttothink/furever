@@ -1,10 +1,19 @@
 // vite dev
-// (in Web)
+import "./private/bun_verify.mjs";
 
-import { $ } from "bun";
+import { spawnSync } from "bun";
+import { resolve } from "node:path";
+import { PROJECT_DIRECTORY } from "./private/constants.mts";
 
-// TODO
-// const additionalArguments = ""
+const { exitCode } = spawnSync(
+	["bunx", "-b", "vite", "dev", ...process.argv.slice(2)],
+	{
+		cwd: resolve(PROJECT_DIRECTORY, "Web"),
 
-$.cwd("");
-await $`bunx -b vite dev`;
+		// @ts-expect-error: I think the types are lagging a bit behind the documentation?
+		stdin: "inherit",
+		stdout: "inherit",
+		stderr: "inherit",
+	},
+);
+process.exit(exitCode);
