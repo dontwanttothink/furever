@@ -30,7 +30,7 @@ export async function pushTo(target: DatabasePushTarget) {
 			}
 
 			log.error(
-				`The environment variable${missingEnvironmentVariables.length > 1 ? "s" : ""}, ${m}, are missing.`,
+				`The environment variable${missingEnvironmentVariables.length > 1 ? "s" : ""}, ${m}, ${missingEnvironmentVariables.length > 1 ? "are" : "is"} missing.`,
 			);
 			log.info(
 				"These variables are needed to connect to a remote Cloudflare D1 database." +
