@@ -8,7 +8,7 @@ log.step("prettier . --check");
 const { exitCode: prettierExitCode } = spawnSync(
 	["bunx", "-b", "prettier", ".", "--check"],
 	{
-		cwd: resolve(PROJECT_DIRECTORY, "Web"),
+		cwd: PROJECT_DIRECTORY, // Prettier is configured project-wide
 
 		// @ts-expect-error: I think the types are lagging a bit behind the documentation?
 		stdin: "inherit",
