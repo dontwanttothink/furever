@@ -1,6 +1,4 @@
 // vite dev
-import "./private/bun_verify.mjs";
-
 import { spawnSync } from "bun";
 import { resolve } from "node:path";
 import { PROJECT_DIRECTORY } from "./private/constants.mts";
