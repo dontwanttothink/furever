@@ -9,7 +9,7 @@ To start a development server:
 
 ```sh
 ➜ bun i
-➜ cp .env,example .env
+➜ cp .env.example .env
 
 # set up the local database
 ➜ echo "DB_FILE_NAME=file:local.db" >> .env # saying where it should be
