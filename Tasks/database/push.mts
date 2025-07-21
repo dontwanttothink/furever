@@ -1,3 +1,5 @@
+import "../private/bun_verify.mjs";
+
 import { cancel, isCancel, select, log } from "@clack/prompts";
 import { resolve } from "node:path";
 import { $, sleep, spawn } from "bun";
