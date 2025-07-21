@@ -7,13 +7,12 @@
 		"prepare": "svelte-kit sync || echo ''"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250719.0",
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@sveltejs/adapter-cloudflare": "^7.0.0",
 		"@sveltejs/kit": "^2.22.0",
 		"@sveltejs/vite-plugin-svelte": "^6.0.0",
-		"@types/bun": "^1.2.18",
-		"@types/node": "^22",
 		"@vitest/browser": "^3.2.3",
 		"drizzle-kit": "^0.30.2",
 		"eslint": "^9.18.0",
