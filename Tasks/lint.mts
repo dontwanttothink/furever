@@ -2,7 +2,9 @@
 import { spawnSync } from "bun";
 import { resolve } from "node:path";
 import { PROJECT_DIRECTORY } from "./private/constants.mts";
+import { log } from "@clack/prompts";
 
+log.step("prettier --check");
 const { exitCode: prettierExitCode } = spawnSync(
 	["bunx", "-b", "prettier", "--check"],
 	{
@@ -14,6 +16,8 @@ const { exitCode: prettierExitCode } = spawnSync(
 		stderr: "inherit",
 	},
 );
+
+log.step("eslint .");
 const { exitCode: eslintExitCode } = spawnSync(["bunx", "-b", "eslint", "."], {
 	cwd: resolve(PROJECT_DIRECTORY, "Web"),
 

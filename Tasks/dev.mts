@@ -2,7 +2,9 @@
 import { spawnSync } from "bun";
 import { resolve } from "node:path";
 import { PROJECT_DIRECTORY } from "./private/constants.mts";
+import { log } from "@clack/prompts";
 
+log.step("vite dev " + process.argv.slice(2));
 const { exitCode } = spawnSync(
 	["bunx", "-b", "vite", "dev", ...process.argv.slice(2)],
 	{

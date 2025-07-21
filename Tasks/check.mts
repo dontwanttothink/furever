@@ -2,7 +2,9 @@
 import { spawnSync } from "bun";
 import { resolve } from "node:path";
 import { PROJECT_DIRECTORY } from "./private/constants.mts";
+import { log } from "@clack/prompts";
 
+log.step("svelte-kit sync");
 const { exitCode: svelteKitExitCode } = spawnSync(
 	["bunx", "-b", "svelte-kit", "sync"],
 	{
@@ -18,6 +20,7 @@ if (svelteKitExitCode != 0) {
 	process.exit(svelteKitExitCode);
 }
 
+log.step("svelte-check --tsconfig ./tsconfig.json");
 const { exitCode: checkExitCode } = spawnSync(
 	["bunx", "-b", "svelte-check", "--tsconfig", "./tsconfig.json"],
 	{
