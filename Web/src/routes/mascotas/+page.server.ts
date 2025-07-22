@@ -5,7 +5,6 @@ import { getUserDataById } from "$lib/server/auth/userData";
 import { getFileAttachmentsFor } from "$lib/server/content";
 
 export async function load({ platform }) {
-	console.log(platform?.env);
 	if (!platform?.env?.db) {
 		throw new TypeError("Missing database binding");
 	}
