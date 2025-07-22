@@ -9,6 +9,7 @@ export async function createPet(
 	newPet: InferInsertModel<typeof petsTable>,
 	imageFiles: File[] | Blob[],
 	platform: NonNullable<App.Platform["env"]>,
+	eventFetch: typeof fetch,
 ): Promise<number> {
 	const { insertedId } = (
 		await getDB(platform.db)
@@ -17,7 +18,12 @@ export async function createPet(
 			.returning({ insertedId: petsTable.id })
 	)[0];
 
-	await processAndRegisterPetImages(insertedId, imageFiles, platform);
+	await processAndRegisterPetImages(
+		insertedId,
+		imageFiles,
+		platform,
+		eventFetch,
+	);
 	return insertedId;
 }
 
@@ -47,6 +53,7 @@ export async function processAndRegisterPetImages(
 	petId: number,
 	files: File[] | Blob[],
 	platform: NonNullable<App.Platform["env"]>,
+	eventFetch: typeof fetch,
 ): Promise<string[]> {
 	const registeredIds: string[] = [];
 
@@ -63,7 +70,7 @@ export async function processAndRegisterPetImages(
 		const storageId = crypto.randomUUID();
 
 		const before = Temporal.Now.instant();
-		const recodedArrayBuffer = await recodeJpeg(arrayBuffer);
+		const recodedArrayBuffer = await recodeJpeg(arrayBuffer, eventFetch);
 		console.log(
 			"Recoded in",
 			Temporal.Now.instant().since(before).toLocaleString(),

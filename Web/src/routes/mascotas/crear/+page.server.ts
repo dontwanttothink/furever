@@ -18,7 +18,7 @@ const validBreeds = Object.values(DogBreeds).filter(
 const validSexes = Object.values(Sex).filter((n) => typeof n === "number");
 
 export const actions: Actions = {
-	default: async ({ request, cookies, platform }) => {
+	default: async ({ request, cookies, platform, fetch: eventFetch }) => {
 		assert(platform?.env);
 
 		const userToken = cookies.get("secret_token");
@@ -147,7 +147,12 @@ export const actions: Actions = {
 			newPet.weight = parseInt(maybeWeight, 10);
 		}
 
-		const insertedId = await createPet(newPet, imageFiles, platform.env);
+		const insertedId = await createPet(
+			newPet,
+			imageFiles,
+			platform.env,
+			eventFetch,
+		);
 
 		redirect(303, "/mascotas/ver/" + insertedId.toString());
 	},
