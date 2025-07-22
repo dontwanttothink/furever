@@ -1,4 +1,5 @@
 import { env } from "$env/dynamic/private";
+import * as z from "zod";
 import { assert } from "$lib";
 import { InvalidSessionError } from "$lib/server/auth/errors";
 import { getCurrentTimestampInSeconds } from "$lib/server/auth/internal";
@@ -12,6 +13,24 @@ import {
 } from "@simplewebauthn/server";
 import { error } from "@sveltejs/kit";
 import { Temporal } from "temporal-polyfill";
+import "$lib/polyfills/proposal-arraybuffer-base64.mjs";
+
+const ClientKeyRegistrationResponse = z.object({
+	optionsJSON: z.string(),
+	signatureB64: z.base64(),
+	attestationResponse: z.custom<RegistrationResponseJSON>((val) => {
+		const ZRegistrationResponseJSON = z.object({
+			id: z.base64url(),
+			rawId: z.base64url(),
+			response: z.object(), // 🤞😍
+			authenticatorAttachment: z.optional(z.object()),
+			clientExtensionResults: z.object(),
+			type: z.literal("public-key"),
+		});
+		const { success } = ZRegistrationResponseJSON.safeParse(val);
+		return success;
+	}),
+});
 
 export async function POST({ request, cookies, platform }) {
 	assert(platform?.env);
@@ -42,9 +61,8 @@ export async function POST({ request, cookies, platform }) {
 		optionsJSON: string;
 		signatureB64: string;
 		attestationResponse: RegistrationResponseJSON;
-	} = body;
+	} = ClientKeyRegistrationResponse.parse(body);
 
-	// @ts-expect-error: Fucking TypeScript pmo
 	const signature = Uint8Array.fromBase64(signatureB64);
 
 	const encoder = new TextEncoder();
@@ -108,7 +126,6 @@ export async function POST({ request, cookies, platform }) {
 			id: credential.id,
 			userId: user.userId,
 			webAuthnUserId: options.webauthn.user.id,
-			// @ts-expect-error TypeScript is annoying
 			publicKeyB64: credential.publicKey.toBase64(),
 			counter: credential.counter,
 			transports: (credential.transports ?? []).join(":"),

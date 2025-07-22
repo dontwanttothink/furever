@@ -4,6 +4,7 @@ import { error } from "@sveltejs/kit";
 import { signingPair, rpID } from "$lib/server/auth/passkeys";
 import { Temporal } from "temporal-polyfill";
 import { assert } from "$lib";
+import "$lib/polyfills/proposal-arraybuffer-base64.mjs";
 
 export async function GET({ cookies, platform }) {
 	assert(platform?.env);
@@ -41,7 +42,7 @@ export async function GET({ cookies, platform }) {
 		signingPair.privateKey,
 		encoder.encode(optionsJSON),
 	);
-	// @ts-expect-error Outdated types by TypeScript
+
 	const signatureB64: string = new Uint8Array(signature).toBase64();
 
 	const data = {
