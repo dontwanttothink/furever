@@ -1,5 +1,5 @@
 // The casts in this file are needed because of subtle type differences
-// between DOM-like types in Cloudflare Workers and the actual DOM, which
+// between DOM-like types in Cloudflare Workers and the spec, which
 // SvelteKit's type definitions want.
 
 import { error, type RequestHandler } from "@sveltejs/kit";
