@@ -3,7 +3,6 @@
 // SvelteKit's type definitions want.
 
 import { error, type RequestHandler } from "@sveltejs/kit";
-import type * as Worker from "@cloudflare/workers-types";
 
 export const GET: RequestHandler = async ({ params: { uuid }, platform }) => {
 	if (!uuid || !platform?.env) {
