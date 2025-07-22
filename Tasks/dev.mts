@@ -6,7 +6,8 @@ import { log } from "@clack/prompts";
 
 log.step("vite dev " + process.argv.slice(2));
 const { exitCode } = spawnSync(
-	["bunx", "-b", "vite", "dev", ...process.argv.slice(2)],
+	// ["bunx", "-b", "vite", "dev", ...process.argv.slice(2)],
+	["bunx", "vite", "dev", ...process.argv.slice(2)],
 	{
 		cwd: resolve(PROJECT_DIRECTORY, "Web"),
 
