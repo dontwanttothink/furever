@@ -1,9 +1,7 @@
 import type { DrizzleD1Database } from "drizzle-orm/d1";
-import { recodeJpeg } from "./recode.mjs";
 import { getDB } from "../db/index";
 import { petAttachments, petsTable } from "../db/schema";
 import { eq, type InferInsertModel } from "drizzle-orm";
-import { Temporal } from "temporal-polyfill";
 
 export async function createPet(
 	newPet: InferInsertModel<typeof petsTable>,
@@ -69,15 +67,7 @@ export async function processAndRegisterPetImages(
 
 		const storageId = crypto.randomUUID();
 
-		const before = Temporal.Now.instant();
-		const recodedArrayBuffer = await recodeJpeg(arrayBuffer, eventFetch);
-		console.log(
-			"Recoded in",
-			Temporal.Now.instant().since(before).toLocaleString(),
-		);
-
-		platform.user_photography.put(storageId, recodedArrayBuffer, {
-			// platform.user_photography.put(storageId, arrayBuffer, {
+		platform.user_photography.put(storageId, arrayBuffer, {
 			httpMetadata: {
 				contentType: file.type,
 			},
