@@ -7,7 +7,7 @@
 	],
 	"scripts": {
 		"dev": "bun run Tasks/dev.mts",
-		"build": "bun run Tasks/bun.mts",
+		"build": "bun run Tasks/build.mts",
 		"preview": "bun run Tasks/preview.mts",
 		"check": "bun run Tasks/check.mts",
 		"db": "bun run Tasks/database/index.mts",
