@@ -5,15 +5,15 @@ import { PROJECT_DIRECTORY } from "./private/constants.mts";
 import { log } from "@clack/prompts";
 
 log.step("vitest " + process.argv.slice(2).join(" "));
-const { exitCode } = spawnSync(
-	["bunx", "-b", "vitest", ...process.argv.slice(2)],
-	{
-		cwd: resolve(PROJECT_DIRECTORY, "Web"),
 
-		// @ts-expect-error: I think the types are lagging a bit behind the documentation?
-		stdin: "inherit",
-		stdout: "inherit",
-		stderr: "inherit",
-	},
-);
+// We don't force Bun here because the latest version as of jul 21, 2025
+// breaks Vitest for some reason
+const { exitCode } = spawnSync(["bunx", "vitest", ...process.argv.slice(2)], {
+	cwd: resolve(PROJECT_DIRECTORY, "Web"),
+
+	// @ts-expect-error: I think the types are lagging a bit behind the documentation?
+	stdin: "inherit",
+	stdout: "inherit",
+	stderr: "inherit",
+});
 process.exit(exitCode);
