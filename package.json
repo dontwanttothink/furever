@@ -13,7 +13,8 @@
 		"db": "bun run Tasks/database/index.mts",
 		"db:push": "bun run Tasks/database/push.mts",
 		"format": "prettier --write .",
-		"lint": "bun run Tasks/lint.mts"
+		"lint": "bun run Tasks/lint.mts",
+		"test": "bun run Tasks/test.mts"
 	},
 	"devDependencies": {
 		"@clack/prompts": "^1.0.0-alpha.1",
