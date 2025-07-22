@@ -39,12 +39,14 @@ export async function load({ params, platform }) {
 		error(404);
 	}
 
+	const db = getDB(platform.env.db);
+
 	const pet = await getPetForId(requestedId, platform.env);
 	return {
 		pet: {
 			...pet,
-			author: await getUserDataById(pet.author, platform.env),
-			attachmentUUIDs: await getFileAttachmentsFor(pet.id, platform.env),
+			author: await getUserDataById(pet.author, db),
+			attachmentUUIDs: await getFileAttachmentsFor(pet.id, db),
 		},
 	};
 }
