@@ -328,13 +328,13 @@
 					type="file"
 					id="pet-images"
 					name="imágenes"
-					accept="image/*"
+					accept="image/jpeg"
 					multiple
 					class="pet-images-input"
 				/>
 				<small class="pet-images-hint">
-					Puedes subir varias imágenes. Solo se aceptan archivos de imagen por
-					el momento.
+					Puedes subir varias imágenes. Solo se aceptan archivos de imagen JPEG
+					por el momento.
 				</small>
 			</div>
 
