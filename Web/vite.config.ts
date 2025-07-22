@@ -1,8 +1,12 @@
 import { sveltekit } from "@sveltejs/kit/vite";
+import viteWasm from "vite-plugin-wasm";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-	plugins: [sveltekit()],
+	plugins: [sveltekit(), viteWasm()],
+	optimizeDeps: {
+		exclude: ["@jsquash/jpeg"],
+	},
 	test: {
 		projects: [
 			{

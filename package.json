@@ -19,6 +19,10 @@
 	"devDependencies": {
 		"@clack/prompts": "^1.0.0-alpha.1",
 		"prettier": "^3.6.2",
-		"typedoc": "^0.28.7"
+		"typedoc": "^0.28.7",
+		"vite-plugin-wasm": "^3.5.0"
+	},
+	"dependencies": {
+		"@jsquash/jpeg": "^1.6.0"
 	}
 }
