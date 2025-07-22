@@ -12,7 +12,12 @@
 		"moduleResolution": "bundler",
 
 		"lib": ["es2024"],
-		"types": ["@cloudflare/workers-types"]
+		"types": ["@cloudflare/workers-types"],
+		"plugins": [
+			{
+				"name": "typescript-svelte-plugin"
+			}
+		]
 	}
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
