@@ -1,3 +1,4 @@
+import { env } from "$env/dynamic/private";
 import {
 	logIn,
 	signUp,
@@ -65,8 +66,10 @@ export const actions = {
 			});
 		}
 
-		// TODO: move this to an env var
-		if (!invitationCode || invitationCode != "3156432755") {
+		if (!env.INVITATION_CODE) {
+			throw Error("The INVITATION_CODE environment variable is unset.");
+		}
+		if (!invitationCode || invitationCode != env.INVITATION_CODE) {
 			return fail(400, {
 				error: "Código de invitación inválido.",
 			});
