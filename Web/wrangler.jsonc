@@ -12,5 +12,9 @@
 			"database_name": "furever-db",
 			"database_id": "3b6e49f0-0ace-459c-bc43-2c7aba1e8dbd"
 		}
-	]
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	}
 }

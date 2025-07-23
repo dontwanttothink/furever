@@ -1,6 +1,4 @@
 // vite build
-import "./private/bun_verify.mjs";
-
 import { spawnSync } from "bun";
 import { resolve } from "node:path";
 import { PROJECT_DIRECTORY } from "./private/constants.mts";
@@ -8,7 +6,7 @@ import { log } from "@clack/prompts";
 
 log.step("vite build " + process.argv.slice(2));
 const { exitCode } = spawnSync(
-	["bunx", "-b", "vite", "build", ...process.argv.slice(2)],
+	["bunx", "vite", "build", ...process.argv.slice(2)],
 	{
 		cwd: resolve(PROJECT_DIRECTORY, "Web"),
 
