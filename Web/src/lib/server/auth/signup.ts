@@ -47,8 +47,7 @@ export async function signUp(
 			});
 	} catch (error) {
 		if (
-			error instanceof LibsqlError &&
-			error.code == "SQLITE_CONSTRAINT_UNIQUE"
+			error instanceof Error && error.message.includes("UNIQUE")
 		) {
 			return {
 				result: {

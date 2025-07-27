@@ -14,7 +14,8 @@
 		"db:push": "bun run Tasks/database/push.mts",
 		"format": "prettier --write .",
 		"lint": "bun run Tasks/lint.mts",
-		"test": "bun run Tasks/test.mts"
+		"test": "bun run Tasks/test.mts",
+		"wrangler": "bun run Tasks/wrangler.mts"
 	},
 	"devDependencies": {
 		"@clack/prompts": "^1.0.0-alpha.1",
@@ -23,6 +24,7 @@
 		"vite-plugin-wasm": "^3.5.0"
 	},
 	"dependencies": {
-		"@jsquash/jpeg": "^1.6.0"
+		"@jsquash/jpeg": "^1.6.0",
+		"@noble/hashes": "^1.8.0"
 	}
 }

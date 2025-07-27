@@ -1,23 +1,27 @@
-import * as argon2 from "argon2";
+import { scryptAsync as scrypt } from "@noble/hashes/scrypt";
+import "$lib/polyfills/proposal-arraybuffer-base64";
 
 /**
- * We create our own salts in order to satisfy the security requirements in
- * `docs/auth`.
+ * We create our own salts because our cryptography library won't do it for us.
  */
 function generateSalt() {
 	const randomBytes = new Uint8Array(256 / 8);
 	crypto.getRandomValues(randomBytes);
-	return Buffer.from(randomBytes);
+	return randomBytes;
 }
 
-export function hash(text: string) {
-	return argon2.hash(text, {
-		type: argon2.argon2id,
-		memoryCost: 128 * 1024,
-		timeCost: 5,
-		parallelism: 8,
-		salt: generateSalt(),
-	});
+async function hashWithSalt(text: string, salt: Uint8Array<ArrayBuffer>) {
+	const N = 2 ** 18;
+	const r = 8;
+	const p = 1;
+	const dkLen = 32;
+	let result = await scrypt(text, salt, { N, r, p, dkLen });
+	return `$scrypt$N=${N},r=${r},p=${p},dkLen=${dkLen}$${result.toBase64()}$${salt.toBase64()}`;
+}
+
+export function hash(text: string): Promise<string> {
+	let salt = generateSalt();
+	return hashWithSalt(text, salt);
 }
 
 /**
@@ -27,7 +31,17 @@ export function getCurrentTimestampInSeconds() {
 	return Math.floor(Date.now() / 1000);
 }
 
-export { verify } from "argon2";
+/**
+ * **Warning**
+ *
+ * This function ignores any specified hashing algorithm options in the
+ * `passData` string and uses its own.
+ */
+export async function verify(passData: string, password: string): Promise<boolean> {
+	const [_algorithm, _algoOptions, _originalHash, salt] = passData.split("$").slice(1)
+	const result = await hashWithSalt(password, Uint8Array.fromBase64(salt));
+	return result == passData;
+}
 
 import { getDB, sessionsTable } from "../db";
 import { lt } from "drizzle-orm";
