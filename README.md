@@ -1,7 +1,7 @@
 # furever
 
 > [!WARNING] 
-> This project contains authentication code. Please assume that it is insecure, as it was not authored or audited by any relevant expert.
+> This project implements a custom authentication system. Please assume that it is insecure, as it was not authored or audited by any relevant expert.
 
 This repository contains the source code for the SvelteKit application that
 powers both the back-end and the web front-end of the FureverHome project.
